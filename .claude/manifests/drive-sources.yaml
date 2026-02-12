@@ -1,0 +1,33 @@
+# Drive 소스 링크 설정
+# 수집할 Google Drive 문서 목록을 정의합니다.
+#
+# 사용법:
+#   1. 아래 sources 배열에 문서를 추가합니다.
+#   2. /sync-drive 명령으로 수집을 실행합니다.
+#
+# 접근 방식:
+#   - Playwright 브라우저로 Google 로그인 후 문서에 접근합니다.
+#   - GCP 프로젝트, OAuth 키 등 사전 설정이 필요 없습니다.
+#   - 최초 실행 시 브라우저에서 Google 로그인만 하면 됩니다.
+#   - Google Docs → Markdown, Google Sheets → CSV 자동 변환
+#
+# URL 형식 (아래 모두 지원):
+#   - https://docs.google.com/document/d/{DOCUMENT_ID}/edit
+#   - https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/edit
+#   - https://drive.google.com/file/d/{FILE_ID}/view
+#
+# type: doc | sheet
+
+sources: []
+  # - name: "시장 분석 보고서"
+  #   url: "https://docs.google.com/document/d/DOCUMENT_ID/edit"
+  #   type: doc
+  #
+  # - name: "경쟁사 데이터"
+  #   url: "https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/edit"
+  #   type: sheet
+  #   sheets: []               # 비워두면 전체 시트, 특정 시트명 지정 가능
+
+# PRD 생성물을 업로드할 Drive 폴더 (선택)
+upload_folder: ""
+  # 예: "https://drive.google.com/drive/folders/FOLDER_ID"

@@ -1,0 +1,60 @@
+# 프로젝트 기본 설정
+# /init-project에서 생성되는 project.json의 기본값을 정의합니다.
+# Drive 접근: Playwright 브라우저 (GCP/OAuth 키 불필요, 브라우저 로그인만)
+
+# 출력 언어
+language: ko
+
+# 인용 정책: strict | warn
+# strict: 인용 누락 시 검증 실패
+# warn: 인용 누락을 보고하되 검증은 통과
+citation_policy: strict
+
+# 에이전트 팀 구성 (agent-team-spec.md 참조)
+agent_roles:
+  - biz
+  - marketing
+  - research
+  - tech
+  - pm
+  - synth
+
+# 버전 관리
+versioning:
+  enabled: true
+  format: "v{N}"                           # v1, v2, v3, ...
+  keep_all: true                           # 이전 버전 보존
+
+# Drive 업로드 설정
+upload:
+  ask_after_generation: true               # PRD 생성 후 업로드 여부 확인
+  auto_upload: false                       # true면 자동 업로드 (확인 없이)
+  include_citations: false                 # citations.json도 함께 업로드할지
+  naming_pattern: "PRD-{project}-v{N}"     # Drive 업로드 시 파일명
+
+# 출력 경로
+output_paths:
+  agents_dir: .claude/artifacts/agents
+  prd_dir: .claude/artifacts/prd
+  prd_file: PRD.md
+  citations_file: citations.json
+  conflicts_file: conflicts.json
+  metadata_file: metadata.json
+
+# 증거 저장 경로
+evidence_paths:
+  raw_dir: .claude/knowledge/evidence/raw
+  chunks_dir: .claude/knowledge/evidence/chunks
+  index_file: .claude/knowledge/evidence/index/sources.jsonl
+
+# 상태 파일 경로
+state_paths:
+  project_file: .claude/state/project.json
+  sync_ledger: .claude/state/sync-ledger.json
+
+# Sheets 내보내기 기본값
+sheets_export:
+  default_format: csv                      # csv | md
+  max_rows: 500
+  max_cols: 50
+  include_empty_rows: false

@@ -1,0 +1,16 @@
+# Generated directories (Claude agent outputs)
+.claude/state/
+.claude/knowledge/
+.claude/artifacts/
+
+# Secrets (슬랙으로 공유, 절대 커밋 금지)
+.gh-token
+.user-identity
+
+# OS
+.DS_Store
+
+# Node (if workspace added later)
+node_modules/
+.playwright-mcp/
+.sisyphus/

@@ -1,0 +1,131 @@
+# 문서 유형 레지스트리
+# 각 유형은 에이전트 로스터, 출력 섹션, 출력 경로를 정의합니다.
+# run-research, verify, synth 에이전트가 이 파일을 참조합니다.
+
+document_types:
+
+  prd:
+    name: 제품 요구사항 문서
+    description: 제품 기획을 위한 종합 요구사항 문서
+    output_dir_name: prd
+    output_file_name: PRD.md
+    agent_roles:
+      wave1:
+        - biz
+        - marketing
+        - research
+        - tech
+        - pm
+    output_sections:
+      - 개요 (Executive Summary)
+      - 문제 정의
+      - 목표 / 비목표
+      - 대상 사용자 / 페르소나
+      - 기능 요구사항
+      - 비기능 요구사항
+      - UX 노트
+      - 기술 노트
+      - GTM 전략
+      - 리스크
+      - 마일스톤
+      - 미해결 질문
+
+  design-spec:
+    name: 디자인 사양서
+    description: UI/UX 디자인 상세 사양 및 가이드라인
+    output_dir_name: design-spec
+    output_file_name: DESIGN-SPEC.md
+    agent_roles:
+      wave1:
+        - research
+        - tech
+        - pm
+    output_sections:
+      - 개요
+      - 디자인 원칙
+      - 사용자 흐름
+      - 화면별 상세 사양
+      - 컴포넌트 정의
+      - 인터랙션 패턴
+      - 접근성 요구사항
+      - 기술 제약사항
+      - 미해결 질문
+
+  marketing-brief:
+    name: 마케팅 브리프
+    description: 마케팅 전략 및 캠페인 기획 문서
+    output_dir_name: marketing-brief
+    output_file_name: MARKETING-BRIEF.md
+    agent_roles:
+      wave1:
+        - biz
+        - marketing
+        - research
+    output_sections:
+      - 개요
+      - 시장 분석
+      - 타겟 고객
+      - 포지셔닝 전략
+      - 핵심 메시징
+      - 채널 전략
+      - 런칭 계획
+      - KPI / 성공 지표
+      - 예산 계획
+      - 미해결 질문
+
+  business-plan:
+    name: 사업 계획서
+    description: 사업 타당성 및 실행 계획 문서
+    output_dir_name: business-plan
+    output_file_name: BUSINESS-PLAN.md
+    agent_roles:
+      wave1:
+        - biz
+        - marketing
+        - research
+        - tech
+    output_sections:
+      - 개요 (Executive Summary)
+      - 문제 정의 / 기회
+      - 솔루션
+      - 시장 분석
+      - 비즈니스 모델
+      - 경쟁 분석
+      - 마케팅 전략
+      - 기술 전략
+      - 재무 계획
+      - 리스크 분석
+      - 실행 로드맵
+      - 미해결 질문
+
+  tech-spec:
+    name: 기술 사양서
+    description: 기술 아키텍처 및 구현 상세 문서
+    output_dir_name: tech-spec
+    output_file_name: TECH-SPEC.md
+    agent_roles:
+      wave1:
+        - tech
+        - research
+        - pm
+    output_sections:
+      - 개요
+      - 기술 배경
+      - 아키텍처 설계
+      - API 설계
+      - 데이터 모델
+      - 보안 요구사항
+      - 성능 요구사항
+      - 인프라 / 배포
+      - 테스트 전략
+      - 마이그레이션 계획
+      - 미해결 질문
+
+  custom:
+    name: 사용자 정의
+    description: 사용자가 에이전트와 섹션을 직접 정의
+    output_dir_name: custom
+    output_file_name: DOCUMENT.md
+    agent_roles:
+      wave1: []  # 사용자가 init-project에서 직접 선택
+    output_sections: []  # 사용자가 init-project에서 직접 정의
