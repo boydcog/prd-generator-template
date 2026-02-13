@@ -14,9 +14,9 @@ STATUS=""
 USER_NAME=""
 if [ -f ".user-identity" ]; then
   USER_NAME=$(cat .user-identity | tr -d '\n')
-  STATUS="$STATUS\n✅ 사용자: $USER_NAME"
+  STATUS="$STATUS\nOK 사용자: $USER_NAME"
 else
-  STATUS="$STATUS\n⚠️ 사용자 미설정"
+  STATUS="$STATUS\nWARN 사용자 미설정"
 fi
 
 # ──────────────────────────────────────
@@ -31,21 +31,21 @@ command -v gh &>/dev/null && HAS_GH="true"
 command -v brew &>/dev/null && HAS_BREW="true"
 
 if [ "$HAS_GIT" = "true" ]; then
-  STATUS="$STATUS\n✅ git 설치됨"
+  STATUS="$STATUS\nOK git 설치됨"
 else
-  STATUS="$STATUS\n❌ git 미설치"
+  STATUS="$STATUS\nFAIL git 미설치"
 fi
 
 if [ "$HAS_GH" = "true" ]; then
-  STATUS="$STATUS\n✅ gh CLI 설치됨"
+  STATUS="$STATUS\nOK gh CLI 설치됨"
 else
-  STATUS="$STATUS\n❌ gh CLI 미설치"
+  STATUS="$STATUS\nFAIL gh CLI 미설치"
 fi
 
 if [ "$HAS_BREW" = "true" ]; then
-  STATUS="$STATUS\n✅ Homebrew 설치됨"
+  STATUS="$STATUS\nOK Homebrew 설치됨"
 else
-  STATUS="$STATUS\n⚠️ Homebrew 미설치"
+  STATUS="$STATUS\nWARN Homebrew 미설치"
 fi
 
 # ──────────────────────────────────────
@@ -66,7 +66,7 @@ if [ "$HAS_GIT" = "true" ]; then
       git checkout -b main 2>/dev/null || true
       git branch -u origin/main main 2>/dev/null || true
       GIT_READY="true"
-      STATUS="$STATUS\n✅ git 저장소 초기화 + remote 연결 완료 (HTTPS)"
+      STATUS="$STATUS\nOK git 저장소 초기화 + remote 연결 완료 (HTTPS)"
     else
       # HTTPS 실패 → SSH 폴백
       git remote set-url origin "$SSH_URL" 2>/dev/null || true
@@ -75,9 +75,9 @@ if [ "$HAS_GIT" = "true" ]; then
         git checkout -b main 2>/dev/null || true
         git branch -u origin/main main 2>/dev/null || true
         GIT_READY="true"
-        STATUS="$STATUS\n✅ git 저장소 초기화 + remote 연결 완료 (SSH)"
+        STATUS="$STATUS\nOK git 저장소 초기화 + remote 연결 완료 (SSH)"
       else
-        STATUS="$STATUS\n⚠️ git fetch 실패 (네트워크 또는 인증 문제)"
+        STATUS="$STATUS\nWARN git fetch 실패 (네트워크 또는 인증 문제)"
       fi
     fi
   else
@@ -86,13 +86,13 @@ if [ "$HAS_GIT" = "true" ]; then
     CURRENT_REMOTE=$(git remote get-url origin 2>/dev/null || echo "")
     if [ -z "$CURRENT_REMOTE" ]; then
       git remote add origin "$HTTPS_URL" 2>/dev/null || true
-      STATUS="$STATUS\n✅ remote origin 추가됨 (HTTPS)"
+      STATUS="$STATUS\nOK remote origin 추가됨 (HTTPS)"
     elif [ "$CURRENT_REMOTE" = "$SSH_URL" ]; then
       git remote set-url origin "$HTTPS_URL" 2>/dev/null || true
-      STATUS="$STATUS\n✅ remote URL → HTTPS 전환"
+      STATUS="$STATUS\nOK remote URL → HTTPS 전환"
     elif [ "$CURRENT_REMOTE" != "$HTTPS_URL" ]; then
       git remote set-url origin "$HTTPS_URL" 2>/dev/null || true
-      STATUS="$STATUS\n✅ remote URL 업데이트됨"
+      STATUS="$STATUS\nOK remote URL 업데이트됨"
     fi
   fi
 
@@ -101,7 +101,7 @@ if [ "$HAS_GIT" = "true" ]; then
     CURRENT_BRANCH=$(git branch --show-current 2>/dev/null || echo "")
     if [ -n "$CURRENT_BRANCH" ] && [ "$CURRENT_BRANCH" != "main" ]; then
       git checkout main 2>/dev/null || git checkout -f main 2>/dev/null || true
-      STATUS="$STATUS\n⚠️ $CURRENT_BRANCH → main 자동 전환"
+      STATUS="$STATUS\nWARN $CURRENT_BRANCH → main 자동 전환"
     fi
   fi
 
@@ -109,9 +109,9 @@ if [ "$HAS_GIT" = "true" ]; then
   if [ "$GIT_READY" = "true" ]; then
     PULL_RESULT=$(git pull origin main 2>&1 || echo "pull-failed")
     if echo "$PULL_RESULT" | grep -q "pull-failed"; then
-      STATUS="$STATUS\n⚠️ git pull 실패"
+      STATUS="$STATUS\nWARN git pull 실패"
     else
-      STATUS="$STATUS\n✅ git pull 완료"
+      STATUS="$STATUS\nOK git pull 완료"
     fi
   fi
 
@@ -130,17 +130,18 @@ GH_TOKEN_LOADED="false"
 if [ -f ".gh-token" ]; then
   TOKEN_CONTENT=$(cat .gh-token | tr -d '[:space:]')
   if [ -n "$TOKEN_CONTENT" ]; then
+    chmod 600 .gh-token
     export GH_TOKEN="$TOKEN_CONTENT"
     GH_TOKEN_LOADED="true"
-    STATUS="$STATUS\n✅ GitHub 토큰 로드 완료"
+    STATUS="$STATUS\nOK GitHub 토큰 로드 완료"
   else
-    STATUS="$STATUS\n⚠️ .gh-token 파일이 비어있음"
+    STATUS="$STATUS\nWARN .gh-token 파일이 비어있음"
   fi
 elif [ -n "${GH_TOKEN:-}" ]; then
   GH_TOKEN_LOADED="true"
-  STATUS="$STATUS\n✅ GitHub 토큰 (환경변수)"
+  STATUS="$STATUS\nOK GitHub 토큰 (환경변수)"
 else
-  STATUS="$STATUS\n❌ GitHub 토큰 없음"
+  STATUS="$STATUS\nFAIL GitHub 토큰 없음"
 fi
 
 # ──────────────────────────────────────
