@@ -2,6 +2,8 @@
 
 ## 2026-02-13
 
+- 프로젝트 공유: 수학 문제 레벨링 품질 검증 — prd v1 (`912eae5`)
+
 - feat: `/upload-drive` 독립 커맨드 분리 — 업로드 로직 Single Source of Truth 확립
 - Changelog 분리 + git pull rebase 복구 + sisyphus 제거 + worktree 후 main 복원 추가
 - `/admin` 워크플로우에 Changelog 업데이트 단계 추가 (`f182191`)

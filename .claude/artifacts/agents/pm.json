@@ -1,0 +1,275 @@
+{
+  "claims": [
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 6,
+          "line_start": 1,
+          "quote_sha256": "50e4eabf92d00319fbbed99f5f2a7d328a8388f9b4fe5c11a89529a4c7e5b396",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-001",
+      "statement": "현재 채점 체계는 6개 가중치 차원(W1 연산 종류, W2 자릿수, W3 숫자 크기, W4 절차적 복잡성, W5 특수 숫자 감점, W6 표현 방식)으로 구성되며, 이를 합산하여 W 총점을 산출한 뒤 W(1~23) 레벨과 C(1~15) 레벨로 2단계 매핑하는 구조이다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 5,
+          "line_start": 1,
+          "quote_sha256": "5ede5ba74eed55d5721738c1fd769f4b48904c50439c0944830e98675020ae12",
+          "source_name": "수학 난이도 채점 기준표"
+        },
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0151",
+          "line_end": 5,
+          "line_start": 1,
+          "quote_sha256": "e610ace04c1d663411953a8cbbe223abe72cdedc746fb9df051e6ebf927641ce",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-002",
+      "statement": "현재 데이터셋은 약 15,000개 문제를 포함하며 덧셈(+)과 뺄셈(-)만 다루고, 1자리~2자리 수(0~99) 범위의 연산을 커버한다. W 총점 범위는 0점(0+0)부터 11점(99+98 등)까지, W 레벨은 1~23, C 레벨은 1~15이다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 3,
+          "line_start": 2,
+          "quote_sha256": "4f43ef41e66ca2490d7fef33ec822308504d00a33537523622d03535d1bba999",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-003",
+      "statement": "W1(연산 종류) 가중치는 덧셈 0점, 뺄셈 +1.5점으로, 뺄셈이 역연산 인지 부하로 인해 더 높은 난이도를 부여받는다. 곱셈/나눗셈은 기준표에 헤더만 존재하고 실제 데이터가 없어 향후 확장이 필요하다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 8,
+          "line_start": 6,
+          "quote_sha256": "512d01cef71a2dfaaa460a46af75db4d694ec24e24bfa47fb22426f9eada19a5",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-004",
+      "statement": "W2(자릿수와 자릿값) 가중치는 동일 자릿수 0점, 비대칭 자릿수 +1.0점, 자릿수 확장 시 자릿당 +2.0점으로, 실제 데이터에서 1자리+2자리 혼합 연산은 W2=3, 2자리+2자리 연산은 W2=4로 나타난다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 10,
+          "line_start": 9,
+          "quote_sha256": "79d837736ace5ac03e05513c1402f8540dd48146c775dac27d21b6792b7f8f7c",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-005",
+      "statement": "W3(숫자 크기 인지 부하)는 0~5 구성 시 0점, 6~9 포함 시 개당 +0.5점(최대 1.5점)으로, 보수 개념이 필요한 큰 숫자에 대해 인지 부하를 반영한다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 13,
+          "line_start": 11,
+          "quote_sha256": "91d877684099e5226d9527998e043a58f9c86cbd6382709d50c1efe83fde36fc",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-006",
+      "statement": "W4(절차적 복잡성)는 상태 변화 없음(No Carry/Borrow) 0점, 1회 상태 변화(Single Carry/Borrow) +3.0점, 연속 상태 변화(Double/Continuous) +5.0점으로, 올림/빌림 여부가 난이도의 가장 큰 결정 요인이다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 15,
+          "line_start": 14,
+          "quote_sha256": "20270fc449c8666fb0a217eb031fb69fa1ec7a9f39457e51c4164e4de49ed88f",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-007",
+      "statement": "W5(특수 숫자)는 10의 배수 포함 시 -1.0점, 동일 숫자 반복 시 -0.5점의 감점 체계로, 심리적 안착점이나 패턴 규칙성이 난이도를 낮추는 방향으로 작용한다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 19,
+          "line_start": 16,
+          "quote_sha256": "56f433631e481d9672b0e787ca0a4f72df77299d95aff1b2e292150fe4a2f944",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-008",
+      "statement": "W6(표현 방식 및 문맥)는 단순 수식형을 기본형(0점)으로 하고, 가로셈/문장제(단순 결합)/문장제(비교/변화) 등의 표현 유형을 구분한다. 현재 데이터에서 W6는 0.5점으로 일률 적용되어 있어 세분화가 필요하다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0050",
+          "line_end": 63,
+          "line_start": 59,
+          "quote_sha256": "bd24ca42e0cb068a0679d645eb3174bcaf84a82160a024e7547b4e50dd0b91e4",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-009",
+      "statement": "올림(Carry)이 발생하는 덧셈(예: 1+19=20, 2+18=20 등)은 W4=3으로 W 총점 7점, W 레벨 15, C 레벨 10을 부여받아, 올림 없는 동일 자릿수 연산(W 레벨 8) 대비 난이도가 크게 상승한다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0100",
+          "line_end": 70,
+          "line_start": 66,
+          "quote_sha256": "84bd1da517142485037fadd4d79dce89dd58c06fd13803bba637f57c6482b584",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-010",
+      "statement": "빌림(Borrow)이 발생하는 뺄셈(예: 60-11=49, 60-15=45 등)은 W1=1.5(뺄셈) + W4=3(빌림)이 누적되어 W 총점 8.5점, W 레벨 18, C 레벨 14로, 데이터셋 내 가장 높은 난이도 구간에 해당한다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 101,
+          "line_start": 78,
+          "quote_sha256": "5afce545eeaea6d9b7b9e4f9da2e2e90849e0b61dce4931f92cbad01e5e0f452",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-011",
+      "statement": "10의 배수 덧셈(0+10, 0+20 등)은 W5=-1.0 감점이 적용되어 W 총점 2.5점(W 레벨 6)으로, 동일 자릿수 조합의 비배수 연산(W 총점 3.5점, W 레벨 8)보다 낮은 난이도를 부여받는다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0100",
+          "line_end": 5,
+          "line_start": 1,
+          "quote_sha256": "7d83526c2246ea5b9394174455dd12d98108e1512a7381217d56088e87f1fe1b",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "medium",
+      "id": "CLM-012",
+      "statement": "2자리+2자리 올림 연산(예: 56+36=92)은 W 총점 8.5점, W 레벨 18, C 레벨 11로 분류되며, 결과가 100 이상이 되는 동일 W 총점 연산(56+61=117)은 C 레벨 8로 오히려 낮게 분류된다. 이는 C 레벨 매핑 로직에 결과값 범위가 반영될 수 있음을 시사한다."
+    }
+  ],
+  "inputs": {
+    "chunks_used": [
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0002",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0003",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0004",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0005",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0009",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0010",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0050",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0100",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0150",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0151"
+    ],
+    "evidence_index": ".claude/knowledge/evidence/index/sources.jsonl"
+  },
+  "open_questions": [
+    {
+      "citations": [],
+      "id": "Q-001",
+      "priority": "high",
+      "question": "W 레벨(1~23)에서 C 레벨(1~15)로의 매핑 규칙(공식 또는 룩업 테이블)이 명시되어 있지 않다. 동일 W 레벨에서도 C 값이 달라지는 패턴이 관찰되며(예: W=3에서 C=1 또는 C=3), 매핑 로직의 완전한 정의가 필요하다."
+    },
+    {
+      "citations": [],
+      "id": "Q-002",
+      "priority": "high",
+      "question": "채점 기준의 가중치 값(예: W4 올림 +3.0점)이 교육학적 근거에 기반한 것인지, 경험적 데이터에서 도출된 것인지 근거 문서가 부재하다. 가중치의 타당성 검증 방법론이 정의되어야 한다."
+    },
+    {
+      "citations": [],
+      "id": "Q-003",
+      "priority": "medium",
+      "question": "W6(표현 방식) 차원이 현재 데이터에서 0.5점으로 일률 적용되어 있어, 문장제/가로셈/세로셈 등 표현 유형별 실질적 차별화가 이루어지지 않고 있다. 향후 문장제 유형을 포함할 때 이 차원의 세분화 계획이 필요하다."
+    },
+    {
+      "citations": [],
+      "id": "Q-004",
+      "priority": "medium",
+      "question": "실제 학생 학습 데이터(정답률, 풀이 시간 등)와 현재 W/C 레벨 간의 상관관계가 검증되지 않았다. 레벨링 체계의 교육적 유효성을 어떤 데이터와 방법으로 검증할 것인가?"
+    },
+    {
+      "citations": [],
+      "id": "Q-005",
+      "priority": "low",
+      "question": "곱셈/나눗셈, 3자리 수 이상, 분수/소수 연산으로 확장 시 기존 6차원 가중치 체계가 충분한지, 새로운 차원(예: 자릿수 곱셈 복잡성, 분수 통분 부하)의 추가가 필요한지 평가되어야 한다."
+    }
+  ],
+  "project": "수학 문제 레벨링 품질 검증",
+  "risks": [
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 3,
+          "line_start": 2,
+          "quote_sha256": "4f43ef41e66ca2490d7fef33ec822308504d00a33537523622d03535d1bba999",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "id": "RSK-001",
+      "impact": "high",
+      "mitigation": "곱셈/나눗셈 확장 시 W1 가중치 재설계를 별도 마일스톤으로 분리하고, 교육 전문가 자문을 포함한 가중치 검증 프로세스를 수립한다.",
+      "risk": "현재 덧셈/뺄셈만 커버하므로 곱셈/나눗셈 확장 시 W1 가중치 체계 전면 재설계가 필요하며, 기존 레벨과의 정합성 유지가 어려울 수 있다."
+    },
+    {
+      "citations": [],
+      "id": "RSK-002",
+      "impact": "high",
+      "mitigation": "MVP 단계에서 실제 학생 데이터(최소 500명, 3개월)와의 상관관계 분석을 필수 게이트로 설정하고, 통계적 유의성 기준(r >= 0.7)을 수용 기준에 포함한다.",
+      "risk": "실제 학생 데이터 없이 전문가 판단으로만 설계된 가중치 체계가 실제 학습 난이도와 괴리될 수 있어, 레벨링 시스템의 교육적 효과가 보장되지 않는다."
+    },
+    {
+      "citations": [],
+      "id": "RSK-003",
+      "impact": "medium",
+      "mitigation": "CSV에서 시스템 통합 가능한 구조화 포맷(JSON/Protocol Buffers)으로의 변환 파이프라인을 Phase 1에서 구축하고, 스키마 버저닝을 도입한다.",
+      "risk": "현재 CSV 기반 데이터 포맷이 시스템 통합과 실시간 레벨링 엔진에 부적합하며, 15,000건 이상 규모에서 성능 병목이 발생할 수 있다."
+    },
+    {
+      "citations": [],
+      "id": "RSK-004",
+      "impact": "medium",
+      "mitigation": "가중치 변경 이력을 버전 관리하고, 변경 시 전체 문제의 레벨 재계산 + 변경 영향 리포트 자동 생성 도구를 구축한다.",
+      "risk": "가중치 조정 시 전체 문제의 레벨이 일괄 변경되어, 이미 학습 중인 학생의 커리큘럼과 학습 이력 정합성이 깨질 수 있다."
+    },
+    {
+      "citations": [],
+      "id": "RSK-005",
+      "impact": "low",
+      "mitigation": "W-to-C 매핑 규칙을 명시적 구성 파일로 외부화하고, 연산 유형별 독립적 매핑 테이블을 지원하는 설계를 채택한다.",
+      "risk": "W 레벨에서 C 레벨로의 매핑 로직이 불투명하여, 새로운 연산 유형 추가 시 C 레벨 분포가 비정상적으로 편중될 수 있다."
+    }
+  ],
+  "role": "pm",
+  "version": "1.0"
+}

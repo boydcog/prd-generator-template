@@ -1,0 +1,223 @@
+{
+  "claims": [
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 3,
+          "line_start": 3,
+          "quote_sha256": "a3fa042225fb31d9871c8612891bbb1bf71c68a8dcf40c9cd6b43fa28dbe63b3",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-001",
+      "statement": "W1~W6 가중치 체계는 연산 종류, 자릿수, 숫자 크기, 절차적 복잡성, 특수 숫자, 표현 방식의 6개 차원으로 수학 문제 난이도를 정량화하며, 약 15,000개 덧셈/뺄셈 문제에 대해 W_총점 0~11점 범위로 매핑된다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 5,
+          "line_start": 4,
+          "quote_sha256": "4de380d05aea84878cbb7d0ed787720e9deb138deb1026f43925cd80cae62efa",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-002",
+      "statement": "W1 연산 종류에서 뺄셈(+1.5점)이 덧셈(0점) 대비 역연산 인지 부하를 반영하여 기본 1.5점 높게 책정되어 있으며, 이는 동일 숫자 조합에서 뺄셈이 항상 더 높은 난이도로 분류됨을 의미한다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 15,
+          "line_start": 14,
+          "quote_sha256": "232532d9a20198bb2a9964f7facdc56108538a85d21d4ae012ff612e8cfaeed2",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-003",
+      "statement": "W4 절차적 복잡성은 가중치 체계에서 가장 큰 단일 점수 기여자로, carry/borrow 1회 발생 시 +3.0점, 연속 carry/borrow 시 +5.0점이 부과되어 전체 난이도 편차의 핵심 동인이 된다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 10,
+          "line_start": 9,
+          "quote_sha256": "82e8ae3007b17aecf89dada12ac278fc663cef0cf4a86d5b05cf398c04c16d03",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-004",
+      "statement": "W2 자릿수 차원은 비대칭 자릿수(nn+n)에 +1.0점, 자릿수 확장에 자릿당 +2.0점을 부여하여 1자리+2자리 혼합 연산이 동일 자릿수 연산 대비 체계적으로 높은 레벨로 분류된다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 17,
+          "line_start": 16,
+          "quote_sha256": "0c0b77794ad3c82c89c08fdd3766da95ec5ff684e7852356838f28c67a2256e0",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-005",
+      "statement": "W5 특수 숫자 감점(-1.0점 10의 배수, -0.5점 동일 숫자 반복)은 학습자의 심리적 안착점과 규칙성 인지 효과를 반영한 차별화 요소로, 경쟁 제품과의 핵심 차별점이 될 수 있다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 58,
+          "line_start": 4,
+          "quote_sha256": "4bc78ccc52e1046b21568779dc671dc92ad1d3746d6f5e362673794808268a44",
+          "source_name": "수학 난이도 채점 기준표"
+        },
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0151",
+          "line_end": 53,
+          "line_start": 3,
+          "quote_sha256": "4bc78ccc52e1046b21568779dc671dc92ad1d3746d6f5e362673794808268a44",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-006",
+      "statement": "데이터셋은 약 15,050개 문제를 W(1~23) 23단계와 C(1~15) 15등급으로 이중 매핑하여 미세 난이도 조정과 교육과정 연계 등급 부여를 동시에 지원한다. W_총점 0점(0+0)부터 11점(99+98 등)까지 전 범위를 커버한다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0050",
+          "line_end": 64,
+          "line_start": 60,
+          "quote_sha256": "232532d9a20198bb2a9964f7facdc56108538a85d21d4ae012ff612e8cfaeed2",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-007",
+      "statement": "carry가 발생하는 문제(예: 1+19=20, W_총점 7.0)는 carry가 없는 동일 자릿수 조합(예: 1+11=12, W_총점 3.5) 대비 W4에서 +3.0점이 추가되어, 절차적 복잡성이 난이도 레벨을 W(8)에서 W(15)로 크게 점프시키는 핵심 변수임이 데이터로 확인된다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 12,
+          "line_start": 12,
+          "quote_sha256": "ea82b9fab22d48dd3dbcaa2e1448984c8a77a6dbe53fd266ed87ea1bfda9c7cd",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "medium",
+      "id": "CLM-008",
+      "statement": "W3 숫자 크기 인지 부하에서 6~9 포함 시 개당 +0.5점(최대 1.5점)은 보수 개념 활용 필요성을 반영하나, 최대 기여분이 1.5점으로 W4(최대 5점)에 비해 난이도 전체 분산 기여도가 제한적이다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0075",
+          "line_end": 50,
+          "line_start": 3,
+          "quote_sha256": "232532d9a20198bb2a9964f7facdc56108538a85d21d4ae012ff612e8cfaeed2",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-009",
+      "statement": "2자리-2자리 뺄셈(예: 97-16, W_총점 7.5, W(16))은 동일 숫자의 덧셈(예: 97+10, W_총점 7.5, W(16))과 동일 총점이나 C등급에서 뺄셈(C9)이 덧셈(C8)보다 높아, W_총점 외에 연산 방향이 최종 등급에 추가 영향을 미침을 보여준다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0150",
+          "line_end": 47,
+          "line_start": 3,
+          "quote_sha256": "c625eb07e090471eae5cc09ffe00a088a3a0f6b447ff405c130cafcfa8a3b3ff",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-010",
+      "statement": "최상위 난이도 문제(W_총점 11, W(23), C(12))는 연속 carry가 발생하는 2자리+2자리 큰 숫자 조합(예: 97+98=195, 99+98=197)으로 구성되며, 이 단계 문제들은 모두 W4=5(연속 carry)를 포함하여 절차적 복잡성이 최대치에 도달한다."
+    }
+  ],
+  "inputs": {
+    "chunks_used": [
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0002",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0003",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0004",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0050",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0075",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0100",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0150",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0151"
+    ],
+    "evidence_index": ".claude/knowledge/evidence/index/sources.jsonl"
+  },
+  "open_questions": [
+    {
+      "id": "OQ-001",
+      "question": "W_총점에서 C등급으로의 매핑 함수가 비선형적으로 보이는데(동일 W_총점에서도 C등급이 다름), 이 매핑 규칙의 정확한 기준이 데이터에서 명시적으로 제공되지 않는다. 교육과정 전문가의 별도 검증이 필요한가?"
+    },
+    {
+      "id": "OQ-002",
+      "question": "현재 데이터셋은 덧셈/뺄셈만 포함하며, W1 참조표에 곱셈/나누기 행이 존재하나 점수가 비어있다. 곱셈/나누기 확장 시 가중치 체계의 구조적 변경이 필요한가, 아니면 기존 프레임워크 내 확장이 가능한가?"
+    },
+    {
+      "id": "OQ-003",
+      "question": "W6 표현 방식 차원은 현재 모든 문제에서 0.5점(단순 수식형)으로 일정한데, 문장제/가로셈 등 표현 방식 변형이 실제 적용될 계획이 있는가? 있다면 이는 별도 데이터셋이 필요한가?"
+    },
+    {
+      "id": "OQ-004",
+      "question": "실제 학습자(학생) 대상 난이도 체감 데이터와의 교차 검증이 이루어졌는가? W 가중치의 각 계수(1.5, 3.0, 5.0 등)가 교육 심리학적 근거에 기반한 것인지 확인이 필요하다."
+    }
+  ],
+  "project": "수학 문제 레벨링 품질 검증",
+  "risks": [
+    {
+      "description": "W4(절차적 복잡성)가 최대 5점으로 전체 난이도 분산의 약 45%를 차지하여, carry/borrow 유무에 따라 난이도가 급격히 점프한다. 중간 단계(W8~W14)의 문제 밀도가 낮아 적응형 학습에서 세밀한 레벨 조정이 어려울 수 있다.",
+      "id": "RISK-001",
+      "impact": "high",
+      "mitigation": "W4 가중치를 세분화하거나 중간 단계 보간 문제를 추가 생성하여 레벨 간 연속성을 확보해야 한다.",
+      "type": "product"
+    },
+    {
+      "description": "W_총점이 동일해도 C등급이 다른 사례가 발견되어(예: 덧셈 C8 vs 뺄셈 C9), W_총점만으로 최종 난이도를 결정할 수 없다. 이 비선형 매핑 규칙이 투명하게 문서화되지 않으면 시스템 신뢰도가 저하된다.",
+      "id": "RISK-002",
+      "impact": "medium",
+      "mitigation": "W_총점에서 C등급으로의 매핑 규칙을 명시적으로 공식화하고, 모든 예외 케이스를 문서화해야 한다.",
+      "type": "product"
+    },
+    {
+      "description": "현재 데이터셋이 덧셈/뺄셈 1~2자리 수에 한정되어 있어, 3자리 이상 연산이나 곱셈/나누기로 확장 시 가중치 체계의 전면 재설계가 필요할 수 있다. 초기 설계에서 확장성을 고려하지 않으면 기술 부채가 누적된다.",
+      "id": "RISK-003",
+      "impact": "high",
+      "mitigation": "가중치 체계를 모듈화하여 연산 유형별 독립 확장이 가능한 아키텍처를 설계해야 한다.",
+      "type": "technical"
+    },
+    {
+      "description": "경쟁 에듀테크 플랫폼(매쓰플랫, 클래스팅 등)이 AI 기반 적응형 학습을 이미 제공하고 있어, 규칙 기반 가중치 체계만으로는 차별화가 제한될 수 있다. 다만 규칙의 투명성과 교육적 설명 가능성은 AI 블랙박스 대비 장점이다.",
+      "id": "RISK-004",
+      "impact": "medium",
+      "mitigation": "규칙 기반 레벨링의 투명성/설명 가능성을 핵심 차별점으로 포지셔닝하고, 향후 AI와 하이브리드 모델로 진화할 로드맵을 수립한다.",
+      "type": "market"
+    },
+    {
+      "description": "W5 감점 항목(10의 배수 -1.0점, 동일 숫자 반복 -0.5점)이 일부 학습자에게는 오히려 혼동을 줄 수 있으며, 감점 폭이 적정한지 실증 데이터 없이는 판단이 어렵다.",
+      "id": "RISK-005",
+      "impact": "low",
+      "mitigation": "파일럿 테스트에서 W5 감점 적용/미적용 A/B 테스트를 수행하여 실제 학습 효과를 검증한다.",
+      "type": "product"
+    }
+  ],
+  "role": "biz",
+  "version": "1.0"
+}
