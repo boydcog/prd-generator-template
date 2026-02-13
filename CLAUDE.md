@@ -235,7 +235,13 @@ SessionStart hook에서 "GitHub 토큰 없음"이 감지되면 **다른 작업�
 
 ### git pull 우선
 
-모든 명령 실행 전에 `git pull origin main`을 실행합니다 (SessionStart hook에서 자동 처리).
+모든 명령 실행 전에 `git pull --rebase origin main`을 실행합니다 (SessionStart hook에서 자동 처리).
+
+**pull 실패 시 자동 복구 절차:**
+1. `git stash` — 로컬 변경사항 임시 저장
+2. `git pull --rebase origin main` — rebase로 remote 변경 반영
+3. `git stash pop` — 저장한 변경사항 복원
+4. 충돌 발생 시 자동 해결 시도 → 해결 불가 시 사용자에게 안내
 
 ### GitHub 토큰
 
@@ -389,6 +395,7 @@ GH 토큰이 없으면 `.claude/state/pending-issues/`에 로컬 저장 후 토�
 ```
 .
 ├── CLAUDE.md                          ← 이 파일 (프로젝트 규칙)
+├── CHANGELOG.md                       ← 변경 이력 (날짜별 관리)
 ├── .gh-token                          ← GitHub 토큰 (gitignored, 슬랙으로 공유)
 ├── .user-identity                     ← 사용자 이름 (gitignored)
 ├── .gitignore
@@ -422,7 +429,6 @@ GH 토큰이 없으면 `.claude/state/pending-issues/`에 로컬 저장 후 토�
 │   ├── state/                         ← 상태 (generated, gitignored)
 │   ├── knowledge/                     ← 증거 (generated, gitignored)
 │   └── artifacts/                     ← 출력물 (generated, gitignored)
-└── .sisyphus/                         ← 기획 이력 (gitignored)
 ```
 
 ---
@@ -444,10 +450,21 @@ README.md는 프로젝트의 context 문서이다. 다음 파일이 변경될 �
 
 ### Changelog 업데이트 규칙
 
-- 위 트리거 파일이 변경될 때마다 Changelog에 새 항목을 추가한다.
-- 형식: `<details><summary>v{X.Y.Z} — {요약} ({날짜})</summary>` 접기 형태.
-- 기존 항목은 수정하지 않는다 (append-only).
-- 버전 번호: 템플릿 수정/기능 추가 = patch (0.1.X). 메이저/마이너 변경은 배포 시에만.
+변경 이력은 `CHANGELOG.md`에 기록한다. README.md에는 기록하지 않는다.
+
+**작성 시점**: tracked 파일을 커밋할 때마다 작성한다.
+
+**같은 PR 내 갱신 규칙**:
+- 같은 PR에서 추가 커밋이 발생하면 기존 항목을 갱신한다.
+- 새 기능 추가 → 새 bullet 추가.
+- 기존 항목의 내용이 변경됨 → 이전 bullet을 삭제하고 갱신된 내용으로 교체.
+- PR이 merge된 이후에는 해당 항목을 수정하지 않는다.
+
+**형식 규칙**:
+- 날짜 헤더 (`## YYYY-MM-DD`)로 그룹핑한다.
+- 같은 날짜가 이미 있으면 해당 날짜 아래에 bullet 추가/갱신, 없으면 맨 위에 새 날짜 헤더 생성.
+- 각 항목 형식: `- {변경 요약} (\`{commit_short}\`)`
+- 최신 날짜가 위 (역순).
 
 ---
 

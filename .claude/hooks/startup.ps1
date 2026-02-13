@@ -123,13 +123,34 @@ if ($HasGit) {
         }
     }
 
-    # git pull
+    # git pull (rebase 방식, 실패 시 stash + rebase + pop)
     if ($GitReady) {
-        $pullResult = git pull origin main 2>&1
+        $pullResult = git pull --rebase origin main 2>&1
         if ($LASTEXITCODE -eq 0) {
             $Status += "OK git pull 완료"
         } else {
-            $Status += "WARN git pull 실패"
+            # rebase 진행 중이면 abort
+            git rebase --abort 2>$null
+            # stash → rebase → pop
+            $stashResult = git stash 2>&1
+            $stashed = $stashResult -match "Saved working directory"
+            $pullResult2 = git pull --rebase origin main 2>&1
+            if ($LASTEXITCODE -eq 0) {
+                if ($stashed) {
+                    $popResult = git stash pop 2>&1
+                    if ($LASTEXITCODE -eq 0) {
+                        $Status += "OK git pull 완료 (stash+rebase 복구)"
+                    } else {
+                        $Status += "WARN git pull 완료, stash pop 충돌 발생"
+                    }
+                } else {
+                    $Status += "OK git pull 완료 (rebase)"
+                }
+            } else {
+                git rebase --abort 2>$null
+                if ($stashed) { git stash pop 2>$null }
+                $Status += "WARN git pull 실패 (stash+rebase 복구 실패)"
+            }
         }
     }
 

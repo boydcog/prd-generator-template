@@ -133,11 +133,35 @@ if [ "$HAS_GIT" = "true" ]; then
     rmdir "$WORKTREE_DIR" 2>/dev/null || true
   fi
 
-  # git pull
+  # git pull (rebase 방식, 실패 시 stash + rebase + pop)
   if [ "$GIT_READY" = "true" ]; then
-    PULL_RESULT=$(git pull origin main 2>&1 || echo "pull-failed")
+    PULL_RESULT=$(git pull --rebase origin main 2>&1 || echo "pull-failed")
     if echo "$PULL_RESULT" | grep -q "pull-failed"; then
-      STATUS="$STATUS\nWARN git pull 실패"
+      # rebase 진행 중이면 abort
+      git rebase --abort 2>/dev/null || true
+      # stash → rebase → pop
+      STASHED="false"
+      STASH_RESULT=$(git stash 2>&1)
+      if echo "$STASH_RESULT" | grep -q "Saved working directory"; then
+        STASHED="true"
+      fi
+      PULL_RESULT2=$(git pull --rebase origin main 2>&1 || echo "pull-failed")
+      if echo "$PULL_RESULT2" | grep -q "pull-failed"; then
+        git rebase --abort 2>/dev/null || true
+        [ "$STASHED" = "true" ] && git stash pop 2>/dev/null || true
+        STATUS="$STATUS\nWARN git pull 실패 (stash+rebase 복구 실패)"
+      else
+        if [ "$STASHED" = "true" ]; then
+          POP_RESULT=$(git stash pop 2>&1 || echo "pop-failed")
+          if echo "$POP_RESULT" | grep -q "pop-failed\|CONFLICT"; then
+            STATUS="$STATUS\nWARN git pull 완료, stash pop 충돌 발생"
+          else
+            STATUS="$STATUS\nOK git pull 완료 (stash+rebase 복구)"
+          fi
+        else
+          STATUS="$STATUS\nOK git pull 완료 (rebase)"
+        fi
+      fi
     else
       STATUS="$STATUS\nOK git pull 완료"
     fi

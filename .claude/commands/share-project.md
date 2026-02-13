@@ -67,27 +67,17 @@ git -C "$WORKTREE_DIR" add .claude/commands/ .claude/templates/ .claude/spec/ .c
 **절대 추가하지 않는 파일:**
 - `.gh-token` (민감 정보)
 - `.claude/knowledge/evidence/chunks/` (대용량 청크)
-- `.sisyphus/` (내부 이력)
 - `.claude/state/pending-issues/` (이미 이슈로 등록됨)
 
-### Step 5: README Changelog 업데이트
+### Step 5: CHANGELOG.md 업데이트
 
-PR 생성 전에 `README.md`의 Changelog 섹션에 프로젝트 공유 항목을 추가합니다:
+PR 생성 전에 `CHANGELOG.md`에 프로젝트 공유 항목을 추가/갱신합니다:
 
-```markdown
-<details>
-<summary>project: {project_name} — {document_type} v{version} ({날짜})</summary>
-
-- 프로젝트 공유: {project_name}
-- 문서 유형: {document_type}
-- 문서 버전: v{version}
-- 작성자: {user_name}
-- 포함 파일: {file_count}개
-
-</details>
-```
-
-- 기존 Changelog 항목 위에 prepend합니다 (최신이 위).
+- 오늘 날짜 (`## YYYY-MM-DD`) 섹션이 이미 있으면 해당 날짜 아래에서:
+  - 새 항목 → 새 bullet 추가.
+  - 기존 항목과 내용이 겹치면 → 이전 bullet 삭제 후 갱신된 내용으로 교체.
+- 없으면 `# Changelog` 바로 아래에 새 날짜 헤더 + bullet 생성.
+- 항목 형식: `- 프로젝트 공유: {project_name} — {document_type} v{version} (\`{commit_short}\`)`
 - 이 항목은 `project/` 브랜치에만 포함됩니다 (main에 머지하지 않으므로 main의 Changelog에는 영향 없음).
 
 ### Step 6: 커밋
