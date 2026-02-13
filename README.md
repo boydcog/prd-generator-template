@@ -2,6 +2,10 @@
 
 Google Drive 문서를 기반으로 6역할 에이전트 팀이 PRD, 디자인 사양서, 마케팅 브리프 등 다양한 문서를 자동 생성하는 Claude Code 프로젝트 템플릿.
 
+## Changelog
+
+[전체 변경 이력 보기](CHANGELOG.md)
+
 ## 어떤 문제를 해결하는가
 
 기획 문서 작성은 여러 관점(비즈니스, 마케팅, 기술, PM 등)의 분석이 필요하고, 출처 기반의 인용과 구조적 일관성을 유지해야 합니다. 이 템플릿은 Google Drive에 올려둔 참고 자료만 연결하면, 에이전트 팀이 증거 기반으로 문서를 자동 생성합니다.
@@ -78,7 +82,7 @@ Google Drive 문서를 기반으로 6역할 에이전트 팀이 PRD, 디자인 �
 첫 실행 시 자동으로 이름을 물어봅니다. 수동 설정:
 
 ```bash
-echo "홍길동" > .user-identity
+echo "보이드" > .user-identity
 ```
 
 ### 3. 실행
@@ -97,6 +101,7 @@ Claude Code 세션을 시작하면 SessionStart hook이 상태를 자동 감지�
 ```
 .
 ├── CLAUDE.md                    ← 프로젝트 규칙 (Single Source of Truth)
+├── CHANGELOG.md                 ← 변경 이력 (날짜별 관리)
 ├── README.md                    ← 이 파일 (프로젝트 context 문서)
 ├── .gh-token                    ← GitHub 토큰 (gitignored)
 ├── .user-identity               ← 사용자 이름 (gitignored)
@@ -122,79 +127,3 @@ Claude Code 세션을 시작하면 SessionStart hook이 상태를 자동 감지�
 | `tech-spec` | 기술 사양서 | 기술 아키텍처 및 구현 상세 문서 | `TECH-SPEC.md` |
 | `custom` | 사용자 정의 | 사용자가 에이전트와 섹션을 직접 정의 | `DOCUMENT.md` |
 
----
-
-## Changelog
-
-<details>
-<summary>v0.1.5 — /admin Changelog 단계 추가 (2026-02-13)</summary>
-
-- `/admin` 워크플로우에 Step 6 "README Changelog 업데이트" 단계 추가
-- PR 생성 전 Changelog에 변경 항목을 자동 prepend하도록 명시
-- CLAUDE.md Changelog 규칙 및 `/share-project` 패턴과 일관성 확보
-
-</details>
-
-<details>
-<summary>v0.1.4 — PR 리뷰 피드백 답글 규칙 추가 (2026-02-13)</summary>
-
-- CLAUDE.md에 "PR 리뷰 피드백 반영 규칙" 섹션 추가
-- 수정 커밋 + PR 답글을 반드시 함께 수행하도록 명시
-- 답글 형식: 반영 커밋 해시 + 지적/반영 내용 표 + 미반영 사유
-
-</details>
-
-<details>
-<summary>v0.1.3 — 에이전트 역할 자동 제안 + 보안 개선 (2026-02-13)</summary>
-
-- `agent-team-spec.md`에 동적 역할 제안 시스템 추가 — 프로젝트 주제 기반으로 에이전트 역할 자동 구성
-- `document-types.yaml`에 `agent_roles.dynamic_suggestion` 필드 추가
-- 입력 검증(URL 화이트리스트, 파일명 sanitize) 및 감사 추적(audit trail) 강화
-- 토큰 보안: push URL에서만 토큰 사용, remote config에 토큰 잔류 방지
-
-</details>
-
-<details>
-<summary>v0.1.2 — Admin 커맨드 + Worktree 브랜치 격리 (2026-02-13)</summary>
-
-- `/admin` 커맨드 추가 — 템플릿 maintainer 전용 워크플로우 (요구사항 → 플랜 → 구현 → 검증 → PR)
-- `.claude/manifests/admins.yaml` 추가 — 관리자 사용자 목록
-- `git worktree` 기반 PR 생성으로 전환 — 여러 세션이 동시 작업해도 브랜치 충돌 없음
-- `git checkout -b` → `git worktree add` 패턴 교체 (CLAUDE.md, share-project.md)
-- startup hook에 잔여 worktree 자동 정리 섹션 추가 (startup.sh, startup.ps1)
-- 프로젝트 명령 목록에 admin, share-project 추가
-
-</details>
-
-<details>
-<summary>v0.1.1 — 프로젝트 공유 명령 추가 (2026-02-13)</summary>
-
-- `/share-project` 명령 추가 — 프로젝트 결과물(문서, 메타데이터)을 PR로 팀에 공유
-- `project/{name}` 브랜치에 gitignore된 artifacts를 강제 추가하여 PR 생성
-- 민감 정보(`.gh-token`) 및 대용량 청크 자동 제외
-- PR 본문에 프로젝트 요약, 포함 파일, 관련 이슈 자동 포함
-- "공유해줘" / "PR 올려줘" 등 자연어 트리거 지원
-
-</details>
-
-<details>
-<summary>v0.1.0 — 초기 버전 (2026-02-12)</summary>
-
-- 6역할 에이전트 팀 (biz, marketing, research, tech, pm, synth)
-- Wave 1 병렬 + Wave 2 순차 실행 패턴
-- `/auto-generate` 전체 파이프라인 자동 실행 (sync → research → verify → 완료)
-- 6종 문서 유형 지원 (`document-types.yaml` 레지스트리)
-- Google Drive 동기화 (`/sync-drive`)
-- 증거 청크 시스템 (`knowledge/evidence/`)
-- JSON 출력 계약 (claims, citations, risks, open_questions)
-- `/init-project` 프로젝트 초기화
-- `/run-research` 에이전트 리서치 실행
-- `/verify` 구조/스키마/인용/완전성 검증
-- `/create-issue` GitHub Issue 자동 생성
-- `.user-identity` 사용자 아이덴티티 시스템
-- PR/Issue 템플릿 (`.claude/templates/`)
-- 브랜치 워크플로우 (main 기반 + feature 브랜치 자동 복귀)
-- SessionStart hook 상태 감지 및 자동 실행
-- 인용 사양 (`citation-spec.md`) + 증거 정규화 사양 (`evidence-spec.md`)
-
-</details>

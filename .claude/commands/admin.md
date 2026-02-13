@@ -41,22 +41,15 @@
    - `.claude/spec/document-types.yaml` 변경 → "지원 문서 유형" 표 업데이트
    - `CLAUDE.md` 구조 섹션 변경 → "파일 구조" 섹션 업데이트
 
-### Step 6: README Changelog 업데이트
+### Step 6: CHANGELOG.md 업데이트
 
-Worktree에 커밋하기 전에 `README.md`의 Changelog 섹션에 항목을 추가합니다:
+Worktree에 커밋하기 전에 `CHANGELOG.md`에 항목을 추가/갱신합니다:
 
-```markdown
-<details>
-<summary>v{X.Y.Z} — {변경 요약} ({날짜})</summary>
-
-- {변경 내역 bullet points}
-
-</details>
-```
-
-- 기존 Changelog 항목 위에 prepend합니다 (최신이 위).
-- 버전 번호: 사용자가 버전을 명시해서 요청했다면 해당 버전을 따릅니다. 기본값은 직전 Changelog 항목의 patch 버전을 +1 합니다.
-- 변경 요약: 커밋 메시지와 동일한 수준으로 작성합니다.
+- 오늘 날짜 (`## YYYY-MM-DD`) 섹션이 이미 있으면 해당 날짜 아래에서:
+  - 새 기능 → 새 bullet 추가.
+  - 기존 항목과 내용이 겹치면 → 이전 bullet 삭제 후 갱신된 내용으로 교체.
+- 없으면 `# Changelog` 바로 아래에 새 날짜 헤더 + bullet 생성.
+- 항목 형식: `- {변경 요약} (\`{commit_short}\`)`
 
 ### Step 7: Worktree PR 생성
 
@@ -91,6 +84,10 @@ GH_TOKEN=$GH_TOKEN gh pr create --repo boydcog/prd-generator-template \
 
 # 5. worktree 정리
 git worktree remove "$WORKTREE_DIR"
+
+# 6. main 작업 디렉토리 복원
+git -C "$PROJECT_DIR" checkout -- {modified_files}
+# 새로 생성한 untracked 파일이 있으면 삭제
 ```
 
 3. PR 본문은 `.claude/templates/pr-template.md` 템플릿을 사용합니다.
