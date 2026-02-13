@@ -7,6 +7,7 @@ document_types:
   prd:
     name: 제품 요구사항 문서
     description: 제품 기획을 위한 종합 요구사항 문서
+    allow_dynamic_roles: true
     output_dir_name: prd
     output_file_name: PRD.md
     agent_roles:
@@ -33,6 +34,7 @@ document_types:
   design-spec:
     name: 디자인 사양서
     description: UI/UX 디자인 상세 사양 및 가이드라인
+    allow_dynamic_roles: true
     output_dir_name: design-spec
     output_file_name: DESIGN-SPEC.md
     agent_roles:
@@ -54,6 +56,7 @@ document_types:
   marketing-brief:
     name: 마케팅 브리프
     description: 마케팅 전략 및 캠페인 기획 문서
+    allow_dynamic_roles: true
     output_dir_name: marketing-brief
     output_file_name: MARKETING-BRIEF.md
     agent_roles:
@@ -76,6 +79,7 @@ document_types:
   business-plan:
     name: 사업 계획서
     description: 사업 타당성 및 실행 계획 문서
+    allow_dynamic_roles: true
     output_dir_name: business-plan
     output_file_name: BUSINESS-PLAN.md
     agent_roles:
@@ -101,6 +105,7 @@ document_types:
   tech-spec:
     name: 기술 사양서
     description: 기술 아키텍처 및 구현 상세 문서
+    allow_dynamic_roles: true
     output_dir_name: tech-spec
     output_file_name: TECH-SPEC.md
     agent_roles:
@@ -124,6 +129,7 @@ document_types:
   custom:
     name: 사용자 정의
     description: 사용자가 에이전트와 섹션을 직접 정의
+    allow_dynamic_roles: false
     output_dir_name: custom
     output_file_name: DOCUMENT.md
     agent_roles:

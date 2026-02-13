@@ -141,6 +141,49 @@ synth 에이전트가 Wave 1의 결과를 읽고 최종 문서를 생성합니�
 
 ---
 
+## 동적 역할 (Dynamic Roles)
+
+프로젝트 주제에 따라 기존 역할로 커버되지 않는 영역이 감지되면,
+`run-research` Step 0.6에서 추가 역할을 자동 제안합니다.
+
+### 동적 역할 규칙
+
+1. **역할 ID**: `/^[a-z][a-z0-9-]*$/` 패턴 준수 (영문 소문자 시작, 소문자/숫자/하이픈만 허용). 기존 역할 ID(`biz`, `marketing`, `research`, `tech`, `pm`, `synth`)와 중복 불가. 저장 전 반드시 검증.
+2. **JSON 계약**: 기존 에이전트와 동일한 공통 Envelope 사용 (위 "JSON 출력 계약" 참조)
+3. **출력 경로**: `.claude/artifacts/agents/{role_id}.json` + `{role_id}.md`
+4. **증거 분배**: `keywords` 배열의 키워드로 관련 청크를 필터링하여 분배
+5. **최대 개수**: 동적 역할은 최대 3개까지 제안 (너무 많으면 품질 저하)
+6. **저장 위치**: `project.json`의 `dynamic_roles[]` (프로젝트별, gitignored 상태 파일). `document-types.yaml`이나 `agent-team-spec.md`에는 반영하지 않음 (템플릿 파일 보호).
+7. **synth 통합**: synth 에이전트는 동적 역할 출력도 Wave 1 결과로 동일하게 처리
+8. **허용 플래그**: `document-types.yaml`의 `allow_dynamic_roles`가 `true`인 문서 유형에서만 활성화
+9. **필수 필드 검증**: 각 동적 역할은 `role_id`, `name`(비어있지 않음), `responsibility`(비어있지 않음), `keywords`(최소 1개), `output_sections`(최소 1개)를 모두 갖추어야 함. 검증 실패 시 해당 역할 제외.
+10. **감사 추적**: `project.json`에 `dynamic_roles_meta` 객체를 함께 저장 (변경자, 시각, 액션, 이전 역할 목록)
+
+### 동적 역할 데이터 구조
+
+`project.json`에 저장되는 각 동적 역할의 형식:
+
+```json
+{
+  "role_id": "ops",
+  "name": "운영/프로세스",
+  "responsibility": "운영 프로세스 분석, 워크플로우 최적화, 변경 관리",
+  "keywords": ["운영", "프로세스", "워크플로우", "SOP", "변경관리"],
+  "output_sections": ["운영 현황 분석", "프로세스 개선 방안", "변경 관리 계획"]
+}
+```
+
+### 동적 역할 프롬프트 템플릿
+
+기존 에이전트 프롬프트 템플릿과 동일하되, 역할 정의를 `agent-team-spec.md`의 고정 섹션 대신
+`project.json`의 `dynamic_roles`에서 로드합니다:
+
+- 역할명 → `dynamic_roles[].name`
+- 책임 범위 → `dynamic_roles[].responsibility`
+- 필수 섹션 → `dynamic_roles[].output_sections`
+
+---
+
 ## 출력 파일 경로
 
 | 에이전트 | JSON | Markdown |
