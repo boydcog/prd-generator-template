@@ -343,12 +343,12 @@ GH 토큰이 없으면 `.claude/state/pending-issues/`에 로컬 저장 후 토�
    - 프로젝트: `project/{slug}`
 3. 변경된 파일을 worktree로 복사
 4. worktree 안에서 `git add` + `git commit`
-5. 인증된 URL로 push:
+5. push URL로 직접 토큰 전달 (remote config에 토큰을 남기지 않음):
    ```
    GH_TOKEN=$(cat "${PROJECT_DIR}/.gh-token" | tr -d '[:space:]')
-   git -C ../.worktrees/${SLUG} remote set-url origin "https://${GH_TOKEN}@github.com/boydcog/prd-generator-template.git"
-   git -C ../.worktrees/${SLUG} push -u origin {branch_name}
-   git -C ../.worktrees/${SLUG} remote set-url origin "https://github.com/boydcog/prd-generator-template.git"
+   git -C ../.worktrees/${SLUG} push \
+     "https://user:${GH_TOKEN}@github.com/boydcog/prd-generator-template.git" \
+     "HEAD:refs/heads/{branch_name}"
    ```
 6. PR 생성 (`pr-template.md` 사용)
 7. Worktree 정리: `git worktree remove ../.worktrees/${SLUG}`

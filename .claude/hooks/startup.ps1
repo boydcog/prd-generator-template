@@ -105,15 +105,20 @@ if ($HasGit) {
     # ──────────────────────────────────────
     $WorktreeDir = Join-Path (Split-Path $ProjectDir) ".worktrees"
     if (Test-Path $WorktreeDir) {
-        git worktree prune 2>$null
-        $Remaining = (Get-ChildItem -Directory $WorktreeDir -ErrorAction SilentlyContinue).Count
-        if ($Remaining -gt 0) {
-            Get-ChildItem -Directory $WorktreeDir | ForEach-Object {
-                git worktree remove --force $_.FullName 2>$null
-            }
-            $Status += "WARN 잔여 worktree ${Remaining}개 정리됨"
+        git -C $ProjectDir worktree prune 2>$null
+        $Cleaned = 0
+        $Failed = 0
+        Get-ChildItem -Directory $WorktreeDir -ErrorAction SilentlyContinue | ForEach-Object {
+            $result = git -C $ProjectDir worktree remove --force $_.FullName 2>&1
+            if ($LASTEXITCODE -eq 0) { $Cleaned++ } else { $Failed++ }
         }
-        if ((Get-ChildItem $WorktreeDir -ErrorAction SilentlyContinue).Count -eq 0) {
+        if ($Cleaned -gt 0) {
+            $Status += "WARN 잔여 worktree ${Cleaned}개 정리됨"
+        }
+        if ($Failed -gt 0) {
+            $Status += "WARN worktree ${Failed}개 정리 실패"
+        }
+        if ((Get-ChildItem $WorktreeDir -ErrorAction SilentlyContinue | Measure-Object).Count -eq 0) {
             Remove-Item $WorktreeDir -ErrorAction SilentlyContinue
         }
     }

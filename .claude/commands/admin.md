@@ -50,29 +50,29 @@
 2. Worktree 방식으로 PR을 생성합니다:
 
 ```bash
+PROJECT_DIR="$(pwd)"
+
 # 1. worktree 생성
 SLUG="{branch_name에서 / → -}"
 WORKTREE_DIR="../.worktrees/${SLUG}"
 git worktree add -b {branch_name} "$WORKTREE_DIR" main
 
-# 2. 변경된 파일을 worktree로 복사
-cp {modified_files} "$WORKTREE_DIR/{path}/"
+# 2. 변경된 파일을 worktree로 복사 (디렉토리 구조 유지)
+cp --parents {modified_files} "$WORKTREE_DIR/"
 
-# 3. worktree 안에서 commit + push
-cd "$WORKTREE_DIR"
-git add .
-git commit -m "{type}: {요약}"
-GH_TOKEN=$(cat "{PROJECT_DIR}/.gh-token" | tr -d '[:space:]')
-git remote set-url origin "https://${GH_TOKEN}@github.com/boydcog/prd-generator-template.git"
-git push -u origin {branch_name}
-git remote set-url origin "https://github.com/boydcog/prd-generator-template.git"
+# 3. worktree 안에서 commit + push (git -C로 디렉토리 이동 없이)
+git -C "$WORKTREE_DIR" add .
+git -C "$WORKTREE_DIR" commit -m "{type}: {요약}"
+GH_TOKEN=$(cat "${PROJECT_DIR}/.gh-token" | tr -d '[:space:]')
+git -C "$WORKTREE_DIR" push \
+  "https://user:${GH_TOKEN}@github.com/boydcog/prd-generator-template.git" \
+  "HEAD:refs/heads/{branch_name}"
 
 # 4. PR 생성
 GH_TOKEN=$GH_TOKEN gh pr create --repo boydcog/prd-generator-template \
-  --title "{type}: {요약}" --body "..."
+  --title "{type}: {요약}" --body "..." --head "{branch_name}"
 
 # 5. worktree 정리
-cd "{PROJECT_DIR}"
 git worktree remove "$WORKTREE_DIR"
 ```
 

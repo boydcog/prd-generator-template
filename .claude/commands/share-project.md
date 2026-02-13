@@ -102,14 +102,15 @@ git -C "$WORKTREE_DIR" commit -m "project: {project_name} — {document_type} v{
 브라우저 인증이나 `gh auth login` 등 interactive 플로우를 사용하지 않습니다.
 
 ```bash
-# worktree 안에서 인증된 URL로 push (PROJECT_DIR은 Step 4에서 설정됨)
+# push URL로 직접 토큰 전달 (remote config에 토큰을 남기지 않음)
 GH_TOKEN=$(cat "${PROJECT_DIR}/.gh-token" | tr -d '[:space:]')
-git -C "$WORKTREE_DIR" remote set-url origin "https://${GH_TOKEN}@github.com/boydcog/prd-generator-template.git"
-git -C "$WORKTREE_DIR" push -u origin "project/{branch_slug}"
-git -C "$WORKTREE_DIR" remote set-url origin "https://github.com/boydcog/prd-generator-template.git"
+git -C "$WORKTREE_DIR" push \
+  "https://user:${GH_TOKEN}@github.com/boydcog/prd-generator-template.git" \
+  "HEAD:refs/heads/project/{branch_slug}"
 
 # PR 생성
-GH_TOKEN=$GH_TOKEN gh pr create --repo boydcog/prd-generator-template ...
+GH_TOKEN=$GH_TOKEN gh pr create --repo boydcog/prd-generator-template \
+  --head "project/{branch_slug}" ...
 ```
 
 1. push + PR 생성
