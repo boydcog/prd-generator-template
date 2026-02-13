@@ -43,8 +43,9 @@ git add -f .user-identity
 # 생성된 문서 (artifacts 전체)
 git add -f .claude/artifacts/
 
-# 템플릿 변경사항도 포함
-git add -A
+# tracked 파일 중 변경된 템플릿만 포함 (구체적 경로 지정)
+git add CLAUDE.md README.md
+git add .claude/commands/ .claude/templates/ .claude/spec/ .claude/manifests/
 ```
 
 **절대 추가하지 않는 파일:**
@@ -81,11 +82,15 @@ git commit -m "project: {project_name} — {document_type} v{version}"
 
 ### Step 7: PR 생성
 
-**중요: 모든 `gh` 명령은 `GH_TOKEN` 환경변수를 직접 주입합니다.**
+**중요: `gh auth setup-git`으로 git credential을 설정한 뒤 push/PR을 실행합니다.**
 브라우저 인증이나 `gh auth login` 등 interactive 플로우를 사용하지 않습니다.
 
 ```bash
-GH_TOKEN=$(cat .gh-token) git push -u origin project/{branch_slug}
+# gh를 git credential helper로 설정 (GH_TOKEN으로 인증)
+GH_TOKEN=$(cat .gh-token) gh auth setup-git
+
+# push 및 PR 생성
+git push -u origin project/{branch_slug}
 GH_TOKEN=$(cat .gh-token) gh pr create ...
 ```
 
@@ -126,7 +131,7 @@ GH_TOKEN=$(cat .gh-token) gh pr create ...
 
 3. `gh pr create` 실행.
 
-**중요**: Step 7에서 PR 본문에 `GH_TOKEN=$(cat .gh-token)`을 사용합니다. `gh auth login` 등 interactive 인증은 절대 사용하지 않습니다.
+**중요**: Step 7의 `gh pr create` 명령 실행 시 `GH_TOKEN` 환경 변수를 사용하여 인증합니다. `gh auth login` 등 interactive 인증은 절대 사용하지 않으며, PR 본문에 토큰을 포함해서는 안 됩니다.
 
 ### Step 8: main 복귀 (필수)
 
