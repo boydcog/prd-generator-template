@@ -20,9 +20,79 @@
    - 필드가 없으면 기본값 `prd`를 사용합니다 (하위호환).
 2. `.claude/spec/document-types.yaml`에서 해당 문서 유형의 설정을 로드합니다:
    - `agent_roles.wave1` → Wave 1에서 실행할 에이전트 목록
+   - `allow_dynamic_roles` → 동적 역할 분석 활성화 여부
    - `output_dir_name` → 출력 디렉토리 이름
    - `output_file_name` → 최종 문서 파일명
    - `output_sections` → synth 에이전트에 전달할 문서 구조
+
+### Step 0.6: 에이전트 역할 적합성 분석
+
+> 이 단계는 `document-types.yaml`의 `allow_dynamic_roles`가 `true`일 때만 실행합니다.
+> `false`이면 (예: custom 유형) 이 단계를 건너뛰고 Step 0.7로 진행합니다.
+
+#### 1. 입력 수집
+
+다음 정보를 수집합니다:
+- `project.json`: `name`, `domain`, `core_problem`, `constraints`, `research_questions`
+- `sources.jsonl`: 증거 소스 목록 (제목, 유형)
+- `document-types.yaml`: 현재 문서 유형의 `agent_roles.wave1` 에이전트 목록
+
+#### 2. 기존 dynamic_roles 확인
+
+`project.json`에 `dynamic_roles` 배열이 이미 있는 경우:
+- AskUserQuestion으로 확인합니다:
+  > "이전 실행에서 추가된 역할이 있습니다: {역할 목록}. 유지할까요?"
+- 선택지: "유지" / "재분석"
+- "유지" 선택 시 → Step 0.7로 진행
+- "재분석" 선택 시 → 아래 분석 계속
+
+#### 3. 역할 갭 분석
+
+Claude가 직접 수행합니다 (별도 에이전트 없음):
+
+1. 프로젝트의 도메인, 핵심 문제, 제약사항, 증거 소스 제목을 분석합니다.
+2. 기존 wave1 역할이 커버하는 영역을 파악합니다:
+   - `biz`: 비즈니스 목표, 성공 지표, 경쟁 환경, 시장 기회
+   - `marketing`: 포지셔닝, 메시징, 채널 전략, 런칭 계획
+   - `research`: 사용자 인사이트, 증거 맵, 가정 검증
+   - `tech`: 기술 타당성, 아키텍처, 비기능 요구사항
+   - `pm`: 스코프, 요구사항, 마일스톤, 수용 기준
+3. 프로젝트에 필요하지만 기존 역할로 커버되지 않는 영역을 식별합니다.
+4. 커버되지 않는 영역이 있으면 동적 역할을 제안합니다.
+   - 최대 3개까지 제안합니다.
+   - 각 역할의 형식:
+     ```
+     role_id: 영문 소문자 (예: "ops", "pedagogy", "regulatory")
+     name: 한국어 역할명 (예: "운영/프로세스")
+     responsibility: 책임 범위 설명
+     keywords: 증거 분배용 키워드 배열
+     output_sections: 해당 역할의 필수 출력 섹션 배열
+     ```
+
+#### 4. 제안이 없는 경우
+
+- "기존 에이전트 구성이 이 프로젝트에 적합합니다." 로그 후 Step 0.7로 진행합니다.
+
+#### 5. 제안이 있는 경우
+
+AskUserQuestion으로 사용자 승인을 받습니다:
+> "프로젝트 분석 결과, 다음 역할을 추가하면 더 포괄적인 문서를 생성할 수 있습니다:"
+
+각 역할의 ID, 이름, 책임 범위를 표시합니다.
+선택지: "모두 추가" / "선택적 추가" / "기존 구성 유지"
+- "선택적 추가" 시 multiSelect로 개별 역할 선택 가능
+
+#### 6. 승인된 역할 저장
+
+- `project.json`에 `dynamic_roles` 배열을 추가(또는 갱신)합니다.
+- 각 항목: `{ role_id, name, responsibility, keywords, output_sections }`
+- 기존 `agent_roles` 배열이 있으면 동적 역할 ID도 추가합니다.
+
+#### 7. 후속 단계 연동
+
+- Step 0.7: 동적 역할의 `keywords`를 사용하여 추가 청크 분배
+- Wave 1: 동적 역할도 기존 에이전트와 함께 Task tool로 병렬 실행
+- Wave 2 (Synth): 동적 에이전트 출력도 통합 대상에 포함
 
 ---
 
@@ -76,6 +146,7 @@ Wave 1 에이전트 실행 전에 증거를 한 번만 읽고 역할별로 분�
    - 사용자/인사이트/설문/페르소나 → `research`
    - 기술/아키텍처/API/인프라/성능 → `tech`
    - 요구사항/일정/마일스톤/스코프 → `pm`
+   - **동적 역할**: `project.json`의 `dynamic_roles[].keywords`를 읽어 추가 매핑 생성
    - 분류 불가 → 모든 에이전트에 전달
 3. 에이전트 프롬프트에 파일 경로 대신 **사전 조합된 텍스트**를 전달합니다.
 
@@ -83,7 +154,7 @@ Wave 1 에이전트 실행 전에 증거를 한 번만 읽고 역할별로 분�
 
 ### Wave 1: 병렬 에이전트 실행 (동적)
 
-`document-types.yaml`의 `agent_roles.wave1`에 정의된 에이전트만 Task tool로 **병렬** 실행합니다.
+`document-types.yaml`의 `agent_roles.wave1`에 정의된 에이전트 + `project.json`의 `dynamic_roles`에 정의된 동적 에이전트를 합산하여 Task tool로 **병렬** 실행합니다.
 
 각 에이전트에게 전달할 컨텍스트:
 - `.claude/state/project.json` (프로젝트 설정)
@@ -105,19 +176,27 @@ Wave 1 에이전트 실행 전에 증거를 한 번만 읽고 역할별로 분�
 
 예시: `document_type: marketing-brief`이면 biz, marketing, research만 실행.
 
+#### 동적 역할 에이전트
+
+`project.json`에 `dynamic_roles`가 있으면 해당 역할도 Wave 1에 포함하여 병렬 실행합니다.
+동적 역할 에이전트의 프롬프트는 기존 템플릿과 동일하되:
+- 역할 정의를 `agent-team-spec.md` 대신 `dynamic_roles[]`에서 로드
+- 필수 섹션을 `dynamic_roles[].output_sections`에서 로드
+- 출력 경로: `.claude/artifacts/agents/{role_id}.json` + `{role_id}.md`
+
 ```
 Task(subagent_type="general-purpose", name="{role}-agent")
 ```
 
 ### Wave 2: Synth Agent (순차, Wave 1 완료 후)
 
-Wave 1의 5개 에이전트 결과가 모두 완료된 후 실행합니다.
+Wave 1의 모든 에이전트(고정 역할 + 동적 역할) 결과가 완료된 후 실행합니다.
 
 #### 6. Synth Agent
 ```
 Task(subagent_type="general-purpose", name="synth-agent")
 ```
-- 입력: Wave 1의 에이전트 JSON + MD 결과물 전체
+- 입력: Wave 1의 에이전트 JSON + MD 결과물 전체 (동적 역할 출력 포함)
 - 역할: 통합, 충돌 해결, 최종 문서 작성
 
 ##### Synth 에이전트 지시사항:
@@ -125,9 +204,10 @@ Task(subagent_type="general-purpose", name="synth-agent")
 1. **결과 수집**: Wave 1 에이전트의 JSON 출력을 읽습니다.
 2. **충돌 식별**: 역할 간 상충하는 주장을 식별합니다.
    - 충돌 항목은 `conflicts.json`에 기록합니다.
-3. **통합 문서 작성**: 모든 역할의 핵심 내용을 통합하여 최종 문서를 작성합니다.
+3. **통합 문서 작성**: 모든 역할(고정 + 동적)의 핵심 내용을 통합하여 최종 문서를 작성합니다.
    - 문서 구조는 `document-types.yaml`의 `output_sections`를 따릅니다.
    - synth 에이전트에게 `output_sections` 목록을 전달하여 해당 섹션으로 문서를 구성하게 합니다.
+   - 동적 역할의 관점은 관련 섹션에 자연스럽게 통합합니다 (별도 섹션을 만들지 않음).
 4. **인용 보고서**: 모든 인용을 `citations.json`에 기록합니다.
 5. **출력**: 버전 디렉토리에 `{output_file_name}` 저장
    - 경로: `.claude/artifacts/{output_dir_name}/v{N}/{output_file_name}`
@@ -136,7 +216,7 @@ Task(subagent_type="general-purpose", name="synth-agent")
 
 ## 에이전트 프롬프트 템플릿
 
-각 에이전트에게 전달하는 프롬프트 구조:
+### 고정 역할 에이전트 프롬프트
 
 ```
 당신은 {role_name} 전문가입니다.
@@ -161,6 +241,36 @@ Step 0.7에서 이 역할에 관련된 증거만 선별하여 전달합니다.
 ## 출력 경로
 - JSON: .claude/artifacts/agents/{role}.json
 - Markdown: .claude/artifacts/agents/{role}.md
+```
+
+### 동적 역할 에이전트 프롬프트
+
+고정 역할과 동일한 구조이되, 역할 정의를 `project.json`의 `dynamic_roles`에서 로드합니다:
+
+```
+당신은 {dynamic_roles[].name} 전문가입니다.
+
+## 프로젝트 컨텍스트
+{project.json 내용}
+
+## 당신의 역할
+- 역할명: {dynamic_roles[].name}
+- 책임 범위: {dynamic_roles[].responsibility}
+- 필수 출력 섹션: {dynamic_roles[].output_sections}
+
+## 증거 자료 (사전 필터링됨)
+Step 0.7에서 이 역할의 keywords에 매칭된 증거만 선별하여 전달합니다:
+{역할별 사전 조합된 증거 텍스트}
+
+## 출력 규칙
+1. agent-team-spec.md의 JSON 계약(공통 Envelope)을 준수하세요.
+2. 모든 주장(claim)에는 반드시 citation을 포함하세요 (citation-spec.md 참조).
+3. JSON 파일과 Markdown 파일을 모두 생성하세요.
+4. JSON 키는 알파벳순으로 정렬하세요.
+
+## 출력 경로
+- JSON: .claude/artifacts/agents/{role_id}.json
+- Markdown: .claude/artifacts/agents/{role_id}.md
 ```
 
 ---
