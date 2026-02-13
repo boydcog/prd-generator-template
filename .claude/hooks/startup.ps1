@@ -100,6 +100,29 @@ if ($HasGit) {
         }
     }
 
+    # ──────────────────────────────────────
+    # 2-2. 잔여 worktree 정리
+    # ──────────────────────────────────────
+    $WorktreeDir = Join-Path (Split-Path $ProjectDir) ".worktrees"
+    if (Test-Path $WorktreeDir) {
+        git -C $ProjectDir worktree prune 2>$null
+        $Cleaned = 0
+        $Failed = 0
+        Get-ChildItem -Directory $WorktreeDir -ErrorAction SilentlyContinue | ForEach-Object {
+            $result = git -C $ProjectDir worktree remove --force $_.FullName 2>&1
+            if ($LASTEXITCODE -eq 0) { $Cleaned++ } else { $Failed++ }
+        }
+        if ($Cleaned -gt 0) {
+            $Status += "WARN 잔여 worktree ${Cleaned}개 정리됨"
+        }
+        if ($Failed -gt 0) {
+            $Status += "WARN worktree ${Failed}개 정리 실패"
+        }
+        if ((Get-ChildItem $WorktreeDir -ErrorAction SilentlyContinue | Measure-Object).Count -eq 0) {
+            Remove-Item $WorktreeDir -ErrorAction SilentlyContinue
+        }
+    }
+
     # git pull
     if ($GitReady) {
         $pullResult = git pull origin main 2>&1

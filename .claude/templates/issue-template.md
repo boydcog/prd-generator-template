@@ -5,7 +5,7 @@
 | 등록 시각 | {timestamp} |
 | 프로젝트 | {project_name} |
 | 문서 유형 | {document_type} |
-| 현재 버전 | v{version} |
+| 커밋 | `{commit_short}` |
 
 ## 내용
 {user_message}

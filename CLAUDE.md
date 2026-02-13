@@ -93,6 +93,7 @@ SessionStart hook 출력에서 `FAIL` 표시된 의존성이 있으면 **추천 
 - "수정해줘" / "개선해줘" → 해당 내용 수정 후 /auto-generate (새 버전)
 - "이슈 올려줘" / "기록해줘" → /create-issue
 - "공유해줘" / "PR 올려줘" / "프로젝트 올려줘" / "팀에 공유" → /share-project
+- "템플릿 수정" / "규칙 변경" / "명령어 추가" / "spec 수정" → /admin
 
 ### 5-1. 프로젝트 기능 안내 범위
 
@@ -101,7 +102,7 @@ SessionStart hook 출력에서 `FAIL` 표시된 의존성이 있으면 **추천 
 - **반드시 `.claude/commands/` 디렉토리에 등록된 명령만** 안내합니다.
 - system-reminder의 글로벌 스킬 목록(figma, firecrawl, ralph-loop 등)은 이 프로젝트의 기능이 아닙니다.
 - 프로젝트 기능 = `.claude/commands/*.md` 파일에 정의된 것만 해당합니다.
-- 현재 프로젝트 명령: init-project, sync-drive, run-research, verify, create-issue, auto-generate
+- 현재 프로젝트 명령: init-project, sync-drive, run-research, verify, create-issue, auto-generate, share-project, admin
 
 ### 6. GH 토큰 자동 세팅
 
@@ -167,6 +168,13 @@ SessionStart hook에서 "GitHub 토큰 없음"이 감지되면 **다른 작업�
 - 사용자에게 "이슈를 올릴까요?"라고 묻지 않습니다. 감지 즉시 자동으로 처리합니다.
 - 사용자에게는 결과만 알려줍니다: "구조 문제를 발견하여 자동 수정 PR을 생성했습니다."
 - GH 토큰이 없으면 `.claude/state/pending-issues/`에 로컬 저장합니다.
+
+### 9. Admin 모드
+
+사용자가 템플릿 자체의 수정을 요청하면 `/admin` 커맨드를 실행합니다.
+- `.claude/manifests/admins.yaml`에 등록된 사용자만 실행 가능합니다.
+- EnterPlanMode → 승인 → 구현 → 검증 → worktree PR 생성까지 자동 실행합니다.
+- 일반 사용자의 `/auto-generate` 워크플로우와 완전히 분리됩니다.
 
 ---
 
@@ -284,7 +292,7 @@ SessionStart hook에서 "GitHub 토큰 없음"이 감지되면 **다른 작업�
   - `{timestamp}`: 현재 시각 (ISO 8601)
   - `{project_name}`: `project.json`에서 로드
   - `{document_type}`: `project.json`에서 로드 (기본값: prd)
-  - `{version}`: 현재 문서 버전
+  - `{commit_short}`: `git rev-parse --short HEAD` (기준 커밋)
   - `{branch_name}`: 현재 브랜치명
   - `{change_summary}`, `{detailed_changes}`, `{reason}`, `{file_list}`: 변경 내용 기반
 
@@ -314,29 +322,43 @@ GH 토큰이 없으면 `.claude/state/pending-issues/`에 로컬 저장 후 토�
 ### 원칙
 
 - **작업 브랜치는 항상 main**입니다.
-- PR 생성 시에만 feature 브랜치로 전환합니다.
-- PR 생성 후 **반드시 main으로 복귀**합니다.
+- **main 작업 디렉토리의 브랜치를 절대 변경하지 않습니다** (`git checkout` 금지).
+- PR 생성 시 `git worktree`로 독립 디렉토리를 생성하여 작업합니다.
 - SessionStart hook에서 main이 아닌 브랜치에 있으면 자동 전환합니다.
+- SessionStart hook에서 잔여 worktree를 자동 정리합니다.
 
-### PR 생성 절차
+### PR 생성 절차 (Worktree 방식)
 
 1. `git pull origin main`
-2. `git checkout -b {branch_name}`
+2. Worktree 생성:
+   ```
+   SLUG="{branch_name에서 / → -}"
+   git worktree add -b {branch_name} ../.worktrees/${SLUG} main
+   ```
    - 문서: `doc/{type}-v{N}` (예: `doc/prd-v3`)
    - 수정: `fix/{요약}`
+   - 개선: `improve/{요약}`
+   - 기능: `feat/{요약}`
    - 이슈: `issue/{이슈번호}-{요약}`
-3. `git add` + `git commit`
-4. `git push -u origin {branch_name}`
-5. `gh pr create` (`.claude/templates/pr-template.md` 사용)
-6. `git checkout main` **(필수)**
-7. `git pull origin main`
+   - 프로젝트: `project/{slug}`
+3. 변경된 파일을 worktree로 복사
+4. worktree 안에서 `git add` + `git commit`
+5. push URL로 직접 토큰 전달 (remote config에 토큰을 남기지 않음):
+   ```
+   GH_TOKEN=$(cat "${PROJECT_DIR}/.gh-token" | tr -d '[:space:]')
+   git -C ../.worktrees/${SLUG} push \
+     "https://user:${GH_TOKEN}@github.com/boydcog/prd-generator-template.git" \
+     "HEAD:refs/heads/{branch_name}"
+   ```
+6. PR 생성 (`pr-template.md` 사용)
+7. Worktree 정리: `git worktree remove ../.worktrees/${SLUG}`
 
 ### 안전 장치
 
-에러 발생 시에도 반드시 main으로 복귀합니다:
-```bash
-git checkout main || git checkout -f main
-```
+- startup hook에서 잔여 worktree를 자동 정리합니다.
+- worktree 생성 실패 시 (동일 브랜치 존재 등) 기존 worktree를 제거 후 재시도합니다.
+- worktree 위치는 프로젝트 루트의 형제 디렉토리 `../.worktrees/` (프로젝트 밖이므로 gitignore 불필요).
+- GH_TOKEN은 원본 프로젝트 디렉토리의 `.gh-token`에서 절대경로로 읽습니다.
 
 ---
 
@@ -361,13 +383,15 @@ git checkout main || git checkout -f main
 │   │   ├── verify.md
 │   │   ├── auto-generate.md           ← 전체 파이프라인 자동 실행
 │   │   ├── create-issue.md            ← GitHub Issue 생성
-│   │   └── share-project.md           ← 프로젝트 결과물 PR 공유
+│   │   ├── share-project.md           ← 프로젝트 결과물 PR 공유
+│   │   └── admin.md                   ← 관리자 워크플로우
 │   ├── templates/                     ← PR/Issue 템플릿
 │   │   ├── pr-template.md
 │   │   └── issue-template.md
 │   ├── manifests/                     ← 설정 (tracked)
 │   │   ├── drive-sources.yaml
-│   │   └── project-defaults.yaml
+│   │   ├── project-defaults.yaml
+│   │   └── admins.yaml                ← 관리자 목록
 │   ├── spec/                          ← 사양서 (tracked)
 │   │   ├── agent-team-spec.md
 │   │   ├── citation-spec.md

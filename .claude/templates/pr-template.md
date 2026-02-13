@@ -8,7 +8,7 @@
 | 생성 시각 | {timestamp} |
 | 프로젝트 | {project_name} |
 | 문서 유형 | {document_type} |
-| 문서 버전 | v{version} |
+| 기준 커밋 | `{commit_short}` |
 | 브랜치 | {branch_name} |
 
 ## 변경 내용

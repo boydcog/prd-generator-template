@@ -16,11 +16,11 @@
 1. `.claude/state/project.json`에서 프로젝트 정보를 읽습니다:
    - `name` → `{project_name}`
    - `document_type` → `{document_type}` (없으면 `prd`)
-   - `current_version` → `{version}`
-2. 파일이 없으면 기본값 사용:
+2. `git rev-parse --short HEAD`로 현재 커밋 해시를 가져옵니다 → `{commit_short}`
+3. 파일이 없으면 기본값 사용:
    - `project_name`: "미설정"
    - `document_type`: "prd"
-   - `version`: 0
+   - `commit_short`: "unknown"
 
 ### Step 3: Issue 내용 준비
 
@@ -34,7 +34,7 @@
    - `{timestamp}` ← 현재 시각 (ISO 8601)
    - `{project_name}` ← project.json
    - `{document_type}` ← project.json (기본값: prd)
-   - `{version}` ← project.json
+   - `{commit_short}` ← `git rev-parse --short HEAD`
    - `{user_message}` ← 사용자 메시지
    - `{context_summary}` ← 컨텍스트 요약
 

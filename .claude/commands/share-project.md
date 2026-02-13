@@ -22,30 +22,46 @@
 3. 토큰 없이는 PR을 생성할 수 없으므로 "스킵" 시 중단:
    > "PR을 생성하려면 토큰이 필요합니다. 토큰 설정 후 다시 시도해주세요."
 
-### Step 3: 브랜치 생성
+### Step 3: Worktree 생성
 
 1. `git pull origin main`
 2. 프로젝트 이름을 kebab-case로 변환: `{project_name}` → `{branch_slug}`
    - 예: "Maththera" → `maththera`, "My App 2.0" → `my-app-2-0`
-3. `git checkout -b project/{branch_slug}`
+3. Worktree로 브랜치 생성:
+   ```bash
+   SLUG="project-{branch_slug}"
+   WORKTREE_DIR="../.worktrees/${SLUG}"
+   git worktree add -b "project/{branch_slug}" "$WORKTREE_DIR" main
+   ```
    - 이미 존재하면: `project/{branch_slug}-v{version}`
+   - worktree 생성 실패 시 기존 worktree를 제거 후 재시도
 
 ### Step 4: 공유 대상 파일 추가
 
-`git add -f`로 gitignore된 파일을 강제 추가:
+변경 파일을 worktree로 복사한 뒤 `git add -f`로 추가:
 
 ```bash
-# 프로젝트 메타데이터
-git add -f .claude/state/project.json
-git add -f .claude/state/sync-ledger.json
-git add -f .user-identity
+PROJECT_DIR="$(pwd)"
+WORKTREE_DIR="../.worktrees/${SLUG}"
 
-# 생성된 문서 (artifacts 전체)
-git add -f .claude/artifacts/
+# 필요한 디렉토리 생성
+mkdir -p "$WORKTREE_DIR/.claude/state"
 
-# tracked 파일 중 변경된 템플릿만 포함 (구체적 경로 지정)
-git add CLAUDE.md README.md
-git add .claude/commands/ .claude/templates/ .claude/spec/ .claude/manifests/
+# 프로젝트 메타데이터를 worktree로 복사
+cp .claude/state/project.json "$WORKTREE_DIR/.claude/state/"
+cp .claude/state/sync-ledger.json "$WORKTREE_DIR/.claude/state/" 2>/dev/null || true
+cp .user-identity "$WORKTREE_DIR/"
+
+# artifacts를 worktree로 복사
+cp -r .claude/artifacts/ "$WORKTREE_DIR/.claude/artifacts/"
+
+# worktree 안에서 git add (git -C로 디렉토리 이동 없이 실행)
+git -C "$WORKTREE_DIR" add -f .claude/state/project.json
+git -C "$WORKTREE_DIR" add -f .claude/state/sync-ledger.json
+git -C "$WORKTREE_DIR" add -f .user-identity
+git -C "$WORKTREE_DIR" add -f .claude/artifacts/
+git -C "$WORKTREE_DIR" add CLAUDE.md README.md
+git -C "$WORKTREE_DIR" add .claude/commands/ .claude/templates/ .claude/spec/ .claude/manifests/
 ```
 
 **절대 추가하지 않는 파일:**
@@ -77,21 +93,24 @@ PR 생성 전에 `README.md`의 Changelog 섹션에 프로젝트 공유 항목�
 ### Step 6: 커밋
 
 ```bash
-git commit -m "project: {project_name} — {document_type} v{version}"
+git -C "$WORKTREE_DIR" commit -m "project: {project_name} — {document_type} v{version}"
 ```
 
 ### Step 7: PR 생성
 
-**중요: `gh auth setup-git`으로 git credential을 설정한 뒤 push/PR을 실행합니다.**
+**중요: 인증된 URL로 push한 뒤 PR을 생성합니다.**
 브라우저 인증이나 `gh auth login` 등 interactive 플로우를 사용하지 않습니다.
 
 ```bash
-# gh를 git credential helper로 설정 (GH_TOKEN으로 인증)
-GH_TOKEN=$(cat .gh-token) gh auth setup-git
+# push URL로 직접 토큰 전달 (remote config에 토큰을 남기지 않음)
+GH_TOKEN=$(cat "${PROJECT_DIR}/.gh-token" | tr -d '[:space:]')
+git -C "$WORKTREE_DIR" push \
+  "https://user:${GH_TOKEN}@github.com/boydcog/prd-generator-template.git" \
+  "HEAD:refs/heads/project/{branch_slug}"
 
-# push 및 PR 생성
-git push -u origin project/{branch_slug}
-GH_TOKEN=$(cat .gh-token) gh pr create ...
+# PR 생성
+GH_TOKEN=$GH_TOKEN gh pr create --repo boydcog/prd-generator-template \
+  --head "project/{branch_slug}" ...
 ```
 
 1. push + PR 생성
@@ -133,16 +152,16 @@ GH_TOKEN=$(cat .gh-token) gh pr create ...
 
 **중요**: Step 7의 `gh pr create` 명령 실행 시 `GH_TOKEN` 환경 변수를 사용하여 인증합니다. `gh auth login` 등 interactive 인증은 절대 사용하지 않으며, PR 본문에 토큰을 포함해서는 안 됩니다.
 
-### Step 8: main 복귀 (필수)
+### Step 8: Worktree 정리 (필수)
 
-PR 생성 성공/실패와 관계없이 **반드시** main으로 복귀합니다:
+PR 생성 성공/실패와 관계없이 **반드시** worktree를 정리합니다:
 
 ```bash
-git checkout main || git checkout -f main
-git pull origin main
+# PROJECT_DIR은 Step 4에서 설정됨
+git worktree remove "${PROJECT_DIR}/../.worktrees/${SLUG}" 2>/dev/null || git worktree remove --force "${PROJECT_DIR}/../.worktrees/${SLUG}" 2>/dev/null || true
 ```
 
-에러 발생 시에도 이 단계는 반드시 실행합니다 (CLAUDE.md 브랜치 워크플로우 안전 장치와 동일).
+에러 발생 시에도 이 단계는 반드시 실행합니다. main 디렉토리의 브랜치는 변경되지 않으므로 별도의 복귀 절차가 불필요합니다.
 
 ### Step 9: 결과 보고
 
