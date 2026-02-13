@@ -148,8 +148,16 @@ if [ "$HAS_GIT" = "true" ]; then
       PULL_RESULT2=$(git pull --rebase origin main 2>&1 || echo "pull-failed")
       if echo "$PULL_RESULT2" | grep -q "pull-failed"; then
         git rebase --abort 2>/dev/null || true
-        [ "$STASHED" = "true" ] && git stash pop 2>/dev/null || true
-        STATUS="$STATUS\nWARN git pull 실패 (stash+rebase 복구 실패)"
+        if [ "$STASHED" = "true" ]; then
+          RESTORE_RESULT=$(git stash pop 2>&1 || echo "restore-failed")
+          if echo "$RESTORE_RESULT" | grep -q "restore-failed"; then
+            STATUS="$STATUS\nWARN git pull 실패 (stash+rebase 복구 실패, stash 복원도 실패)"
+          else
+            STATUS="$STATUS\nWARN git pull 실패 (stash+rebase 복구 실패, 로컬 변경 복원됨)"
+          fi
+        else
+          STATUS="$STATUS\nWARN git pull 실패 (stash+rebase 복구 실패)"
+        fi
       else
         if [ "$STASHED" = "true" ]; then
           POP_RESULT=$(git stash pop 2>&1 || echo "pop-failed")

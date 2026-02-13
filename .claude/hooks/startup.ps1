@@ -148,8 +148,16 @@ if ($HasGit) {
                 }
             } else {
                 git rebase --abort 2>$null
-                if ($stashed) { git stash pop 2>$null }
-                $Status += "WARN git pull 실패 (stash+rebase 복구 실패)"
+                if ($stashed) {
+                    $restoreResult = git stash pop 2>&1
+                    if ($LASTEXITCODE -eq 0) {
+                        $Status += "WARN git pull 실패 (stash+rebase 복구 실패, 로컬 변경 복원됨)"
+                    } else {
+                        $Status += "WARN git pull 실패 (stash+rebase 복구 실패, stash 복원도 실패)"
+                    }
+                } else {
+                    $Status += "WARN git pull 실패 (stash+rebase 복구 실패)"
+                }
             }
         }
     }
