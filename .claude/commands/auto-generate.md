@@ -81,8 +81,17 @@
    - 섹션 수, 인용 수, 경고 사항
 2. Drive 업로드 확인:
    - "Google Drive에 업로드하시겠습니까?" 질문.
-   - 수락: Playwright로 업로드 실행 (Markdown → HTML 변환 후 서식 유지 붙여넣기. `run-research.md`의 "서식 유지 붙여넣기" 절차 참조).
-   - 거부: 로컬에만 보관.
+   - 수락 시:
+     a. 기존 업로드 플로우 실행 (Markdown → HTML 변환 후 서식 유지 붙여넣기. `run-research.md`의 "서식 유지 붙여넣기" 절차 참조).
+     b. 업로드 완료 후:
+        "emocog 공유 드라이브로 이동하시겠습니까?" 질문.
+     c. 수락 시:
+        - `drive-sources.yaml`의 `shared_drive_folder` 확인.
+        - **없으면**: 공유 드라이브 폴더 URL 입력 안내 → 입력받은 URL을 `shared_drive_folder`에 저장 (재사용).
+        - **있으면**: 저장된 폴더로 문서 이동.
+        - Playwright `browser_navigate`로 업로드된 문서 페이지 이동 → `browser_snapshot` → 파일 메뉴 또는 우클릭 → "이동" 클릭 → 공유 드라이브 폴더로 이동 실행.
+     d. 거부 시: 개인 Drive에 보관.
+   - 거부 시: 로컬에만 보관.
 
 ---
 
