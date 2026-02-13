@@ -46,8 +46,8 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
    - 사용자가 "확인" (또는 동의 의사)을 입력할 때까지 **이 단계에서만** 대기합니다.
    - 사용자 확인 후 `browser_evaluate`로 현재 URL에서 폴더 ID를 추출합니다:
      ```javascript
-     // URL 형태: https://drive.google.com/drive/folders/{FOLDER_ID}
-     window.location.href;
+     const match = window.location.href.match(/drive\/folders\/([^/?]+)/);
+     return match ? match[1] : "";
      ```
    - 추출한 폴더 URL을 `drive-sources.yaml`의 `upload_folder`에 저장합니다 (다음부터 재사용).
 
@@ -79,7 +79,11 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
    ```
    - 한글 등 비ASCII 문자의 mojibake를 방지합니다.
    - 로컬 HTTP 서버로 서빙할 때 Content-Type 헤더에 charset이 빠져도 브라우저가 메타태그로 인코딩을 올바르게 인식합니다.
-4. 래핑된 HTML을 임시 파일(`/tmp/upload_serve/index.html`)에 저장합니다.
+4. 래핑된 HTML을 임시 디렉토리에 저장합니다:
+   ```bash
+   SERVE_DIR=$(mktemp -d)
+   # 래핑된 HTML을 ${SERVE_DIR}/index.html에 저장
+   ```
 
 ### Step 5: Google Docs 생성 + 내용 삽입
 
@@ -89,28 +93,40 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
    - 제목 형식은 `project-defaults.yaml`의 `upload.naming_pattern`을 따릅니다.
 3. **로컬 서빙 → 브라우저 복사 → Google Docs 붙여넣기**로 삽입합니다:
    ```
-   // a. 로컬 HTTP 서버로 래핑된 HTML 서빙
-   python3 -m http.server {port} -d /tmp/upload_serve &
+   // a. 로컬 HTTP 서버로 래핑된 HTML 서빙 + PID 기록
+   PORT={사용 가능한 포트}
+   python3 -m http.server $PORT -d $SERVE_DIR &
+   HTTP_PID=$!
 
    // b. 새 탭에서 로컬 HTML 열기
-   browser_navigate → http://localhost:{port}/index.html
+   browser_navigate → http://localhost:$PORT/index.html
 
    // c. 전체 선택 + 복사 (서식 포함 클립보드)
-   browser_press_key → "Meta+a"  (전체 선택)
-   browser_press_key → "Meta+c"  (복사)
+   // macOS: Meta, Windows/Linux: Control
+   browser_press_key → "Meta+a" 또는 "Control+a"  (전체 선택)
+   browser_press_key → "Meta+c" 또는 "Control+c"  (복사)
 
    // d. Google Docs 탭으로 전환
    browser_tabs → select (Docs 탭)
 
    // e. 문서 본문에 붙여넣기
    browser_click → 문서 본문 영역 클릭 (포커스)
-   browser_press_key → "Meta+v"  (붙여넣기)
+   browser_press_key → "Meta+v" 또는 "Control+v"  (붙여넣기)
+
+   // f. 로컬 서버 정리
+   kill $HTTP_PID
+   rm -rf $SERVE_DIR
    ```
    - 브라우저가 렌더링한 HTML을 복사하므로 heading, bold, table, list 서식이 보존됩니다.
    - `<meta charset="UTF-8">` 덕분에 한글이 정확히 인코딩됩니다.
    - `execCommand('insertHTML')`은 사용하지 않습니다 (deprecated + Google Docs Canvas 렌더링과 비호환).
    - `navigator.clipboard.write()`도 사용하지 않습니다 (CORS 제약으로 Google Docs에서 실패할 수 있음).
 4. 삽입 완료 확인 (스크린샷 1회).
+5. **(Fallback) 자동 붙여넣기 실패 시:**
+   - "자동 붙여넣기에 실패했습니다." 메시지 표시.
+   - 사용자에게 안내:
+     > "브라우저에서 `http://localhost:{port}` 탭으로 이동하여 내용을 수동으로 복사(Cmd+A, Cmd+C)한 후, Google Docs 탭에 붙여넣어(Cmd+V) 주세요."
+   - 사용자가 확인하면 절차를 계속 진행합니다.
 
 ### Step 6: 공유 드라이브 이동 (선택)
 
