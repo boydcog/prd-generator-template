@@ -1,0 +1,209 @@
+{
+  "claims": [
+    {
+      "category": "cognitive-load-theory",
+      "citations": [
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0001"
+      ],
+      "confidence": 0.75,
+      "id": "CLM-PED-001",
+      "statement": "W1 연산 방향성 가중치(뺄셈 +1.5점)는 인지 부하 이론의 역연산 비대칭성(inverse operation asymmetry)과 부분적으로 일치한다. 뺄셈은 덧셈과 달리 비교환적(non-commutative)이며, Baroody(1983)와 Campbell(2008)의 연구에서 뺄셈이 덧셈 대비 반응시간이 유의미하게 길다는 결과와 부합한다. 다만 +1.5점이라는 구체적 수치의 근거는 제시되지 않았으며, 실증 데이터 기반 교정이 필요하다."
+    },
+    {
+      "category": "cognitive-load-theory",
+      "citations": [
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0050"
+      ],
+      "confidence": 0.8,
+      "id": "CLM-PED-002",
+      "statement": "W4 절차적 복잡성(carry/borrow)은 Sweller의 인지 부하 이론에서 말하는 element interactivity(요소 상호작용성)를 가장 직접적으로 반영한다. carry 없음(0점) -> 1회 carry(+3.0점) -> 연속 carry(+5.0점)의 3단계 구분은 학습자의 작업 기억(working memory) 부담 증가와 방향이 일치한다. 그러나 0->3->5점의 비선형 간격은 이론적 근거가 불충분하며, 특히 연속 carry의 +2점 추가분이 단일 carry 대비 실제 인지 부하 증가분을 정확히 반영하는지는 실증이 필요하다."
+    },
+    {
+      "category": "cognitive-load-theory",
+      "citations": [
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0002"
+      ],
+      "confidence": 0.7,
+      "id": "CLM-PED-003",
+      "statement": "W3 숫자 크기 인지 부하(6~9 포함 시 개당 +0.5점, 최대 1.5점)는 보수(complement) 개념 기반이라고 설명되나, 교육학적으로 더 정확한 근거는 수 감각(number sense) 연구의 'subitizing boundary'이다. Dehaene(1997)의 연구에서 5 이상의 수는 빠른 수 인식(subitizing)이 불가능해져 세기(counting) 전략으로 전환해야 하며, 이것이 인지 부하 증가의 실질적 원인이다. 다만 6~9를 동일 가중치로 처리하는 것은 문제가 있는데, 6과 9의 인지 부하 차이가 연구에서 확인되기 때문이다."
+    },
+    {
+      "category": "difficulty-measurement-methodology",
+      "citations": [
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0140",
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0151"
+      ],
+      "confidence": 0.9,
+      "id": "CLM-PED-004",
+      "statement": "W_총점(0~11) -> W단계(1~23) -> C단계(1~15)의 이중 매핑 구조는 측정 방법론적으로 정보 손실(information loss)을 유발한다. W_총점은 연속형 변수(0~11, 0.5단위)인데 이를 먼저 23단계로 양자화한 후 다시 15단계로 압축하는 과정에서, 원래 구별 가능했던 난이도 차이가 동일 C단계로 병합된다. 예를 들어 W_총점 2.5(W=6)와 3.0(W=7)은 모두 C=8로 매핑되는 경우가 다수 관찰된다."
+    },
+    {
+      "category": "difficulty-measurement-methodology",
+      "citations": [
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0001"
+      ],
+      "confidence": 0.65,
+      "id": "CLM-PED-005",
+      "statement": "W5 특수 숫자 감점(10의 배수 -1.0점, 동일 숫자 반복 -0.5점)에서 언급되는 '심리적 안착점(psychological anchor point)' 개념은 Ashcraft(1992)의 problem-size effect 및 숫자 친숙도(number familiarity) 연구와 부분적으로 연결된다. 10의 배수는 10진법 체계에서 기저 단위로 기능하여 절차적 부담이 실제로 감소한다(carry 없음). 그러나 -1.0점이라는 감점 폭의 근거가 부재하며, '심리적 안착점'은 학술 용어가 아니라 직관적 서술에 가깝다."
+    },
+    {
+      "category": "difficulty-measurement-methodology",
+      "citations": [
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0100",
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0120"
+      ],
+      "confidence": 0.85,
+      "id": "CLM-PED-006",
+      "statement": "가산적(additive) 가중치 모델은 요인 간 상호작용 효과(interaction effect)를 포착하지 못한다. 예를 들어, 뺄셈(W1=1.5)과 borrow(W4=3.0)가 동시에 존재할 때의 인지 부하는 단순 합산(4.5)보다 클 가능성이 높다. Sweller의 element interactivity 이론에 따르면 동시 처리해야 하는 요소가 증가할수록 인지 부하는 선형이 아닌 초선형(superlinear)으로 증가한다. 현재 체계는 이를 무시하고 있다."
+    },
+    {
+      "category": "learning-stage-design",
+      "citations": [
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0030",
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0075"
+      ],
+      "confidence": 0.8,
+      "id": "CLM-PED-007",
+      "statement": "C단계(1~15) 내에서 덧셈과 뺄셈이 동일 C레벨에 혼재되는 패턴이 발견된다. 예: C=8에 '1+11'(덧셈, no carry)과 같은 문제와 C=9에 '45-1'(뺄셈, no borrow)이 배치된다. Piaget의 구체적 조작기(7~11세) 아동은 덧셈과 뺄셈을 역연산 관계로 통합 이해하기까지 시간이 필요하므로, 학습 경로(learning path) 설계 시 연산 유형별 분리 단계가 선행되어야 한다. 현재 C단계는 연산 유형과 자릿수를 동시에 교차 배치하여, 학습 순서의 인지적 일관성이 약화된다."
+    },
+    {
+      "category": "learning-stage-design",
+      "citations": [
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0120",
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0140"
+      ],
+      "confidence": 0.85,
+      "id": "CLM-PED-008",
+      "statement": "23단계에서 15단계로의 압축 매핑에서 C단계 번호의 비순차적 할당이 관찰된다. 데이터에서 C=8은 no-carry 두 자리 덧셈(W=6~8)에서 광범위하게 사용되며, C=12는 carry가 있는 상위 문제(W=21~23)에 집중된다. 그러나 C=3은 0과의 연산, 기본 1자리 덧셈, 그리고 두 자리+0 같은 이질적 문제 유형을 포함한다. 이는 C단계가 순수한 난이도 서열이 아니라 문제 유형 분류와 난이도가 혼합된 체계임을 시사한다."
+    },
+    {
+      "category": "learning-stage-design",
+      "citations": [
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0050",
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0100"
+      ],
+      "confidence": 0.9,
+      "id": "CLM-PED-009",
+      "statement": "W6 표현 방식(수식형 0점, 문장제 +점수)은 현재 데이터에서 모든 문제가 W6=0.5로 처리되어 실질적으로 비활성 상태이다. 약 15,000개 전체 문제가 동일한 '기본 수식형+약간의 표현 부하'로 코딩되어 있어, 문장제(word problem)의 언어적 인지 부하가 전혀 반영되지 않고 있다. 교육학 연구에서 동일 수리 연산이라도 문장제는 순수 수식 대비 유의미하게 높은 오류율을 보이므로(Verschaffel et al., 1999), 이는 중대한 누락이다."
+    },
+    {
+      "category": "developmental-alignment",
+      "citations": [
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0002",
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0050"
+      ],
+      "confidence": 0.7,
+      "id": "CLM-PED-010",
+      "statement": "현재 체계는 덧셈과 뺄셈(0~99 범위)만 포함하며, 이는 대략 초등학교 1~2학년(만 6~8세, Piaget의 구체적 조작기 초기)에 해당한다. 한국 수학교육과정 기준으로 1학년 1학기(9까지의 수, 합이 9 이하 덧셈뺄셈)부터 2학년 2학기(세 자리 수의 덧셈뺄셈)까지를 부분적으로 커버한다. 그러나 해당 연령대 아동의 발달적 개인차(약 2년 편차)를 고려할 때, 15단계가 개인차를 충분히 포착하는지는 의문이다."
+    },
+    {
+      "category": "validation-methodology",
+      "citations": [
+        "SRC-math-difficulty-scoring@d17fde4f#chunk-0001"
+      ],
+      "confidence": 0.95,
+      "id": "CLM-PED-011",
+      "statement": "전체 체계가 전문가 판단(expert judgment)에만 기반하고 실제 학생 수행 데이터(정답률, 반응시간, 오류 유형)가 없다는 것은 타당도 검증의 가장 큰 약점이다. 교육 측정학에서 문항난이도는 반드시 실제 응시자 데이터로 검증(calibration)해야 하며, IRT(Item Response Theory) 기반 모형과의 상관 분석이 필수적이다. 현재 체계는 내용 타당도(content validity)만 존재하며, 구인 타당도(construct validity)와 예측 타당도(predictive validity)가 부재하다."
+    }
+  ],
+  "inputs": {
+    "data_characteristics": {
+      "item_count_approx": 15000,
+      "number_range": "0~99",
+      "operation_types": [
+        "addition",
+        "subtraction"
+      ],
+      "student_performance_data": false,
+      "validation_basis": "expert_judgment_only"
+    },
+    "evidence_chunks": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001 ~ #chunk-0151",
+    "level_mapping": {
+      "C_stages": "1~15",
+      "W_score_range": "0~11",
+      "W_stages": "1~23"
+    },
+    "source": "math-difficulty-scoring",
+    "weight_system": {
+      "W1": "operation_type_and_direction (subtraction +1.5)",
+      "W2": "digit_count_and_place_value (asymmetric +1.0, digit_extension +2.0_per_digit)",
+      "W3": "number_element_cognitive_load (6-9 digit +0.5 each, max 1.5)",
+      "W4": "procedural_complexity (no_carry 0, single_carry +3.0, continuous_carry +5.0)",
+      "W5": "special_number_discount (multiple_of_10 -1.0, repeated_digits -0.5)",
+      "W6": "representation_format (basic_expression 0, word_problem TBD)"
+    }
+  },
+  "open_questions": [
+    {
+      "id": "OQ-PED-001",
+      "priority": "critical",
+      "question": "W4 절차적 복잡성의 0->3->5점 간격이 실제 학생 오류율/반응시간 데이터와 일치하는가? 비선형 간격의 이론적 근거는 무엇인가?"
+    },
+    {
+      "id": "OQ-PED-002",
+      "priority": "critical",
+      "question": "가산적 모델의 타당성: W1(연산)과 W4(carry/borrow)의 상호작용 효과가 존재하는가? 뺄셈+borrow의 결합 난이도는 단순 합산 이상일 가능성이 높다."
+    },
+    {
+      "id": "OQ-PED-003",
+      "priority": "high",
+      "question": "W_총점에서 C단계로의 매핑 규칙은 무엇인가? 동일 W단계 내에서 C단계가 달라지는 기준(예: C=3 vs C=8)이 명시되지 않았다."
+    },
+    {
+      "id": "OQ-PED-004",
+      "priority": "high",
+      "question": "15단계(C단계)의 세분화 수준이 적정한가? 교육과정 단원 매핑이나 학생 성취도 수준과의 대응 관계가 설정되어 있는가?"
+    },
+    {
+      "id": "OQ-PED-005",
+      "priority": "medium",
+      "question": "W3에서 6~9를 동일 가중치(+0.5)로 처리하는 근거는? 수 감각 연구에서 6과 9의 인지 부하 차이가 보고되는데, 이를 무시해도 되는가?"
+    },
+    {
+      "id": "OQ-PED-006",
+      "priority": "medium",
+      "question": "W6 표현 방식이 현재 전 문제에서 0.5로 고정된 이유는? 향후 문장제를 포함할 계획이 있는가, 아니면 수식형 전용 체계인가?"
+    }
+  ],
+  "project": "math-difficulty-scoring-quality-verification",
+  "risks": [
+    {
+      "id": "RSK-PED-001",
+      "impact": "high",
+      "mitigation": "파일럿 학교에서 최소 300명 학생의 정답률/반응시간 데이터를 수집하여 IRT 모형과의 상관 분석을 수행한다. Rasch 모형 기반 문항 난이도와 W_총점 간 Pearson 상관이 0.7 이상이면 체계의 기본 구조를 유지하되, 가중치 값을 회귀 분석으로 교정한다.",
+      "probability": "high",
+      "risk": "전문가 판단 기반 가중치가 실제 학생 수행 난이도와 괴리될 수 있다. 특히 W4(carry/borrow)의 +3.0/+5.0 간격이 과대 또는 과소 평가일 가능성이 있다."
+    },
+    {
+      "id": "RSK-PED-002",
+      "impact": "high",
+      "mitigation": "가산 모델과 승산(multiplicative) 모델, 또는 상호작용 항을 포함한 회귀 모델을 비교 평가한다. 특히 W1*W4 상호작용 항의 유의성을 검정한다.",
+      "probability": "medium",
+      "risk": "가산적 가중치 모델이 요인 간 상호작용을 무시하여 특정 문제 유형(뺄셈+borrow, 큰 수+carry 등)의 난이도를 체계적으로 과소 추정한다."
+    },
+    {
+      "id": "RSK-PED-003",
+      "impact": "medium",
+      "mitigation": "C단계 매핑 규칙을 명시적으로 문서화하고, 각 C단계 내의 문제 동질성(homogeneity)을 통계적으로 검증한다. 필요시 C단계를 재구성한다.",
+      "probability": "high",
+      "risk": "W->C 이중 매핑에서 정보 손실이 발생하여, 학습자에게 적정 수준보다 너무 쉽거나 어려운 문제가 배정될 수 있다. C=8에 매핑되는 문제의 실제 난이도 범위가 지나치게 넓다."
+    },
+    {
+      "id": "RSK-PED-004",
+      "impact": "medium",
+      "mitigation": "한국 수학교육과정의 학년-학기별 성취기준과 C단계 간의 매핑 테이블을 작성하고, 교사 전문가 리뷰를 통해 배치 적절성을 검증한다.",
+      "probability": "medium",
+      "risk": "C단계가 한국 초등수학 교육과정의 학습 순서와 정합하지 않아, 교육과정 기반 적응학습 시스템에서 부적절한 문제 추천이 발생한다."
+    }
+  ],
+  "role": "pedagogy-agent",
+  "version": "1.0.0"
+}

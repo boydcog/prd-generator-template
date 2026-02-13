@@ -1,0 +1,60 @@
+{
+  "agent_roles": [
+    "biz",
+    "marketing",
+    "research",
+    "tech",
+    "pm",
+    "pedagogy",
+    "synth"
+  ],
+  "constraints": [],
+  "core_problem": "학생 수준에 맞는 문제를 자동으로 추천하기 어려움. 수학 문제의 객관적 난이도 기준이 부재하여 맞춤 학습 레벨링이 불가능",
+  "created_at": "2026-02-13T09:18:54.559903+00:00",
+  "current_version": 1,
+  "document_type": "prd",
+  "domain": "교육 기술 (에듀테크) / 수학 학습",
+  "dynamic_roles": [
+    {
+      "keywords": [
+        "인지",
+        "부하",
+        "난이도",
+        "학습",
+        "발달",
+        "교육",
+        "레벨",
+        "단계",
+        "가중치",
+        "채점",
+        "평가",
+        "carry",
+        "borrow",
+        "연산",
+        "자릿수"
+      ],
+      "name": "교육학/학습과학",
+      "output_sections": [
+        "인지 부하 이론 적용 분석",
+        "난이도 측정 방법론 평가",
+        "학습 단계 설계 적합성",
+        "개선 권고사항"
+      ],
+      "responsibility": "인지 부하 이론, 난이도 측정 방법론, 학습 단계 설계, 발달 심리학 기반 분석",
+      "role_id": "pedagogy"
+    }
+  ],
+  "dynamic_roles_meta": {
+    "action": "add",
+    "previous_roles": [],
+    "updated_at": "2026-02-13T09:20:09.250355+00:00",
+    "updated_by": "zoe"
+  },
+  "language": "ko",
+  "name": "수학 문제 레벨링 품질 검증",
+  "research_questions": [
+    "W1~W6 가중치 체계가 실제 학습 난이도를 정확히 반영하는가?",
+    "가중치 모델의 타당성과 개선 방향은 무엇인가?"
+  ],
+  "target_users": "에듀테크 개발팀"
+}

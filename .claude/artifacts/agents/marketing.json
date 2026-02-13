@@ -1,0 +1,180 @@
+{
+  "claims": [
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 8,
+          "line_start": 4,
+          "quote_sha256": "30cf25c53c5d6222fbbcbbbb589f563110c4ffd9471dc4a8eec56d3236cf9e17",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-001",
+      "statement": "6가지 가중치(W1~W6)로 수학 문제 난이도를 정량화하는 체계적 채점 시스템이 존재하며, 이는 에듀테크 시장에서 '객관적 난이도 측정'이라는 독보적 포지셔닝을 가능하게 한다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 3,
+          "line_start": 3,
+          "quote_sha256": "dce7660ad9451605ebbf673bb04ca075a70529b587a59da94890de7f331af101",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-002",
+      "statement": "W_총점을 W(1~23) 단계와 C(1~15) 커리큘럼 레벨로 이중 변환하여, 교사와 학부모 모두 직관적으로 이해할 수 있는 난이도 체계를 제공한다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 18,
+          "line_start": 14,
+          "quote_sha256": "85756ebcb1b2ff0a9228a1f350dbb28227064bef62dc2fb156d5afe1a59eb507",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-003",
+      "statement": "W4(절차적 복잡성)에서 carry/borrow 여부가 +3.0~+5.0점으로 가장 큰 가중치를 가지며, 이는 학생의 실제 인지 부하와 직결되는 핵심 차별화 요소이다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 84,
+          "line_start": 80,
+          "quote_sha256": "733a6c050c9aeb0c7b636f22fb65c0bebb4cf2d8a5fe51d4d830470082f1c264",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-004",
+      "statement": "W5(특수 숫자 감점)에서 10의 배수에 -1.0점을 부여하여 심리적 안착점 효과를 반영하며, 이는 인지과학 기반 채점이라는 메시징 차별화를 뒷받침한다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0050",
+          "line_end": 62,
+          "line_start": 60,
+          "quote_sha256": "df41a7222a49e203fa1583ffb5b0399e024a90f3c57cc17cdd06a51fc78318f7",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-005",
+      "statement": "carry가 발생하는 덧셈(예: 1+19=20)은 W4에서 +3.0점이 부여되어 W=15 단계로 분류되며, carry 없는 동일 자릿수 덧셈(W=6~8)과 명확히 구분된다. 이 세밀한 단계 구분이 맞춤형 학습 경로 설계의 근거가 된다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0151",
+          "line_end": 6,
+          "line_start": 3,
+          "quote_sha256": "6ec89a4eef7cf020644ed73ceb82adf6ff0b416ccb3d54640c5b4fa75c15cd47",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-006",
+      "statement": "최고 난이도 W=23(예: 99+26=125)은 연속 carry(W4=5.0) + 큰 숫자(W3=1.5) + 자릿수 확장(W2=4.0)이 복합적으로 작용하며, 약 15,000개 문제가 23단계로 세분화되어 있다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0100",
+          "line_end": 6,
+          "line_start": 3,
+          "quote_sha256": "9913d11f6245a67febcd74d752d146478cb482c172eaa5824b915c20cb32968b",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-007",
+      "statement": "중상위 난이도(W=18, 예: 56+36=92)에서 1회 carry와 큰 숫자가 결합되며, C레벨은 11로 매핑된다. 이 구간은 초등 중학년 핵심 학습 구간으로 시장 수요가 가장 높다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+          "line_end": 13,
+          "line_start": 10,
+          "quote_sha256": "952e65faae575275e9f3d31dec81a0cee0260a7189b9bf4ae5cfc48601dd830a",
+          "source_name": "수학 난이도 채점 기준표"
+        }
+      ],
+      "confidence": "medium",
+      "id": "CLM-008",
+      "statement": "W2(비대칭 자릿수 +1.0점)와 W3(큰 숫자 개당 +0.5점)의 세분화된 가중치는 기존 에듀테크 경쟁사가 제공하지 못하는 미세 난이도 조절을 가능하게 하여, B2B 시장에서 기술 신뢰성 메시지의 근거가 된다."
+    }
+  ],
+  "inputs": {
+    "chunks_used": [
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0001",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0002",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0003",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0050",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0100",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0150",
+      "SRC-math-difficulty-scoring@d17fde4f#chunk-0151"
+    ],
+    "evidence_index": ".claude/knowledge/evidence/index/sources.jsonl"
+  },
+  "open_questions": [
+    {
+      "citations": [],
+      "id": "Q-001",
+      "priority": "high",
+      "question": "타겟 시장의 지역 범위가 한국 내수인지, 글로벌(아시아 수학 교육과정 기반) 확장을 포함하는지 명확하지 않다. GTM 채널 전략이 이에 따라 크게 달라진다."
+    },
+    {
+      "citations": [],
+      "id": "Q-002",
+      "priority": "high",
+      "question": "B2B(학원/학교/에듀테크 플랫폼 대상)와 B2C(학부모/학생 직접) 중 어떤 모델이 우선인지에 따라 포지셔닝과 채널 전략이 분기된다."
+    },
+    {
+      "citations": [],
+      "id": "Q-003",
+      "priority": "medium",
+      "question": "현재 덧셈/뺄셈만 15,000문제가 커버되어 있으나, 곱셈/나눗셈 확장 로드맵이 런칭 메시지에 포함되어야 하는지 결정 필요하다."
+    },
+    {
+      "citations": [],
+      "id": "Q-004",
+      "priority": "medium",
+      "question": "경쟁사(매쓰홀릭, 토도수학, 클래스팅 등) 대비 가격 전략과 무료 체험 범위가 미정이다."
+    }
+  ],
+  "project": "수학 문제 레벨링 품질 검증",
+  "risks": [
+    {
+      "citations": [],
+      "id": "RSK-001",
+      "impact": "high",
+      "mitigation": "초기에는 '덧셈/뺄셈 전문'으로 명확히 한정하고, 곱셈/나눗셈 로드맵을 투명하게 공개하여 기대치를 관리한다.",
+      "risk": "현재 덧셈/뺄셈만 지원하므로, 마케팅 메시지가 전체 수학 난이도 해결로 오해될 경우 사용자 이탈 리스크가 있다."
+    },
+    {
+      "citations": [],
+      "id": "RSK-002",
+      "impact": "medium",
+      "mitigation": "W/C 레벨 체계를 시각적 대시보드와 학부모 리포트로 제공하여 비전문가도 직관적으로 이해할 수 있게 한다.",
+      "risk": "6가지 가중치 기반 채점 체계가 교사/학부모에게 지나치게 복잡하게 인식될 수 있다."
+    },
+    {
+      "citations": [],
+      "id": "RSK-003",
+      "impact": "medium",
+      "mitigation": "학술 논문 기반 검증 사례와 파일럿 테스트 결과를 초기 마케팅 자료에 포함한다.",
+      "risk": "가중치 체계의 교육학적 타당성 검증이 부족하면 B2B 시장에서 신뢰 확보가 어렵다."
+    }
+  ],
+  "role": "marketing",
+  "version": "1.0"
+}
