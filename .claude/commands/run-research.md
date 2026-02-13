@@ -358,62 +358,8 @@ Step 0.7에서 이 역할의 keywords에 매칭된 증거만 선별하여 전달
 
 > "{document_type_name} v{N}이 생성되었습니다. Google Drive에 업로드하시겠습니까?"
 
-### 업로드 시 동작 (Playwright 브라우저)
-
-**중요: 업로드는 중간에 멈추지 않고 한 번에 완료합니다. 섹션별로 끊지 않습니다.**
-
-#### Step 1: 사용자가 저장 위치 지정
-
-1. `browser_navigate`로 `https://drive.google.com` 을 엽니다.
-2. 사용자에게 안내합니다:
-   > "Google Drive가 열렸습니다. 문서를 저장할 폴더로 이동한 후 '확인'을 입력해주세요."
-3. 사용자가 "확인" (또는 동의 의사)을 입력할 때까지 **이 단계에서만** 대기합니다.
-4. 사용자 확인 후 `browser_evaluate`로 현재 URL에서 폴더 ID를 추출합니다:
-   ```javascript
-   // URL 형태: https://drive.google.com/drive/folders/{FOLDER_ID}
-   window.location.href;
-   ```
-5. 추출한 폴더 URL을 `.claude/manifests/drive-sources.yaml`의 `upload_folder`에 저장합니다 (다음부터 재사용).
-
-#### Step 2: 문서 HTML 변환 (일괄)
-
-1. 생성된 `.md` 파일 전체를 읽습니다.
-2. Markdown → HTML로 한 번에 변환합니다 (heading, bold, table, list 등 서식 포함).
-3. 변환된 HTML을 하나의 문자열 변수에 저장합니다.
-
-#### Step 3: 해당 폴더에 Google Docs 생성 + 내용 삽입
-
-1. 사용자가 지정한 Drive 폴더에서 `browser_click`으로 "새로 만들기" → "Google Docs" → "빈 문서"를 클릭합니다.
-   - 또는 `browser_navigate`로 `https://docs.google.com/document/create` 접속 후, 생성된 문서를 해당 폴더로 이동.
-2. `browser_evaluate`로 문서 제목을 `{type}-{project}-v{N}`으로 설정합니다.
-3. **단일 `browser_evaluate` 호출**로 전체 HTML을 삽입합니다:
-   ```javascript
-   // 전체 문서를 한 번에 삽입 — 섹션별로 나누지 않음
-   document.querySelector('.kix-appview-editor').focus();
-   document.execCommand('insertHTML', false, fullHtmlContent);
-   ```
-4. 삽입 완료 확인 (스크린샷 1회).
-
-#### Step 4: 결과 보고
-
-1. 업로드 파일:
-   - `{output_file_name}` (문서 본문 — HTML 서식 유지)
-   - `citations.json` (인용 보고서, 선택)
-2. 업로드 완료 후 Drive 링크를 사용자에게 공유합니다.
-
-#### Step 5: 브라우저 종료
-
-업로드 완료 후 `browser_close`를 호출하여 브라우저를 종료합니다.
-
-**금지사항**:
-- 개인 Drive 루트에 무단 생성 (반드시 사용자가 지정한 폴더에 저장)
-- plain text 붙여넣기 (서식 사라짐)
-- 섹션별 분할 삽입 (중간에 끊기고 사용자 입력 대기 발생)
-- 삽입 중 사용자에게 "계속하시겠습니까?" 같은 질문 (위치 확인은 Step 1에서만)
-
-### 업로드 거부 시
-
-- "나중에 `/run-research --upload`로 업로드할 수 있습니다."를 안내합니다.
+- 수락 시: `/upload-drive`를 실행합니다.
+- 거부 시: "나중에 `/upload-drive`로 업로드할 수 있습니다."를 안내합니다.
 
 ---
 
