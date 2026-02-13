@@ -127,6 +127,34 @@ Claude Code 세션을 시작하면 SessionStart hook이 상태를 자동 감지�
 ## Changelog
 
 <details>
+<summary>v0.1.5 — /admin Changelog 단계 추가 (2026-02-13)</summary>
+
+- `/admin` 워크플로우에 Step 6 "README Changelog 업데이트" 단계 추가
+- PR 생성 전 Changelog에 변경 항목을 자동 prepend하도록 명시
+- CLAUDE.md Changelog 규칙 및 `/share-project` 패턴과 일관성 확보
+
+</details>
+
+<details>
+<summary>v0.1.4 — PR 리뷰 피드백 답글 규칙 추가 (2026-02-13)</summary>
+
+- CLAUDE.md에 "PR 리뷰 피드백 반영 규칙" 섹션 추가
+- 수정 커밋 + PR 답글을 반드시 함께 수행하도록 명시
+- 답글 형식: 반영 커밋 해시 + 지적/반영 내용 표 + 미반영 사유
+
+</details>
+
+<details>
+<summary>v0.1.3 — 에이전트 역할 자동 제안 + 보안 개선 (2026-02-13)</summary>
+
+- `agent-team-spec.md`에 동적 역할 제안 시스템 추가 — 프로젝트 주제 기반으로 에이전트 역할 자동 구성
+- `document-types.yaml`에 `agent_roles.dynamic_suggestion` 필드 추가
+- 입력 검증(URL 화이트리스트, 파일명 sanitize) 및 감사 추적(audit trail) 강화
+- 토큰 보안: push URL에서만 토큰 사용, remote config에 토큰 잔류 방지
+
+</details>
+
+<details>
 <summary>v0.1.2 — Admin 커맨드 + Worktree 브랜치 격리 (2026-02-13)</summary>
 
 - `/admin` 커맨드 추가 — 템플릿 maintainer 전용 워크플로우 (요구사항 → 플랜 → 구현 → 검증 → PR)
