@@ -105,6 +105,24 @@ if [ "$HAS_GIT" = "true" ]; then
     fi
   fi
 
+  # ──────────────────────────────────────
+  # 2-2. 잔여 worktree 정리
+  # ──────────────────────────────────────
+  WORKTREE_DIR="${PROJECT_DIR}/../.worktrees"
+  if [ -d "$WORKTREE_DIR" ]; then
+    # 잔여 worktree 자동 정리 (이전 세션에서 정리 안 된 것)
+    git worktree prune 2>/dev/null || true
+    REMAINING=$(ls -d "$WORKTREE_DIR"/*/ 2>/dev/null | wc -l | tr -d ' ')
+    if [ "$REMAINING" -gt 0 ]; then
+      for wt in "$WORKTREE_DIR"/*/; do
+        [ -d "$wt" ] && git worktree remove --force "$wt" 2>/dev/null || true
+      done
+      STATUS="$STATUS\nWARN 잔여 worktree ${REMAINING}개 정리됨"
+    fi
+    # 빈 디렉토리 삭제
+    rmdir "$WORKTREE_DIR" 2>/dev/null || true
+  fi
+
   # git pull
   if [ "$GIT_READY" = "true" ]; then
     PULL_RESULT=$(git pull origin main 2>&1 || echo "pull-failed")

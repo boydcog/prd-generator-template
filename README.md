@@ -24,6 +24,8 @@ Google Drive 문서를 기반으로 6역할 에이전트 팀이 PRD, 디자인 �
 6. **브랜치 워크플로우** — main 기반 작업 + feature 브랜치 PR 생성 후 자동 복귀
 7. **PR/Issue 템플릿** — `.claude/templates/`의 표준 템플릿으로 일관된 형식 보장
 8. **프로젝트 공유 (`/share-project`)** — 생성된 문서와 메타데이터를 PR로 팀에 공유
+9. **관리자 모드 (`/admin`)** — 템플릿 maintainer 전용. 요구사항 → 플랜 → 구현 → 검증 → PR 자동 생성
+10. **Worktree 기반 브랜치 격리** — 여러 세션이 동시 작업해도 브랜치 충돌 없음
 
 ---
 
@@ -99,9 +101,9 @@ Claude Code 세션을 시작하면 SessionStart hook이 상태를 자동 감지�
 ├── .gh-token                    ← GitHub 토큰 (gitignored)
 ├── .user-identity               ← 사용자 이름 (gitignored)
 ├── .claude/
-│   ├── commands/                ← 슬래시 명령어 (7개)
+│   ├── commands/                ← 슬래시 명령어 (8개)
 │   ├── templates/               ← PR/Issue 템플릿
-│   ├── manifests/               ← 설정 (drive-sources, project-defaults)
+│   ├── manifests/               ← 설정 (drive-sources, project-defaults, admins)
 │   ├── spec/                    ← 사양서 (agent-team, document-types 등)
 │   ├── hooks/                   ← SessionStart hook
 │   ├── state/                   ← 상태 (generated, gitignored)
@@ -123,6 +125,18 @@ Claude Code 세션을 시작하면 SessionStart hook이 상태를 자동 감지�
 ---
 
 ## Changelog
+
+<details>
+<summary>v0.1.2 — Admin 커맨드 + Worktree 브랜치 격리 (2026-02-13)</summary>
+
+- `/admin` 커맨드 추가 — 템플릿 maintainer 전용 워크플로우 (요구사항 → 플랜 → 구현 → 검증 → PR)
+- `.claude/manifests/admins.yaml` 추가 — 관리자 사용자 목록
+- `git worktree` 기반 PR 생성으로 전환 — 여러 세션이 동시 작업해도 브랜치 충돌 없음
+- `git checkout -b` → `git worktree add` 패턴 교체 (CLAUDE.md, share-project.md)
+- startup hook에 잔여 worktree 자동 정리 섹션 추가 (startup.sh, startup.ps1)
+- 프로젝트 명령 목록에 admin, share-project 추가
+
+</details>
 
 <details>
 <summary>v0.1.1 — 프로젝트 공유 명령 추가 (2026-02-13)</summary>
