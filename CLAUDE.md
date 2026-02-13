@@ -92,6 +92,7 @@ SessionStart hook 출력에서 `FAIL` 표시된 의존성이 있으면 **추천 
 - "업로드" / "드라이브에 올려줘" → 업로드 실행
 - "수정해줘" / "개선해줘" → 해당 내용 수정 후 /auto-generate (새 버전)
 - "이슈 올려줘" / "기록해줘" → /create-issue
+- "공유해줘" / "PR 올려줘" / "프로젝트 올려줘" / "팀에 공유" → /share-project
 
 ### 5-1. 프로젝트 기능 안내 범위
 
@@ -359,7 +360,8 @@ git checkout main || git checkout -f main
 │   │   ├── run-research.md
 │   │   ├── verify.md
 │   │   ├── auto-generate.md           ← 전체 파이프라인 자동 실행
-│   │   └── create-issue.md            ← GitHub Issue 생성
+│   │   ├── create-issue.md            ← GitHub Issue 생성
+│   │   └── share-project.md           ← 프로젝트 결과물 PR 공유
 │   ├── templates/                     ← PR/Issue 템플릿
 │   │   ├── pr-template.md
 │   │   └── issue-template.md

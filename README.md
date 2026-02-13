@@ -23,6 +23,7 @@ Google Drive 문서를 기반으로 6역할 에이전트 팀이 PRD, 디자인 �
 5. **사용자 아이덴티티** — `.user-identity`로 작성자 추적, PR/Issue에 자동 반영
 6. **브랜치 워크플로우** — main 기반 작업 + feature 브랜치 PR 생성 후 자동 복귀
 7. **PR/Issue 템플릿** — `.claude/templates/`의 표준 템플릿으로 일관된 형식 보장
+8. **프로젝트 공유 (`/share-project`)** — 생성된 문서와 메타데이터를 PR로 팀에 공유
 
 ---
 
@@ -98,7 +99,7 @@ Claude Code 세션을 시작하면 SessionStart hook이 상태를 자동 감지�
 ├── .gh-token                    ← GitHub 토큰 (gitignored)
 ├── .user-identity               ← 사용자 이름 (gitignored)
 ├── .claude/
-│   ├── commands/                ← 슬래시 명령어 (6개)
+│   ├── commands/                ← 슬래시 명령어 (7개)
 │   ├── templates/               ← PR/Issue 템플릿
 │   ├── manifests/               ← 설정 (drive-sources, project-defaults)
 │   ├── spec/                    ← 사양서 (agent-team, document-types 등)
@@ -122,6 +123,17 @@ Claude Code 세션을 시작하면 SessionStart hook이 상태를 자동 감지�
 ---
 
 ## Changelog
+
+<details>
+<summary>v0.1.1 — 프로젝트 공유 명령 추가 (2026-02-13)</summary>
+
+- `/share-project` 명령 추가 — 프로젝트 결과물(문서, 메타데이터)을 PR로 팀에 공유
+- `project/{name}` 브랜치에 gitignore된 artifacts를 강제 추가하여 PR 생성
+- 민감 정보(`.gh-token`) 및 대용량 청크 자동 제외
+- PR 본문에 프로젝트 요약, 포함 파일, 관련 이슈 자동 포함
+- "공유해줘" / "PR 올려줘" 등 자연어 트리거 지원
+
+</details>
 
 <details>
 <summary>v0.1.0 — 초기 버전 (2026-02-12)</summary>
