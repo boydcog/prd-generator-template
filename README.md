@@ -28,8 +28,9 @@ Google Drive 문서를 기반으로 6역할 에이전트 팀이 PRD, 디자인 �
 6. **브랜치 워크플로우** — main 기반 작업 + feature 브랜치 PR 생성 후 자동 복귀
 7. **PR/Issue 템플릿** — `.claude/templates/`의 표준 템플릿으로 일관된 형식 보장
 8. **프로젝트 공유 (`/share-project`)** — 생성된 문서와 메타데이터를 PR로 팀에 공유
-9. **관리자 모드 (`/admin`)** — 템플릿 maintainer 전용. 요구사항 → 플랜 → 구현 → 검증 → PR 자동 생성
-10. **Worktree 기반 브랜치 격리** — 여러 세션이 동시 작업해도 브랜치 충돌 없음
+9. **Drive 업로드 (`/upload-drive`)** — 생성된 문서를 Google Drive에 HTML 서식 유지하여 업로드
+10. **관리자 모드 (`/admin`)** — 템플릿 maintainer 전용. 요구사항 → 플랜 → 구현 → 검증 → PR 자동 생성
+11. **Worktree 기반 브랜치 격리** — 여러 세션이 동시 작업해도 브랜치 충돌 없음
 
 ---
 
@@ -54,7 +55,7 @@ Google Drive 문서를 기반으로 6역할 에이전트 팀이 PRD, 디자인 �
 └─────────┬───────────┘
           ▼
 ┌─────────────────────┐
-│Phase 4: 완료 보고     │  문서 요약 + Drive 업로드 제안
+│Phase 4: 완료 보고     │  문서 요약 + /upload-drive 제안
 └─────────────────────┘
 ```
 
@@ -106,7 +107,7 @@ Claude Code 세션을 시작하면 SessionStart hook이 상태를 자동 감지�
 ├── .gh-token                    ← GitHub 토큰 (gitignored)
 ├── .user-identity               ← 사용자 이름 (gitignored)
 ├── .claude/
-│   ├── commands/                ← 슬래시 명령어 (8개)
+│   ├── commands/                ← 슬래시 명령어 (9개)
 │   ├── templates/               ← PR/Issue 템플릿
 │   ├── manifests/               ← 설정 (drive-sources, project-defaults, admins)
 │   ├── spec/                    ← 사양서 (agent-team, document-types 등)

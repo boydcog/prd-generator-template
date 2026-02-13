@@ -2,6 +2,7 @@
 
 ## 2026-02-13
 
+- feat: `/upload-drive` 독립 커맨드 분리 — 업로드 로직 Single Source of Truth 확립
 - Changelog 분리 + git pull rebase 복구 + sisyphus 제거 + worktree 후 main 복원 추가
 - `/admin` 워크플로우에 Changelog 업데이트 단계 추가 (`f182191`)
 - PR 리뷰 피드백 답글 규칙 추가 (`4ab4d33`)

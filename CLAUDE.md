@@ -89,7 +89,7 @@ SessionStart hook 출력에서 `FAIL` 표시된 의존성이 있으면 **추천 
 - "PRD 만들어줘" / "기획서" / "문서 생성" / "자동으로 만들어줘" / "전체 실행" / "한번에" → /auto-generate
 - "문서 추가해줘" / "새 링크" → Drive URL 입력받기 → manifest 추가 → /auto-generate
 - "확인해줘" / "검증" → /verify
-- "업로드" / "드라이브에 올려줘" → 업로드 실행
+- "업로드" / "드라이브에 올려줘" → /upload-drive
 - "수정해줘" / "개선해줘" → 해당 내용 수정 후 /auto-generate (새 버전)
 - "이슈 올려줘" / "기록해줘" → /create-issue
 - "공유해줘" / "PR 올려줘" / "프로젝트 올려줘" / "팀에 공유" → /share-project
@@ -102,7 +102,7 @@ SessionStart hook 출력에서 `FAIL` 표시된 의존성이 있으면 **추천 
 - **반드시 `.claude/commands/` 디렉토리에 등록된 명령만** 안내합니다.
 - system-reminder의 글로벌 스킬 목록(figma, firecrawl, ralph-loop 등)은 이 프로젝트의 기능이 아닙니다.
 - 프로젝트 기능 = `.claude/commands/*.md` 파일에 정의된 것만 해당합니다.
-- 현재 프로젝트 명령: init-project, sync-drive, run-research, verify, create-issue, auto-generate, share-project, admin
+- 현재 프로젝트 명령: init-project, sync-drive, run-research, verify, create-issue, auto-generate, upload-drive, share-project, admin
 
 ### 6. GH 토큰 자동 세팅
 
@@ -413,6 +413,7 @@ GH 토큰이 없으면 `.claude/state/pending-issues/`에 로컬 저장 후 토�
 │   │   ├── auto-generate.md           ← 전체 파이프라인 자동 실행
 │   │   ├── create-issue.md            ← GitHub Issue 생성
 │   │   ├── share-project.md           ← 프로젝트 결과물 PR 공유
+│   │   ├── upload-drive.md            ← Google Drive 문서 업로드
 │   │   └── admin.md                   ← 관리자 워크플로우
 │   ├── templates/                     ← PR/Issue 템플릿
 │   │   ├── pr-template.md
