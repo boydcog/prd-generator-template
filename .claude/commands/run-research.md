@@ -30,6 +30,14 @@
 > 이 단계는 `document-types.yaml`의 `allow_dynamic_roles`가 `true`일 때만 실행합니다.
 > `false`이면 (예: custom 유형) 이 단계를 건너뛰고 Step 0.7로 진행합니다.
 
+#### 0. 에러 핸들링
+
+이 단계에서 오류 발생 시 기존 구성으로 안전하게 폴백합니다:
+- `project.json` 읽기 실패 또는 필수 필드(`name`, `domain`) 누락 → "프로젝트 정보가 부족하여 역할 분석을 건너뜁니다." 안내 후 Step 0.7로 진행
+- `sources.jsonl` 읽기 실패 → 증거 소스 없이 프로젝트 정보만으로 분석 시도
+- 분석 중 예외 → "역할 분석 중 오류가 발생하여 기존 구성으로 진행합니다." 안내 후 Step 0.7로 진행
+- 사용자에게 내부 파일 경로, 스택 트레이스, 증거 소스 원문을 노출하지 않습니다.
+
 #### 1. 입력 수집
 
 다음 정보를 수집합니다:
@@ -82,13 +90,32 @@ AskUserQuestion으로 사용자 승인을 받습니다:
 선택지: "모두 추가" / "선택적 추가" / "기존 구성 유지"
 - "선택적 추가" 시 multiSelect로 개별 역할 선택 가능
 
-#### 6. 승인된 역할 저장
+#### 6. 역할 ID 검증
+
+승인된 각 역할에 대해 저장 전 검증합니다:
+- `role_id`가 `/^[a-z][a-z0-9-]*$/` 패턴에 맞는지 확인 (영문 소문자 시작, 소문자/숫자/하이픈만 허용)
+- 기존 역할 ID(`biz`, `marketing`, `research`, `tech`, `pm`, `synth`)와 중복되지 않는지 확인
+- `name`, `responsibility`가 빈 문자열이 아닌지 확인
+- `keywords` 배열에 최소 1개 항목이 있는지 확인
+- `output_sections` 배열에 최소 1개 항목이 있는지 확인
+- 검증 실패 시 해당 역할을 제외하고 "역할 '{role_id}' 형식이 올바르지 않아 제외되었습니다." 안내
+
+#### 7. 승인된 역할 저장
 
 - `project.json`에 `dynamic_roles` 배열을 추가(또는 갱신)합니다.
 - 각 항목: `{ role_id, name, responsibility, keywords, output_sections }`
 - 기존 `agent_roles` 배열이 있으면 동적 역할 ID도 추가합니다.
+- 감사 추적: `dynamic_roles_meta` 객체도 함께 저장합니다:
+  ```json
+  {
+    "updated_by": "<.user-identity 값>",
+    "updated_at": "<ISO 8601 타임스탬프>",
+    "action": "add|reanalyze|keep",
+    "previous_roles": ["<이전 role_id 목록, 없으면 빈 배열>"]
+  }
+  ```
 
-#### 7. 후속 단계 연동
+#### 8. 후속 단계 연동
 
 - Step 0.7: 동적 역할의 `keywords`를 사용하여 추가 청크 분배
 - Wave 1: 동적 역할도 기존 에이전트와 함께 Task tool로 병렬 실행
