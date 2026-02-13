@@ -17,6 +17,13 @@
 #   - https://drive.google.com/file/d/{FILE_ID}/view
 #
 # type: doc | sheet
+#
+# tabs (Google Docs 전용, 선택):
+#   - 생략 또는 "single": URL의 ?tab= 파라미터에 해당하는 탭만 수집 (기본값)
+#   - "all": 문서의 모든 탭을 자동 발견하여 수집
+#   - Google Sheets는 tabs 필드 미사용. sheets 필드가 탭 제어를 담당:
+#     sheets: []         → 모든 시트 자동 수집
+#     sheets: ["시트1"]  → 지정한 시트만 수집
 
 sources: []
   # - name: "시장 분석 보고서"
