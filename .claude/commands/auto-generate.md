@@ -40,8 +40,10 @@
 ```
 
 1. `/run-research` 실행.
-   - Wave 1: 병렬 에이전트 실행 (문서 유형에 따라 동적 결정).
-   - Wave 2: synth 에이전트 실행.
+   - TeamCreate로 리서치 팀 구성.
+   - Wave 1: 팀원 병렬 실행 (Opus 모델, 실시간 진행 보고).
+   - Wave 2: synth 팀원 실행.
+   - 완료 후 팀 자동 정리.
 2. 완료 확인:
    - 최종 문서 파일이 생성되었는지 확인.
    - 생성되지 않았으면: 재시도 1회.
@@ -101,6 +103,7 @@
 |------|------|------|
 | Phase 1 | Drive 접근 불가 | 로그인 안내, 1회 재시도 후 중단 |
 | Phase 1 | 증거 0건 | "소스에서 추출된 내용이 없습니다" 보고 후 중단 |
+| Phase 2 | 팀원 응답 없음 | 해당 팀원 shutdown → 새 팀원 생성으로 재시도 |
 | Phase 2 | 에이전트 실패 | 실패한 에이전트만 1회 재시도 |
 | Phase 2 | 문서 미생성 | 전체 1회 재시도 후 중단 |
 | Phase 3 | 검증 FAIL | 자동 수정 → 재검증 → 그래도 실패 시 중단 |
@@ -115,13 +118,13 @@
 Phase 1/4: Drive 동기화
   ✅ 3개 문서 동기화 완료 (12개 청크 생성)
 
-Phase 2/4: 에이전트 리서치
-  ✅ biz 분석 완료
-  ✅ marketing 분석 완료
-  ✅ research 분석 완료
-  ✅ tech 분석 완료
-  ✅ pm 분석 완료
-  ✅ 통합 문서 생성 완료
+Phase 2/4: 에이전트 리서치 (research-v{N} 팀)
+  ✅ biz 분석 완료 — claims: {N}건, risks: {N}건
+  ✅ marketing 분석 완료 — claims: {N}건, risks: {N}건
+  ✅ research 분석 완료 — claims: {N}건, risks: {N}건
+  ✅ tech 분석 완료 — claims: {N}건, risks: {N}건
+  ✅ pm 분석 완료 — claims: {N}건, risks: {N}건
+  ✅ 통합 문서 생성 완료 — 섹션: {N}개, 인용: {N}건
 
 Phase 3/4: 검증
   ✅ 구조 검사 통과
