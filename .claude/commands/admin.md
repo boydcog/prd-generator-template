@@ -84,6 +84,10 @@ GH_TOKEN=$GH_TOKEN gh pr create --repo boydcog/prd-generator-template \
 
 # 5. worktree 정리
 git worktree remove "$WORKTREE_DIR"
+
+# 6. main 작업 디렉토리 복원
+git -C "$PROJECT_DIR" checkout -- {modified_files}
+# 새로 생성한 untracked 파일이 있으면 삭제
 ```
 
 3. PR 본문은 `.claude/templates/pr-template.md` 템플릿을 사용합니다.

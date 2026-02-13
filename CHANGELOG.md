@@ -2,7 +2,7 @@
 
 ## 2026-02-13
 
-- Changelog를 별도 파일로 분리, 날짜별 관리 체계 전환 + git pull rebase 복구 + sisyphus 제거 (`02f9d1f`)
+- Changelog 분리 + git pull rebase 복구 + sisyphus 제거 + worktree 후 main 복원 추가
 - `/admin` 워크플로우에 Changelog 업데이트 단계 추가 (`f182191`)
 - PR 리뷰 피드백 답글 규칙 추가 (`4ab4d33`)
 - 에이전트 역할 자동 제안 + 보안 개선 (`b88f39c`)

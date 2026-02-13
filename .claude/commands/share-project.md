@@ -148,10 +148,14 @@ PR 생성 성공/실패와 관계없이 **반드시** worktree를 정리합니�
 
 ```bash
 # PROJECT_DIR은 Step 4에서 설정됨
+# worktree 제거
 git worktree remove "${PROJECT_DIR}/../.worktrees/${SLUG}" 2>/dev/null || git worktree remove --force "${PROJECT_DIR}/../.worktrees/${SLUG}" 2>/dev/null || true
+
+# main 작업 디렉토리 복원 (수정된 tracked 파일 되돌리기 + 새로 생성한 untracked 파일 삭제)
+git -C "$PROJECT_DIR" checkout -- .
 ```
 
-에러 발생 시에도 이 단계는 반드시 실행합니다. main 디렉토리의 브랜치는 변경되지 않으므로 별도의 복귀 절차가 불필요합니다.
+에러 발생 시에도 이 단계는 반드시 실행합니다.
 
 ### Step 9: 결과 보고
 

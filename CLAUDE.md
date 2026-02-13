@@ -380,6 +380,7 @@ GH 토큰이 없으면 `.claude/state/pending-issues/`에 로컬 저장 후 토�
    ```
 6. PR 생성 (`pr-template.md` 사용)
 7. Worktree 정리: `git worktree remove ../.worktrees/${SLUG}`
+8. main 작업 디렉토리 복원: `git checkout -- {modified_files}` + untracked 파일 삭제
 
 ### 안전 장치
 
