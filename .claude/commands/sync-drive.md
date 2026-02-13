@@ -42,44 +42,52 @@ Playwright 브라우저를 통해 Google Drive 문서를 수집하고 로컬 kno
    - 로그인 완료를 `browser_snapshot`으로 확인합니다.
 4. **로그인 됨**: 다음 단계로 진행합니다.
 
-### Step 2: 파일 접근 & 내보내기
+### Step 2: 파일 접근 & 내보내기 (5탭 배치 병렬)
 
-각 소스에 대해 Playwright를 사용합니다:
+소스 목록을 최대 5개씩 배치로 나누어 병렬 다운로드합니다.
 
-#### Google Docs (`type: doc`)
+#### 2-1. Export URL 생성
 
-1. URL에서 문서 ID를 추출합니다:
-   - `https://docs.google.com/document/d/{DOC_ID}/edit` → `DOC_ID`
-2. 내보내기 URL로 이동합니다:
-   ```
-   browser_run_code로 실행:
-   async (page) => {
-     const response = await page.goto('https://docs.google.com/document/d/{DOC_ID}/export?format=txt');
-     return await response.text();
-   }
-   ```
-3. 반환된 텍스트를 Markdown으로 변환하여 저장합니다.
-4. 저장 경로: `.claude/knowledge/evidence/raw/{source_slug}.md`
+각 소스에서 export URL을 생성합니다:
 
-#### Google Sheets (`type: sheet`)
+- **Google Docs** (`type: doc`):
+  - URL에서 `DOC_ID` 추출: `https://docs.google.com/document/d/{DOC_ID}/edit` → `DOC_ID`
+  - Export URL: `https://docs.google.com/document/d/{DOC_ID}/export?format=txt`
 
-1. URL에서 시트 ID를 추출합니다:
-   - `https://docs.google.com/spreadsheets/d/{SHEET_ID}/edit` → `SHEET_ID`
-2. CSV로 내보내기:
-   ```
-   browser_run_code로 실행:
-   async (page) => {
-     const response = await page.goto('https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv');
-     return await response.text();
-   }
-   ```
-3. 특정 시트만 내보내기 (gid 지정):
-   ```
-   https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&gid={GID}
-   ```
-4. 시트 목록 가져오기 (전체 시트를 내보낼 때):
-   - 시트 페이지에서 `browser_evaluate`로 탭 이름과 gid를 추출합니다.
-5. 저장 경로:
+- **Google Sheets** (`type: sheet`):
+  - URL에서 `SHEET_ID` 추출: `https://docs.google.com/spreadsheets/d/{SHEET_ID}/edit` → `SHEET_ID`
+  - Export URL: `https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv`
+  - gid가 있으면: `&gid={GID}` 추가
+  - 시트 목록이 필요하면 먼저 `browser_evaluate`로 탭 이름과 gid를 추출합니다.
+
+#### 2-2. 배치 병렬 다운로드
+
+5개씩 묶어 `browser_run_code` 1회 호출로 동시 fetch합니다:
+
+```
+browser_run_code로 실행:
+async (page) => {
+  const context = page.context();
+  const urls = [/* 배치 내 export URL 배열 */];
+  const results = await Promise.all(urls.map(async (item) => {
+    const p = await context.newPage();
+    try {
+      const res = await p.goto(item.url, { timeout: 30000 });
+      const content = await res.text();
+      return { name: item.name, content, success: true };
+    } catch (e) {
+      return { name: item.name, content: null, success: false, error: e.message };
+    } finally { await p.close(); }
+  }));
+  return JSON.stringify(results);
+}
+```
+
+#### 2-3. 실패 재시도 + 저장
+
+1. 실패한 소스는 순차적으로 1회 재시도합니다 (개별 `browser_run_code` 호출).
+2. Docs 반환 텍스트 → Markdown 변환 후 저장: `.claude/knowledge/evidence/raw/{source_slug}.md`
+3. Sheets 반환 CSV → 저장:
    - 단일 시트: `.claude/knowledge/evidence/raw/{source_slug}.csv`
    - 여러 시트: `.claude/knowledge/evidence/raw/{source_slug}/{sheet_name}.csv`
 
