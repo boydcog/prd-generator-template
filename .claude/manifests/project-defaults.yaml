@@ -58,3 +58,11 @@ sheets_export:
   max_rows: 500
   max_cols: 50
   include_empty_rows: false
+
+# Playwright 제약사항 기본값 (sync-drive에서 참조)
+playwright_constraints:
+  evaluate_safe_limit: 30000               # bytes. 이 이상은 download event 사용
+  batch_size: 3                            # 대용량 시 동시 페이지 수
+  download_timeout: 30000                  # ms. waitForEvent('download') 타임아웃
+  clipboard_retry_delay: 500               # ms. 2-pass clipboard 읽기 간 대기
+  max_retry_per_source: 2                  # primary + fallback 시도 횟수

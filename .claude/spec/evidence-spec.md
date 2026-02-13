@@ -63,6 +63,41 @@ SRC-{source_slug}@{content_hash}#chunk-{sequence}
 
 ---
 
+## 3.1. Multi-Tab Chunk ID (다중 탭 문서)
+
+Google Docs/Sheets에서 탭이 여러 개인 문서를 수집할 때 탭별로 독립된 청크 ID를 생성합니다.
+
+### 형식
+
+```
+SRC-{source_slug}/{tab_slug}@{content_hash}#chunk-{sequence}
+```
+
+### 구성요소
+
+| 요소 | 생성 규칙 |
+|------|----------|
+| `source_slug` | Section 3과 동일 (파일명 기반, 최대 50자) |
+| `tab_slug` | 탭 이름에서 파생: 소문자 변환, 공백→하이픈, 비영숫자/비한글 제거, 최대 30자 |
+| `content_hash` | 해당 **탭**의 정규화된 내용의 SHA-256 앞 8자리 (탭 단위) |
+| `sequence` | 4자리 0-패딩 (0001부터 시작, 탭 내 순서) |
+
+### 파일 경로 패턴
+
+```
+.claude/knowledge/evidence/chunks/{source_slug}/{tab_slug}/chunk-{NNNN}.md
+```
+
+### 하위호환
+
+- 단일 탭 소스 (대부분의 경우): 기존 Section 3의 형식을 그대로 사용
+  - `SRC-{source_slug}@{content_hash}#chunk-{sequence}`
+  - 경로: `chunks/{source_slug}/chunk-{NNNN}.md`
+- `tab_slug`가 포함된 형식은 **실제로 다중 탭을 수집한 경우에만** 적용
+- 기존 인덱스와 청크 파일은 변경 없이 유지
+
+---
+
 ## 4. 인덱스 파일 형식
 
 ### 경로: `.claude/knowledge/evidence/index/sources.jsonl`

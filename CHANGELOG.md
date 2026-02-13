@@ -2,6 +2,7 @@
 
 ## 2026-02-13
 
+- fix: sync-drive Step 2 전략 기반 재작성 — Download Event / Clipboard / gviz 계층 도입, 다중 탭 지원, Playwright 제약사항 문서화 (#16)
 - feat: `/upload-drive` 독립 커맨드 분리 — 업로드 로직 Single Source of Truth 확립
 - Changelog 분리 + git pull rebase 복구 + sisyphus 제거 + worktree 후 main 복원 추가
 - `/admin` 워크플로우에 Changelog 업데이트 단계 추가 (`f182191`)
