@@ -308,6 +308,11 @@ Step 0.7에서 이 역할에 관련된 증거만 선별하여 전달합니다.
 ## 출력 경로
 - JSON: .claude/artifacts/agents/{role}.json
 - Markdown: .claude/artifacts/agents/{role}.md
+
+## 팀 통신 (필수)
+당신은 "research-v{N}" 팀의 "{role}-agent" 팀원입니다.
+`.claude/spec/agent-team-spec.md`의 "팀원 공통 절차"를 반드시 따르세요.
+태스크명: "{role_name} 분석 수행"
 ```
 
 ### 동적 역할 에이전트 프롬프트
@@ -341,33 +346,8 @@ Step 0.7에서 이 역할의 keywords에 매칭된 증거만 선별하여 전달
 
 ## 팀 통신 (필수)
 당신은 "research-v{N}" 팀의 "{role}-agent" 팀원입니다.
-
-1. TaskList → "{role_name} 분석 수행" 태스크 찾기
-2. TaskUpdate(owner="{role}-agent", status="in_progress")
-3. 분석 완료 후:
-   a. TaskUpdate(status="completed")
-   b. SendMessage(type="message", recipient="team-lead",
-      content="{role} 분석 완료. claims: {N}건, risks: {N}건. 핵심: {요약}",
-      summary="{role} 분석 완료")
-4. shutdown_request 수신 시 승인
-```
-
-### Synth 에이전트 팀 통신 블록
-
-synth 에이전트 프롬프트 끝에도 동일한 팀 통신 블록을 추가합니다 (태스크명만 변경):
-
-```
-## 팀 통신 (필수)
-당신은 "research-v{N}" 팀의 "synth-agent" 팀원입니다.
-
-1. TaskList → "통합 문서 생성 (synth)" 태스크 찾기
-2. TaskUpdate(owner="synth-agent", status="in_progress")
-3. 통합 완료 후:
-   a. TaskUpdate(status="completed")
-   b. SendMessage(type="message", recipient="team-lead",
-      content="통합 문서 생성 완료. 섹션: {N}개, 인용: {N}건. 핵심: {요약}",
-      summary="통합 문서 생성 완료")
-4. shutdown_request 수신 시 승인
+`.claude/spec/agent-team-spec.md`의 "팀원 공통 절차"를 반드시 따르세요.
+태스크명: "{role_name} 분석 수행"
 ```
 
 ---

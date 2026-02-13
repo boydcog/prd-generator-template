@@ -114,13 +114,6 @@ async (page) => {
 - `evidence_index_sha256`: sources.jsonl의 SHA-256
 - 소스별 `scraped_at`, `content_sha256`, `chunk_count`, `materialized_paths`
 
-### Step 6: 브라우저 종료
-
-동기화 완료 후 Playwright 브라우저를 닫습니다:
-
-1. `browser_close`를 호출하여 브라우저를 종료합니다.
-2. 다른 세션에서 Playwright를 사용할 때 충돌을 방지합니다.
-
 ---
 
 ## 옵션
