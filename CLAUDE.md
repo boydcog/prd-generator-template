@@ -292,7 +292,7 @@ SessionStart hook에서 "GitHub 토큰 없음"이 감지되면 **다른 작업�
   - `{timestamp}`: 현재 시각 (ISO 8601)
   - `{project_name}`: `project.json`에서 로드
   - `{document_type}`: `project.json`에서 로드 (기본값: prd)
-  - `{version}`: 현재 문서 버전
+  - `{commit_short}`: `git rev-parse --short HEAD` (기준 커밋)
   - `{branch_name}`: 현재 브랜치명
   - `{change_summary}`, `{detailed_changes}`, `{reason}`, `{file_list}`: 변경 내용 기반
 
