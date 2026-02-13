@@ -35,6 +35,28 @@ synth 에이전트가 Wave 1의 결과를 읽고 최종 문서를 생성합니�
 
 ---
 
+## 팀 통신 규칙 (TeamCreate 모드)
+
+### 팀원 공통 절차
+
+1. `TaskList`로 태스크 확인
+2. `TaskUpdate`로 클레임 (owner + in_progress)
+3. 분석 수행 + 파일 생성
+4. `TaskUpdate`로 완료 (completed)
+5. `SendMessage`로 팀 리더에게 요약 전송
+6. `shutdown_request` 수신 시 승인
+
+### 팀 리더 역할
+
+1. `TeamCreate`로 팀 생성
+2. `TaskCreate`로 태스크 정의 (Wave 1 + Wave 2)
+3. Wave 2 태스크에 `blockedBy` 설정
+4. `Task` tool로 팀원 생성 (Wave 1 병렬, Wave 2 순차)
+5. 완료 메시지 수신 → 사용자에게 진행 상황 보고
+6. 전체 완료 후 `shutdown_request` → `TeamDelete`
+
+---
+
 ## JSON 출력 계약 (공통 Envelope)
 
 모든 역할 에이전트는 다음 JSON 구조로 출력해야 합니다.

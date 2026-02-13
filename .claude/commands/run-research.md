@@ -179,9 +179,29 @@ Wave 1 에이전트 실행 전에 증거를 한 번만 읽고 역할별로 분�
 
 ---
 
-### Wave 1: 병렬 에이전트 실행 (동적)
+### Wave 0: 팀 구성
 
-`document-types.yaml`의 `agent_roles.wave1`에 정의된 에이전트 + `project.json`의 `dynamic_roles`에 정의된 동적 에이전트를 합산하여 Task tool로 **병렬** 실행합니다.
+1. `TeamCreate(team_name="research-v{N}")`로 팀을 생성합니다.
+2. Wave 1 역할마다 `TaskCreate` 호출:
+   - subject: "{role_name} 분석 수행"
+   - activeForm: "{role_name} 분석 중"
+3. Synth용 `TaskCreate` + `TaskUpdate(addBlockedBy=[모든 wave1 task ID])`
+
+### Wave 1: 팀원 병렬 생성 (동적)
+
+`document-types.yaml`의 `agent_roles.wave1`에 정의된 에이전트 + `project.json`의 `dynamic_roles`에 정의된 동적 에이전트를 합산하여 TeamCreate 팀원으로 **병렬** 생성합니다.
+
+모든 Wave 1 역할에 대해 **동시에** Task tool 호출:
+
+```
+Task(
+  team_name="research-v{N}",
+  name="{role}-agent",
+  subagent_type="general-purpose",
+  model="opus",
+  prompt="... (에이전트 프롬프트 + 팀 통신 블록)"
+)
+```
 
 각 에이전트에게 전달할 컨텍스트:
 - `.claude/state/project.json` (프로젝트 설정)
@@ -190,6 +210,15 @@ Wave 1 에이전트 실행 전에 증거를 한 번만 읽고 역할별로 분�
 - `.claude/spec/agent-team-spec.md` (역할 정의 및 JSON 계약)
 - `.claude/spec/citation-spec.md` (인용 규칙)
 - `.claude/spec/document-types.yaml` (문서 유형 정의)
+
+#### 팀원 실행 절차
+
+1. `TaskList` → 자기 태스크 찾기
+2. `TaskUpdate(owner, status=in_progress)`
+3. 증거 분석 + JSON/MD 파일 생성
+4. `TaskUpdate(status=completed)`
+5. `SendMessage(recipient="team-lead", summary="{role} 분석 완료")`
+6. `shutdown_request` 대기 → 승인
 
 #### 에이전트 목록 (문서 유형에 따라 활성화)
 
@@ -205,39 +234,50 @@ Wave 1 에이전트 실행 전에 증거를 한 번만 읽고 역할별로 분�
 
 #### 동적 역할 에이전트
 
-`project.json`에 `dynamic_roles`가 있으면 해당 역할도 Wave 1에 포함하여 병렬 실행합니다.
+`project.json`에 `dynamic_roles`가 있으면 해당 역할도 Wave 1에 포함하여 팀원으로 병렬 생성합니다.
 동적 역할 에이전트의 프롬프트는 기존 템플릿과 동일하되:
 - 역할 정의를 `agent-team-spec.md` 대신 `dynamic_roles[]`에서 로드
 - 필수 섹션을 `dynamic_roles[].output_sections`에서 로드
 - 출력 경로: `.claude/artifacts/agents/{role_id}.json` + `{role_id}.md`
 
+### Wave 2: Synth 팀원 생성 (순차, Wave 1 완료 후)
+
+`TaskList`로 synth 태스크의 `blockedBy` 해소를 확인한 후 synth 팀원을 생성합니다.
+
 ```
-Task(subagent_type="general-purpose", name="{role}-agent")
+Task(
+  team_name="research-v{N}",
+  name="synth-agent",
+  subagent_type="general-purpose",
+  model="opus",
+  prompt="... (synth 프롬프트 + 팀 통신 블록)"
+)
 ```
 
-### Wave 2: Synth Agent (순차, Wave 1 완료 후)
-
-Wave 1의 모든 에이전트(고정 역할 + 동적 역할) 결과가 완료된 후 실행합니다.
-
-#### 6. Synth Agent
-```
-Task(subagent_type="general-purpose", name="synth-agent")
-```
 - 입력: Wave 1의 에이전트 JSON + MD 결과물 전체 (동적 역할 출력 포함)
 - 역할: 통합, 충돌 해결, 최종 문서 작성
 
-##### Synth 에이전트 지시사항:
+##### Synth 팀원 절차:
 
-1. **결과 수집**: Wave 1 에이전트의 JSON 출력을 읽습니다.
-2. **충돌 식별**: 역할 간 상충하는 주장을 식별합니다.
+1. `TaskList` → "통합 문서 생성 (synth)" 태스크 클레임
+2. `TaskUpdate(owner="synth-agent", status="in_progress")`
+3. Wave 1 결과 읽기 (모든 역할의 JSON + MD)
+4. **충돌 식별**: 역할 간 상충하는 주장을 식별합니다.
    - 충돌 항목은 `conflicts.json`에 기록합니다.
-3. **통합 문서 작성**: 모든 역할(고정 + 동적)의 핵심 내용을 통합하여 최종 문서를 작성합니다.
+5. **통합 문서 작성**: 모든 역할(고정 + 동적)의 핵심 내용을 통합하여 최종 문서를 작성합니다.
    - 문서 구조는 `document-types.yaml`의 `output_sections`를 따릅니다.
-   - synth 에이전트에게 `output_sections` 목록을 전달하여 해당 섹션으로 문서를 구성하게 합니다.
+   - `output_sections` 목록을 사용하여 해당 섹션으로 문서를 구성합니다.
    - 동적 역할의 관점은 관련 섹션에 자연스럽게 통합합니다 (별도 섹션을 만들지 않음).
-4. **인용 보고서**: 모든 인용을 `citations.json`에 기록합니다.
-5. **출력**: 버전 디렉토리에 `{output_file_name}` 저장
+6. **인용 보고서**: 모든 인용을 `citations.json`에 기록합니다.
+7. **출력**: 버전 디렉토리에 `{output_file_name}` 저장
    - 경로: `.claude/artifacts/{output_dir_name}/v{N}/{output_file_name}`
+8. `TaskUpdate(status="completed")`
+9. `SendMessage(recipient="team-lead", summary="통합 문서 생성 완료")`
+
+### Wave 3: 팀 정리
+
+1. 모든 팀원에게 `SendMessage(type="shutdown_request")` 전송
+2. 승인 수신 후 `TeamDelete()` 호출
 
 ---
 
@@ -268,6 +308,11 @@ Step 0.7에서 이 역할에 관련된 증거만 선별하여 전달합니다.
 ## 출력 경로
 - JSON: .claude/artifacts/agents/{role}.json
 - Markdown: .claude/artifacts/agents/{role}.md
+
+## 팀 통신 (필수)
+당신은 "research-v{N}" 팀의 "{role}-agent" 팀원입니다.
+`.claude/spec/agent-team-spec.md`의 "팀원 공통 절차"를 반드시 따르세요.
+태스크명: "{role_name} 분석 수행"
 ```
 
 ### 동적 역할 에이전트 프롬프트
@@ -298,6 +343,11 @@ Step 0.7에서 이 역할의 keywords에 매칭된 증거만 선별하여 전달
 ## 출력 경로
 - JSON: .claude/artifacts/agents/{role_id}.json
 - Markdown: .claude/artifacts/agents/{role_id}.md
+
+## 팀 통신 (필수)
+당신은 "research-v{N}" 팀의 "{role}-agent" 팀원입니다.
+`.claude/spec/agent-team-spec.md`의 "팀원 공통 절차"를 반드시 따르세요.
+태스크명: "{role_name} 분석 수행"
 ```
 
 ---
@@ -350,6 +400,10 @@ Step 0.7에서 이 역할의 keywords에 매칭된 증거만 선별하여 전달
    - `{output_file_name}` (문서 본문 — HTML 서식 유지)
    - `citations.json` (인용 보고서, 선택)
 2. 업로드 완료 후 Drive 링크를 사용자에게 공유합니다.
+
+#### Step 5: 브라우저 종료
+
+업로드 완료 후 `browser_close`를 호출하여 브라우저를 종료합니다.
 
 **금지사항**:
 - 개인 Drive 루트에 무단 생성 (반드시 사용자가 지정한 폴더에 저장)
