@@ -60,6 +60,20 @@ sync-drive에서 Playwright를 사용할 때 반드시 인지해야 하는 환�
 
 문서 유형별 전략 계층(Primary → Fallback)으로 수집합니다.
 
+#### 2-0a. 입력 검증
+
+URL 및 slug에서 파생되는 값의 안전성을 보장합니다.
+
+| 대상 | 검증 규칙 | 실패 시 |
+|------|----------|--------|
+| Google Docs URL | `/document/d/[a-zA-Z0-9_-]+/` 패턴 매칭 | 해당 소스 스킵, 에러 로그 |
+| Google Sheets URL | `/spreadsheets/d/[a-zA-Z0-9_-]+/` 패턴 매칭 | 해당 소스 스킵, 에러 로그 |
+| Doc/Sheet ID | `[a-zA-Z0-9_-]+` 패턴만 허용 | 해당 소스 스킵, 에러 로그 |
+| gid (시트 탭 ID) | `[0-9]+` 패턴만 허용 | 해당 탭 스킵, 에러 로그 |
+| source_slug | `..`, `/`, `\`, null byte (`\0`) 제거 | 정제 후 진행 |
+
+검증은 Step 2-0 전략 선택 전에 수행합니다. 검증 실패한 소스는 에러 로그에 기록하고 나머지 소스를 계속 진행합니다.
+
 #### 2-0. 전략 선택 테이블
 
 | 문서 유형 | Primary 전략 | Fallback 전략 |
@@ -115,7 +129,7 @@ sync-drive에서 Playwright를 사용할 때 반드시 인지해야 하는 환�
 **핵심**: `waitForEvent('download')` Promise를 `page.goto()` **이전에** 생성해야 합니다.
 `page.evaluate(() => location.href = ...)` 방식은 download 이벤트를 트리거하지 않으므로 사용하지 않습니다.
 
-#### 2-2-F. Google Docs — Clipboard Fallback
+#### 2-2-F. Google Docs — Clipboard Fallback (폴링 방식)
 
 > 제약 C4, C5 대응. Download Event가 실패할 때 사용합니다.
 
@@ -124,22 +138,31 @@ sync-drive에서 Playwright를 사용할 때 반드시 인지해야 하는 환�
 1. browser_navigate로 Google Docs 편집 URL에 접속
 2. 편집 영역 클릭 (포커스 확보):
    browser_click으로 문서 본문 영역 클릭
-3. 전체 선택 + 복사:
+3. 클립보드 비우기:
+   browser_evaluate:
+     async () => { await navigator.clipboard.writeText(''); }
+4. 전체 선택 + 복사:
    browser_press_key: Meta+a
-   (200ms 대기)
    browser_press_key: Meta+c
-4. 클립보드 읽기 (2-pass, stale data 방지):
+5. 클립보드 폴링 읽기:
    browser_evaluate:
      async () => {
-       const stale = await navigator.clipboard.readText();  // 1차: 폐기
-       await new Promise(r => setTimeout(r, 500));
-       return navigator.clipboard.readText();               // 2차: 실제 데이터
+       const maxWait = 5000;   // 5초 타임아웃
+       const interval = 200;   // 200ms 간격
+       let elapsed = 0;
+       while (elapsed < maxWait) {
+         const text = await navigator.clipboard.readText();
+         if (text && text.trim().length > 0) return text;
+         await new Promise(r => setTimeout(r, interval));
+         elapsed += interval;
+       }
+       throw new Error('clipboard polling timeout: 5s exceeded');
      }
-5. 2차 읽기 결과를 Markdown으로 저장
+6. 폴링 결과를 Markdown으로 저장
 ```
 
-**2-pass 읽기 이유**: 포커스 타이밍에 따라 첫 readText()가 이전 클립보드 내용을 반환할 수 있습니다.
-1차를 폐기하고 500ms 후 2차를 사용하면 안정적으로 현재 문서 내용을 얻습니다.
+**폴링 방식 이유**: 기존 2-pass(1차 폐기 + 500ms 대기 + 2차 읽기)는 고정 딜레이에 의존하여 race condition이 발생할 수 있습니다.
+클립보드를 먼저 비우고(`writeText('')`) 실제 내용이 들어올 때까지 폴링하면 타이밍에 관계없이 안정적으로 현재 문서 내용을 얻습니다.
 
 #### 2-3. Google Sheets — gviz/tq CSV API (Primary)
 
@@ -177,6 +200,8 @@ exportUrl = https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&
 #### 2-4. 대용량 데이터 처리 (>30KB)
 
 > 제약 C1 대응. evaluate 반환값이 MCP 크기 제한을 초과하는 경우.
+>
+> **evaluate_safe_limit = 30KB**: C1 제약의 하드 리밋은 ~50KB이지만, 인코딩 오버헤드(JSON 직렬화, UTF-8 멀티바이트)와 MCP 응답 메타데이터를 고려하여 60% 수준(30KB)에서 download event로 전환합니다. 이 값은 의도적 안전 마진이며, `project-defaults.yaml`의 `playwright_constraints.evaluate_safe_limit`에서 관리합니다.
 
 **Option A — Download Event (권장)**:
 
@@ -208,8 +233,46 @@ browser_run_code:
 1. 소스 목록을 문서 유형별로 그룹화 (Docs / Sheets)
 2. **순차 처리**: Google 요청 제한(rate limit) 방지를 위해 소스별 순차 수집
 3. 소스당 최대 2회 시도: Primary 전략 실패 → Fallback 전략 1회
-4. 개별 소스 실패 시 에러를 기록하고 **나머지 소스는 계속 진행**
+4. 개별 소스 실패 시 에러 유형별 처리:
+   - **Timeout** (download event 30s 초과): Fallback 전략으로 전환
+   - **CORS/Network 에러**: Fallback 전략으로 전환
+   - **인증 만료** (Google 로그인 필요 페이지 감지): 수집 중단, 사용자에게 재로그인 안내
+   - **빈 콘텐츠 반환**: 경고 로그 기록, 해당 소스 스킵
+   - **Fallback도 실패**: 에러 로그 기록 후 다음 소스로 진행
+   모든 에러는 감사 로그(Step 2-5a)에 구조화 형식으로 기록
 5. 모든 소스 수집 완료 후 결과 요약 (성공/실패/스킵 수)
+
+#### 2-5a. 에러 로그 및 감사 기록
+
+수집 과정의 감사 추적을 위해 구조화된 로그를 기록합니다.
+
+**저장 경로**: `.claude/state/sync-log.jsonl`
+
+**형식**: JSONL (소스별 1줄)
+
+```jsonl
+{"timestamp":"2024-01-15T09:30:00Z","source_slug":"market-analysis","doc_type":"doc","strategy":"download_event","result":"success","error_type":null,"error_message":null,"duration_ms":2450,"fallback_used":false}
+{"timestamp":"2024-01-15T09:30:05Z","source_slug":"competitor-data","doc_type":"sheet","strategy":"gviz_csv","result":"failure","error_type":"timeout","error_message":"download event 30s timeout exceeded","duration_ms":30000,"fallback_used":true}
+```
+
+**필드 정의**:
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `timestamp` | string | ISO 8601 형식 |
+| `source_slug` | string | 소스 식별자 (full URL 아님 — 민감정보 방지) |
+| `doc_type` | string | `doc` 또는 `sheet` |
+| `strategy` | string | 사용한 전략: `download_event`, `clipboard`, `gviz_csv`, `chunk_evaluate` |
+| `result` | string | `success`, `failure`, `skipped` |
+| `error_type` | string\|null | `timeout`, `cors`, `auth_expired`, `empty_content`, `unknown` |
+| `error_message` | string\|null | 사람이 읽을 수 있는 에러 설명 |
+| `duration_ms` | integer | 수집 소요 시간 (밀리초) |
+| `fallback_used` | boolean | Fallback 전략 사용 여부 |
+
+**민감정보 제한**:
+- full URL 대신 `source_slug`만 기록합니다.
+- 토큰, 쿠키, 인증 헤더 등 민감정보는 절대 기록하지 않습니다.
+- 에러 메시지에 포함된 URL은 slug로 치환합니다.
 
 #### 2-6. 저장
 
@@ -265,3 +328,4 @@ browser_run_code:
 - `.claude/knowledge/evidence/chunks/` — 정규화된 청크
 - `.claude/knowledge/evidence/index/sources.jsonl` — 청크 인덱스
 - `.claude/state/sync-ledger.json` — 동기화 원장
+- `.claude/state/sync-log.jsonl` — 수집 감사 로그
