@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-02-15
+- 프로젝트 공유: Maththera — prd v4
+
 ## 2026-02-13
 
 - fix: sync-drive Step 2 전략 기반 재작성 — Download Event / Clipboard(폴링) / gviz 계층 도입, 다중 탭 지원, 입력 검증, 감사 로그, 에러 유형별 처리 (#16)

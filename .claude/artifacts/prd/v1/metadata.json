@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "created_at": "2026-02-12T17:40:00+09:00",
+  "source_count": 7,
+  "chunk_count": 55,
+  "agent_roles": ["biz", "marketing", "research", "tech", "pm", "synth"],
+  "project_name": "Maththera",
+  "wave1_outputs": {
+    "biz": ".claude/artifacts/agents/biz.json",
+    "marketing": ".claude/artifacts/agents/marketing.json",
+    "research": ".claude/artifacts/agents/research.json",
+    "tech": ".claude/artifacts/agents/tech.json",
+    "pm": ".claude/artifacts/agents/pm.json"
+  },
+  "prd_outputs": {
+    "prd": ".claude/artifacts/prd/v1/PRD.md",
+    "citations": ".claude/artifacts/prd/v1/citations.json",
+    "conflicts": ".claude/artifacts/prd/v1/conflicts.json",
+    "metadata": ".claude/artifacts/prd/v1/metadata.json"
+  }
+}

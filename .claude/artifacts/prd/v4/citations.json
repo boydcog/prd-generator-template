@@ -1,0 +1,531 @@
+{
+  "agents": {
+    "biz": {
+      "claims": [
+        {
+          "confidence": "high",
+          "id": "biz/CLM-001",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "Master Matrix의 자율적 오답 매핑이 인건비 절감과 확장성의 핵심"
+        },
+        {
+          "confidence": "high",
+          "id": "biz/CLM-002",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "UC1: 정답이어도 느리면 전략 미숙 진단 -> 기존 에듀테크에 없는 차별화"
+        },
+        {
+          "confidence": "high",
+          "id": "biz/CLM-003",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "UC2: 산술 오류와 SPATIAL 인지 결손을 감별하는 진단적 깊이"
+        },
+        {
+          "confidence": "high",
+          "id": "biz/CLM-004",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "UC3: ATTENTION 도메인 개입으로 ADHD 공존 장애 감별 가능 (DTx 근거)"
+        },
+        {
+          "confidence": "high",
+          "id": "biz/CLM-005",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "UC4: Probe 기반 변인 통제로 임상 수준 감별 진단 자동화"
+        },
+        {
+          "confidence": "high",
+          "id": "biz/CLM-006",
+          "source_name": "prd-template-voice-tone-guide",
+          "statement": "'틀려도 괜찮다' 보이스 톤이 수학 불안 감소 + 세션 완료율 향상"
+        },
+        {
+          "confidence": "high",
+          "id": "biz/CLM-007",
+          "source_name": "prd-template-voice-tone-guide",
+          "statement": "규격화된 UX 규칙(3문장/10자/힌트1개)이 치료적 재현성 확보"
+        },
+        {
+          "confidence": "high",
+          "id": "biz/CLM-008",
+          "source_name": "prd-template-voice-tone-guide",
+          "statement": "4가지 상황별 응답 템플릿이 임상 프로토콜 준수 가능케 함"
+        },
+        {
+          "confidence": "high",
+          "id": "biz/CLM-009",
+          "source_name": "prd-template-voice-tone-guide",
+          "statement": "행동 유도형 힌트가 ZPD 기반 scaffolding과 일치"
+        },
+        {
+          "confidence": "high",
+          "id": "biz/CLM-010",
+          "source_name": "prd-template-example",
+          "statement": "PRD Problem 구조에 따른 인과 체인 + 가설 정의"
+        },
+        {
+          "confidence": "high",
+          "id": "biz/CLM-011",
+          "source_name": "prd-template-example",
+          "statement": "Success Metrics 3계층(제품/비즈니스/임상) 확장 적용"
+        },
+        {
+          "confidence": "high",
+          "id": "biz/CLM-012",
+          "source_name": "prd-template-example",
+          "statement": "Risk Management 구조에 따른 6대 리스크 체계적 관리"
+        }
+      ]
+    },
+    "marketing": {
+      "claims": [
+        {
+          "confidence": "high",
+          "id": "marketing/CLM-001",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "Master Matrix 자동 맵핑 체계가 핵심 포지셔닝의 기술적 근거"
+        },
+        {
+          "confidence": "high",
+          "id": "marketing/CLM-002",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "전략 유창성 분석 (정답+느림 감지)이 B2C 차별화 메시지의 기반"
+        },
+        {
+          "confidence": "high",
+          "id": "marketing/CLM-003",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "인지 도메인별 분리 진단이 B2B 과학적 차별점"
+        },
+        {
+          "confidence": "high",
+          "id": "marketing/CLM-004",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "비인지적 ATTENTION 진단이 학부모 감성 메시지 기반"
+        },
+        {
+          "confidence": "high",
+          "id": "marketing/CLM-005",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "변인 통제 Probe가 B2B 학술적 신뢰성의 핵심 근거"
+        },
+        {
+          "confidence": "high",
+          "id": "marketing/CLM-006",
+          "source_name": "prd-template-voice-tone-guide",
+          "statement": "B2C 핵심 페르소나: 따뜻한 친구 같은 튜터"
+        },
+        {
+          "confidence": "high",
+          "id": "marketing/CLM-007",
+          "source_name": "prd-template-voice-tone-guide",
+          "statement": "3문장/10자 규칙은 인지 부하 최소화 UX 원칙이자 마케팅 메시지"
+        },
+        {
+          "confidence": "high",
+          "id": "marketing/CLM-008",
+          "source_name": "prd-template-voice-tone-guide",
+          "statement": "4가지 표준 응답 프로토콜이 B2B 포지셔닝 자산"
+        },
+        {
+          "confidence": "high",
+          "id": "marketing/CLM-009",
+          "source_name": "prd-template-voice-tone-guide",
+          "statement": "금지 표현 관리 체계가 의료법 준수 및 브랜드 안전성 기반"
+        },
+        {
+          "confidence": "high",
+          "id": "marketing/CLM-010",
+          "source_name": "prd-template-voice-tone-guide",
+          "statement": "'틀려도 괜찮다'가 핵심 마케팅 메시지로 직결"
+        },
+        {
+          "confidence": "high",
+          "id": "marketing/CLM-011",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "구체적 훈련 모듈 매핑(T12->T17)이 제품 핵심 가치"
+        },
+        {
+          "confidence": "high",
+          "id": "marketing/CLM-012",
+          "source_name": "prd-template-voice-tone-guide",
+          "statement": "자기주도 학습 유도 힌트 설계가 B2C 포지셔닝 자산"
+        },
+        {
+          "confidence": "high",
+          "id": "marketing/CLM-013",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "변인 통제(Complexity 제거) Probe가 과학적 실험 설계 기반 메시지"
+        }
+      ]
+    },
+    "pedagogy": {
+      "claims": [
+        {
+          "confidence": "high",
+          "id": "pedagogy/CLM-W-Score",
+          "source_name": "훈련로직-Path-Tag (W*C 이중태그 15,053문제)",
+          "statement": "W-Score 시스템은 6개 차원(W1~W6)으로 문제의 작업기억 부하를 W_총점(0~9.5)으로 정량화, W 레벨 1~23으로 변환"
+        },
+        {
+          "confidence": "high",
+          "id": "pedagogy/CLM-W-Dims",
+          "source_name": "W/C 이중 태그 문제 뱅크 (Solution_Epic_Plan)",
+          "statement": "6개 W차원 상세: W1_연산, W2_자릿수, W3_숫자크기, W4_복잡성, W5_특수수, W6_표현"
+        },
+        {
+          "confidence": "high",
+          "id": "pedagogy/CLM-C-Tag",
+          "source_name": "W/C 이중 태그 문제 뱅크 (Solution_Epic_Plan)",
+          "statement": "C-Tag 교육과정: C1~C15의 15개 단원"
+        },
+        {
+          "confidence": "high",
+          "id": "pedagogy/CLM-Cog-C",
+          "source_name": "Maththera Concept Tag",
+          "statement": "인지진단 Concept Tag(C1~C6)는 교육과정 C단원(C1~C15)과 별개 체계"
+        },
+        {
+          "confidence": "high",
+          "id": "pedagogy/CLM-Neuro",
+          "source_name": "난산증/CSE 인지 모델",
+          "statement": "난산증은 후두정엽-전전두엽 신경학적 연결성 결함"
+        },
+        {
+          "confidence": "high",
+          "id": "pedagogy/CLM-CSE",
+          "source_name": "난산증/CSE 인지 모델",
+          "statement": "CSE 프레임워크: 개념(C), 전략(S), 집행(E) 3축 인지 분석"
+        },
+        {
+          "confidence": "high",
+          "id": "pedagogy/CLM-S-C-Map",
+          "source_name": "난산증/CSE 인지 모델",
+          "statement": "전략(S) S1~S7과 개념(C) C1~C6의 1:1 매핑 구조"
+        },
+        {
+          "confidence": "high",
+          "id": "pedagogy/CLM-E-WM",
+          "source_name": "난산증/CSE 인지 모델",
+          "statement": "집행(E): E1(정보유지량), E2(절차단계), E3(수크기) 3요소"
+        },
+        {
+          "confidence": "high",
+          "id": "pedagogy/CLM-Route-A",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)",
+          "statement": "Route A(W downscaling): 전략은 알지만 계산에서 막힐 때 W_총점 하향"
+        },
+        {
+          "confidence": "high",
+          "id": "pedagogy/CLM-Route-B",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)",
+          "statement": "Route B(C downscaling): 개념 자체를 모를 때 C 레벨 하향"
+        },
+        {
+          "confidence": "high",
+          "id": "pedagogy/CLM-4-Pattern",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)",
+          "statement": "훈련 루프 4가지 반응 패턴 분기: 심각한 오답, 논리적 오답, 정답+느림, 정답+빠름"
+        },
+        {
+          "confidence": "high",
+          "id": "pedagogy/CLM-Bridge",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)",
+          "statement": "Bridge Loop: 빌려오기 전략으로 쉬운 문제와 원래 문제를 교량 연결"
+        },
+        {
+          "confidence": "medium",
+          "id": "pedagogy/CLM-Bridge-Fail",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)",
+          "statement": "Bridge Loop 실패는 가역성(Invertibility)과 결합/분해(Composition) 연결 부위 느슨"
+        },
+        {
+          "confidence": "high",
+          "id": "pedagogy/CLM-Trigger",
+          "source_name": "Maththera Concept Tag",
+          "statement": "Concept Tag 활성화는 문제 유형별 Trigger Rule(Bottom-up Selection)"
+        },
+        {
+          "confidence": "high",
+          "id": "pedagogy/CLM-State-4",
+          "source_name": "Maththera Concept Tag",
+          "statement": "개념 태그 판단 상태 4단계: Normal/Distorted/Incomplete/Void"
+        },
+        {
+          "confidence": "medium",
+          "id": "pedagogy/CLM-C5-Split",
+          "source_name": "Maththera Concept Tag",
+          "statement": "C5 이원화 제안: C5a(합성)와 C5b(분해) 분리 검토 중"
+        },
+        {
+          "confidence": "high",
+          "id": "pedagogy/CLM-Bank",
+          "source_name": "훈련로직-Path-Tag (W*C 이중태그 15,053문제)",
+          "statement": "W*C 이중태그 문제 뱅크: 15,053문제, W1~W6/W_총점/W레벨/C단원 태깅"
+        },
+        {
+          "confidence": "high",
+          "id": "pedagogy/CLM-Visual",
+          "source_name": "난산증/CSE 인지 모델",
+          "statement": "시각 메타포 체계: 기찻길-블록 모델 (1단계~6단계)"
+        },
+        {
+          "confidence": "high",
+          "id": "pedagogy/CLM-Whiteout",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)",
+          "statement": "White-out 현상: 100+90도 모르면 10+9로 대폭 후퇴, 최후 보루 9+1=10"
+        }
+      ]
+    },
+    "pm": {
+      "claims": [
+        {
+          "confidence": "high",
+          "id": "pm/CLM-001",
+          "source_name": "prd-template-example",
+          "statement": "핵심 문제 정의: 기존 교육은 '왜 틀렸는지'를 인지적으로 설명하지 못함"
+        },
+        {
+          "confidence": "high",
+          "id": "pm/CLM-002",
+          "source_name": "prd-template-example",
+          "statement": "스코프 정의: In-Scope(5단계 파이프라인 등), Out-of-Scope(곱셈/나눗셈, DTx 등)"
+        },
+        {
+          "confidence": "high",
+          "id": "pm/CLM-003",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "FR-001: Master Matrix 5단계 오답 진단 파이프라인"
+        },
+        {
+          "confidence": "high",
+          "id": "pm/CLM-004",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "FR-002: 전략 불일치 진단 (UC1: 정답이어도 RT 느리면 전략 미숙)"
+        },
+        {
+          "confidence": "high",
+          "id": "pm/CLM-005",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "FR-003: 공간 인지 결손 진단 (UC2: 오답 패턴에서 SPATIAL 문제 식별)"
+        },
+        {
+          "confidence": "high",
+          "id": "pm/CLM-006",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "FR-004: 주의력/충동성 진단 (UC3: 극도로 빠른 RT + 무작위 응답)"
+        },
+        {
+          "confidence": "high",
+          "id": "pm/CLM-007",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "FR-005: 변인 통제 Probe 시스템 (UC4: 다중 원인 감별)"
+        },
+        {
+          "confidence": "high",
+          "id": "pm/CLM-008",
+          "source_name": "prd-template-voice-tone-guide",
+          "statement": "FR-006: AI 피드백 기본 규칙 (3문장, 10자, 반말, 비난 금지)"
+        },
+        {
+          "confidence": "high",
+          "id": "pm/CLM-009",
+          "source_name": "prd-template-voice-tone-guide",
+          "statement": "FR-007: 상황별 피드백 템플릿 (정답/오답/실수/무응답 4가지)"
+        },
+        {
+          "confidence": "high",
+          "id": "pm/CLM-010",
+          "source_name": "prd-template-voice-tone-guide",
+          "statement": "NFR-001: 금지 표현/방식 목록 및 후처리 검증 레이어"
+        },
+        {
+          "confidence": "high",
+          "id": "pm/CLM-011",
+          "source_name": "prd-template-voice-tone-guide",
+          "statement": "NFR-002: '따뜻한 친구 같은 튜터' 페르소나 4대 원칙"
+        },
+        {
+          "confidence": "high",
+          "id": "pm/CLM-012",
+          "source_name": "prd-template-example",
+          "statement": "14주 MVP Phase 1 마일스톤 (3개 하위 Phase)"
+        },
+        {
+          "confidence": "high",
+          "id": "pm/CLM-013",
+          "source_name": "prd-template-example",
+          "statement": "성공 지표: Primary(오답 진단 정확도, 정답률 향상), Secondary(RT 자동화, 세션 완료율)"
+        }
+      ]
+    },
+    "research": {
+      "claims": [
+        {
+          "confidence": "high",
+          "id": "research/CLM-001",
+          "source_name": "dyscalculia-cse-cognitive-model",
+          "statement": "난산증: 후두정엽-전전두엽 신경학적 연결성 결함에서 기인하는 발달적 장애"
+        },
+        {
+          "confidence": "high",
+          "id": "research/CLM-002",
+          "source_name": "dyscalculia-cse-cognitive-model",
+          "statement": "C-S-E 프레임워크: 개념(C1~C6), 전략(S1~S7), 집행(E1~E3) 3축 진단"
+        },
+        {
+          "confidence": "high",
+          "id": "research/CLM-003",
+          "source_name": "dyscalculia-cse-cognitive-model",
+          "statement": "전략(S) S1~S7 각각 대응 C에 1:1 매칭, Siegler 겹치는 파도 모델 합치"
+        },
+        {
+          "confidence": "high",
+          "id": "research/CLM-004",
+          "source_name": "dyscalculia-cse-cognitive-model",
+          "statement": "집행(E): E1xE2xE3 = 48단계 난이도 매트릭스, 난산증 아동 부하 임계치 낮음"
+        },
+        {
+          "confidence": "high",
+          "id": "research/CLM-005",
+          "source_name": "dyscalculia-cse-cognitive-model",
+          "statement": "48단계 난이도 매트릭스: E1(자릿수) x E2(받아올림) x E3(수크기) 정렬"
+        },
+        {
+          "confidence": "high",
+          "id": "research/CLM-006",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "UC1: 정답이어도 RT+행동관찰로 전략 불일치 진단 가능"
+        },
+        {
+          "confidence": "high",
+          "id": "research/CLM-007",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "UC2: 오답값의 수리적 패턴으로 SPATIAL 인지 문제 진단"
+        },
+        {
+          "confidence": "high",
+          "id": "research/CLM-008",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "UC3: L < C 상황에서 ATTENTION 개입 우선 (E축 과부하 징후)"
+        },
+        {
+          "confidence": "high",
+          "id": "research/CLM-009",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "UC4: 변인 통제 Probe로 SPATIAL vs STRATEGY 원인 분리"
+        },
+        {
+          "confidence": "medium",
+          "id": "research/CLM-010",
+          "source_name": "maththera-matrix-usecase",
+          "statement": "Cogassist Agent 자율 매핑: 규칙 기반 -> 학습 기반 확장 가설"
+        },
+        {
+          "confidence": "high",
+          "id": "research/CLM-011",
+          "source_name": "dyscalculia-cse-cognitive-model",
+          "statement": "C-S-E 축별 차별화 개입: C축(시각 표상), S축(메타인지), E축(단계적 연산)"
+        },
+        {
+          "confidence": "medium",
+          "id": "research/CLM-012",
+          "source_name": "dyscalculia-cse-cognitive-model",
+          "statement": "기찻길-블록 통합 시각 메타포: 체화된 인지(Embodied Cognition) 접근"
+        },
+        {
+          "confidence": "high",
+          "id": "research/CLM-013",
+          "source_name": "prd-template-voice-tone-guide",
+          "statement": "AI 피드백: 따뜻한 튜터 페르소나, 반말, 3문장/10자, 수학 불안 경감"
+        },
+        {
+          "confidence": "high",
+          "id": "research/CLM-014",
+          "source_name": "prd-template-voice-tone-guide",
+          "statement": "금지 표현 목록: 학습된 무력감(Learned Helplessness) 강화 방지 안전장치"
+        }
+      ]
+    },
+    "tech": {
+      "claims": [
+        {
+          "confidence": "high",
+          "id": "tech/CLM-001",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)",
+          "statement": "적응형 알고리즘: CSV 기반 15,053문제 뱅크의 W/C 실시간 쿼리, 규칙 기반 엔진으로 구현 가능"
+        },
+        {
+          "confidence": "high",
+          "id": "tech/CLM-002",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)",
+          "statement": "핵심 분기: Path A(W 하향), Path B(C 하향) 이진 분기 -> 결정 트리 패턴"
+        },
+        {
+          "confidence": "high",
+          "id": "tech/CLM-003",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)",
+          "statement": "훈련 루프: 4가지 반응 상태에 따른 W/C 조정 -> 상태 머신(FSM)"
+        },
+        {
+          "confidence": "high",
+          "id": "tech/CLM-004",
+          "source_name": "W/C 이중 태그 문제 뱅크 (Solution_Epic_Plan)",
+          "statement": "W_총점: 6개 가중치(W1~W6) 합산, 0~9.5 범위, 인메모리 인덱스 가능"
+        },
+        {
+          "confidence": "high",
+          "id": "tech/CLM-005",
+          "source_name": "W/C 이중 태그 문제 뱅크 (Solution_Epic_Plan)",
+          "statement": "교과과정(C) 15개 단원, C 레벨 이동은 정수 연산으로 구현"
+        },
+        {
+          "confidence": "high",
+          "id": "tech/CLM-006",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)",
+          "statement": "3단계 복귀 루프(기준점 고정->미세 조정->복귀): 세션 상태 관리 필수"
+        },
+        {
+          "confidence": "medium",
+          "id": "tech/CLM-007",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)",
+          "statement": "가역성/결합-분해 진단에는 중간 단계 입력 UI(전략 선택)가 필수"
+        },
+        {
+          "confidence": "high",
+          "id": "tech/CLM-008",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)",
+          "statement": "Downscaling 4전략(시각보조, 단계분리, 숫자축소, 세로셈) / Upscaling 3전략"
+        },
+        {
+          "confidence": "high",
+          "id": "tech/CLM-009",
+          "source_name": "Maththera AI 피드백 톤 가이드",
+          "statement": "피드백: 3문장/10자 제약 -> 템플릿 기반 시스템이 LLM 생성보다 적합"
+        },
+        {
+          "confidence": "high",
+          "id": "tech/CLM-010",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic) - 요약",
+          "statement": "RT 측정: 밀리초 단위 타이머, 5초 임계값 기준 Fluency 분기"
+        }
+      ]
+    }
+  },
+  "metadata": {
+    "generated_at": "2026-02-13T16:30:00+09:00",
+    "total_citations": 81,
+    "version": 4
+  },
+  "sources_referenced": [
+    "Maththera AI 피드백 톤 가이드",
+    "Maththera Concept Tag",
+    "W/C 이중 태그 문제 뱅크 (Solution_Epic_Plan)",
+    "dyscalculia-cse-cognitive-model",
+    "maththera-matrix-usecase",
+    "prd-template-example",
+    "prd-template-voice-tone-guide",
+    "난산증/CSE 인지 모델",
+    "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)",
+    "훈련로직-Path-Tag (W*C 이중태그 15,053문제)"
+  ]
+}

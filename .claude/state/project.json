@@ -1,0 +1,31 @@
+{
+  "name": "Maththera",
+  "target_users": "난산증 아동",
+  "domain": "교육훈련 / 치료 컨텐츠",
+  "core_problem": "수감각이 해결되면 수학능력을 향상시킬 수 있으며 난산증은 개선 가능하다",
+  "constraints": [
+    "훈련 컨텐츠 및 효율적인 동적 훈련 제시 로직 정의"
+  ],
+  "research_questions": [
+    "문제를 틀렸을 때 문제와 답을 보고 어떤 전략에 대한 감각이 부족한 것인지를 판단, 적절한 연산문제 및 훈련을 제공하도록 하는 것"
+  ],
+  "language": "ko",
+  "created_at": "2026-02-12T17:03:00+09:00",
+  "agent_roles": ["biz", "marketing", "research", "tech", "pm", "pedagogy", "synth"],
+  "current_version": 4,
+  "dynamic_roles": [
+    {
+      "role_id": "pedagogy",
+      "name": "교육공학/인지과학",
+      "responsibility": "W-Score 6차원 작업기억 부하 시스템, C-Tag 교육과정 체계(C1~C15), Adaptive Logic 오답교정 알고리즘(Route A/B), 수감각 진단, 훈련 루프 설계, Bridge Loop 등 교육 훈련 설계 핵심 로직 분석",
+      "keywords": ["W-Score", "W1", "W2", "W3", "W4", "W5", "W6", "C-Tag", "C단원", "Adaptive", "수감각", "훈련", "교정", "Route", "Bridge", "Downscaling", "Upscaling", "난산증", "인지", "부하", "연산"],
+      "output_sections": ["훈련 설계 체계 분석", "W-Score 부하 시스템 정의", "C-Tag 교육과정 매핑", "Adaptive Logic 알고리즘 분석", "수감각 진단 및 경로 결정", "훈련 루프 설계"]
+    }
+  ],
+  "dynamic_roles_meta": {
+    "updated_by": "보이드",
+    "updated_at": "2026-02-13T15:30:00+09:00",
+    "action": "add",
+    "previous_roles": []
+  }
+}

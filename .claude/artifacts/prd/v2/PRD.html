@@ -1,0 +1,1451 @@
+<h1>Maththera PRD v2</h1>
+
+<p><strong>Version</strong>: 2.0<br>
+<strong>Date Created</strong>: 2026-02-13<br>
+<strong>Base</strong>: PRD v1 (2026-02-12) + 훈련로직 Path-Tag 데이터 + 적응형 오답 교정 알고리즘<br>
+<strong>Language</strong>: 한국어<br>
+<strong>Status</strong>: Draft</p>
+
+<hr>
+
+<h2>1. 개요 (Executive Summary)</h2>
+
+<p>Maththera는 <strong>난산증(Dyscalculia) 아동</strong>을 위한 AI 기반 수학 인지 훈련 시스템이다. 뇌과학 기반 <strong>C-S-E(개념-전략-집행) 인지 모델</strong>로 오답의 근본 원인을 진단하고, 개인화된 훈련 모듈을 자동으로 처방한다.</p>
+
+<p><strong>핵심 파이프라인</strong>: 문제 뱅크(W/C 이중 태그) → 85개 오답 원인(7대 인지 카테고리) → 적응형 문제 결정 알고리즘 → 30+2개 훈련 모듈</p>
+
+<p>v2에서 추가된 핵심 시스템:</p>
+<ul>
+<li><strong>W/C 이중 난이도 태그 체계</strong>: 6개 작업기억(W) 가중치와 15개 교과과정(C) 단원 매핑</li>
+<li><strong>데이터 기반 적응형 오답 교정 알고리즘</strong>: 아동의 반응 유형에 따라 W(작업기억 부하) 또는 C(교과 위계)를 실시간 조절하는 Up &amp; Down Loop</li>
+</ul>
+
+<hr>
+
+<h2>2. 문제 정의</h2>
+
+<h3>핵심 문제</h3>
+
+<p>난산증은 지능과 교육 기회가 충분함에도 불구하고, 수적 정보를 처리하는 뇌 회로의 발달적 결함으로 인해 수학 학습에 심각한 어려움을 겪는 상태이다. 이는 <strong>후두정엽(수 표상)과 전전두엽(집행 제어) 사이의 신경학적 연결성 문제</strong>이다.</p>
+
+<h3>문제의 규모</h3>
+
+<ul>
+<li>전 세계 학령기 아동의 <strong>3~6%</strong>가 난산증의 영향을 받음</li>
+<li>난독증(Dyslexia), ADHD와 유사한 유병률이나, <strong>인지도와 개입 도구는 현저히 부족</strong></li>
+<li>한국에서 난산증이라는 용어 자체가 생소한 학부모가 대다수</li>
+</ul>
+
+<h3>현재 상황</h3>
+
+<ul>
+<li>기존 수학 앱(토도수학, 매쓰홈 등)은 적응형 학습을 제공하나, <strong>인지 원인 진단 기능 부재</strong></li>
+<li>해외 제품(Dybuster Calcularis 등)도 85개 오답원인 MECE 분류 수준의 정밀 진단은 부재</li>
+<li>디지털치료기기(DTx) 시장에서 난산증 특화 제품 공백</li>
+<li><strong>기존 적응형 시스템은 정오답만으로 난이도를 조절</strong>하나, Maththera는 <strong>작업기억 부하(W)와 교과 위계(C)를 분리하여 원인별 맞춤 경로를 제공</strong></li>
+</ul>
+
+<hr>
+
+<h2>3. 가설</h2>
+
+<p><strong>핵심 가설</strong>: 수감각이 해결되면 수학능력을 향상시킬 수 있으며 난산증은 개선 가능하다.</p>
+
+<p><strong>부가 가설</strong>:</p>
+<ol>
+<li>C-S-E 3축 인지 모델로 오답 원인을 정밀 분류하면, 개인화된 훈련 경로 설계가 가능하다.</li>
+<li>Rule-based 트리거 룰이 AI의 자의적 해석을 배제하여, 진단 일관성을 확보할 수 있다.</li>
+<li>정답 여부뿐 아니라 전략 수준(전부 세기 → 10 만들기)의 전환을 유도하면, 장기적 수학 역량이 향상된다.</li>
+<li><strong>W(작업기억 부하)와 C(교과 위계)를 독립적으로 조절하면, 아동이 실패 원인에 맞는 최적 경로로 복구할 수 있다.</strong></li>
+<li><strong>성공 경험의 누적(Downscaling → 성공 → Upscaling)이 수학 불안을 감소시키고 수감각 자동화를 촉진한다.</strong></li>
+</ol>
+
+<hr>
+
+<h2>4. 목표 / 비목표</h2>
+
+<h3>목표 (In-Scope)</h3>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>#</th>
+<th>목표</th>
+<th>우선순위</th>
+</tr>
+<tr>
+<td>1</td>
+<td>C-S-E 인지 모델 기반 오답 진단 엔진 구현</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>W/C 이중 태그 기반 문제 뱅크 구축 및 출제</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>적응형 오답 교정 알고리즘(Adaptive Loop) 구현</strong></td>
+<td>P0</td>
+</tr>
+<tr>
+<td>4</td>
+<td>트리거 룰 기반 개념 태그(C1~C6) 활성화 엔진</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>5</td>
+<td>85개 오답원인 → 30개 훈련 모듈 자동 매핑</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>6</td>
+<td>아동 친화적 피드백 (보이스 톤 가이드 준수)</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>수감각 진단 질문 기반 경로 분기(Path A/B) 시스템</strong></td>
+<td>P0</td>
+</tr>
+<tr>
+<td>8</td>
+<td>RT(반응 시간) 측정 및 전략 불일치 감지</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>9</td>
+<td>제한적 Probe 문제 (공간지각 vs 절차수행 감별)</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>10</td>
+<td>핵심 훈련 모듈 10개 우선 구현</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>11</td>
+<td>충동적 반응(ATTENTION) 감지 및 개입</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>12</td>
+<td>학부모/교사 대상 진단 리포트</td>
+<td>P2</td>
+</tr>
+</table>
+
+<h3>비목표 (Out-of-Scope for MVP)</h3>
+
+<ul>
+<li>곱셈, 나눗셈, 분수, 소수 연산</li>
+<li>디지털치료기기(DTx) 인허가</li>
+<li>Cogassist Agent의 완전 자율 매핑 (Phase 2)</li>
+<li>C7 등가성 태그 (보류)</li>
+<li>오프라인 동작 모드</li>
+<li>다국어/글로벌 로컬라이제이션</li>
+</ul>
+
+<hr>
+
+<h2>5. 대상 사용자 / 페르소나</h2>
+
+<h3>Primary: 난산증 아동 (6~10세)</h3>
+
+<ul>
+<li>수감각이 약하여 기본 연산에 어려움을 겪는 초등 저학년</li>
+<li>작업기억 부하 임계치가 낮아 복잡한 문제에서 쉽게 포기</li>
+<li>수학 불안(Math Anxiety)이 높아 틀리는 것에 대한 두려움이 큼</li>
+</ul>
+
+<h3>Secondary: 학부모</h3>
+
+<ul>
+<li>아이의 수학 문제 원인을 모르는 학부모</li>
+<li>"왜 이걸 못 하지?"에 대한 답을 원함</li>
+<li>'혼내지 않는 AI'에 대한 감성적 니즈</li>
+</ul>
+
+<h3>Tertiary: 특수교사/치료사</h3>
+
+<ul>
+<li>난산증 아동의 인지 수준을 정밀 진단하고 싶은 전문가</li>
+<li>C-S-E 진단 리포트를 통한 체계적 개입 설계 필요</li>
+<li>B2B SaaS 모델의 핵심 고객</li>
+</ul>
+
+<hr>
+
+<h2>6. 기능 요구사항</h2>
+
+<h3>FR-001. C-S-E 진단 엔진</h3>
+
+<ul>
+<li>개념(C1~C6), 전략(S1~S7), 집행(E1~E3) 축으로 오답 원인 분류</li>
+<li>문제 유형별 트리거 룰에 따라 개념 태그 활성화
+<ul>
+<li>한자리수+한자리수: A/B 유형별 C1~C6 선택적 활성화</li>
+<li>한자리수-한자리수: C4 비활성화, C6 항상 활성화</li>
+<li>두자리수 연산: C4 항상 활성화</li>
+</ul>
+</li>
+<li><strong>Bottom-up Selection</strong>: 기초 문항은 하위 개념 태그(C1, C2)만 스캔하여 과진단 방지</li>
+</ul>
+
+<h3>FR-002. 오답 진단 파이프라인</h3>
+
+<ul>
+<li>Rule-based 엔진 70~90% + AI 보조 10~30% 하이브리드 구조</li>
+<li>6종 전략 태그(고정)와 15종 관찰 태그(동적) 분리 운영</li>
+<li>전략 불일치 감지: 문제 요구 전략 vs 아동 실제 전략 비교</li>
+</ul>
+
+<h3>FR-003. W/C 이중 태그 기반 적응형 문제 출제 (v2 대폭 개정)</h3>
+
+<h4>6개 Working Memory 가중치 체계</h4>
+
+<p>각 문제는 다음 6개 W 가중치로 작업기억 부하가 수치화된다:</p>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>가중치</th>
+<th>의미</th>
+<th>점수 범위</th>
+<th>설명</th>
+</tr>
+<tr>
+<td>W1_연산</td>
+<td>연산 유형</td>
+<td>0 (덧셈) / 1.5 (뺄셈)</td>
+<td>뺄셈은 덧셈보다 인지 부하가 높음</td>
+</tr>
+<tr>
+<td>W2_자릿수</td>
+<td>자릿수 복잡도</td>
+<td>0 ~ 4</td>
+<td>한자리(0), 두자리(3), 두자리×두자리(4)</td>
+</tr>
+<tr>
+<td>W3_숫자크기</td>
+<td>숫자 크기</td>
+<td>0 ~ 1</td>
+<td>6 이상의 큰 수(+0.5), 양쪽 모두 큰 수(+1.0)</td>
+</tr>
+<tr>
+<td>W4_복잡성</td>
+<td>절차적 복잡성</td>
+<td>0 / 3</td>
+<td>받아올림/받아내림 발생 시 +3.0</td>
+</tr>
+<tr>
+<td>W5_특수수</td>
+<td>특수 수 보정</td>
+<td>-1.5 ~ 0</td>
+<td>같은 수(-0.5), 10의 배수(-1.0), 두자리 10배수(-1.5)</td>
+</tr>
+<tr>
+<td>W6_표현</td>
+<td>표현 형식</td>
+<td>0.5 (가로셈)</td>
+<td>가로셈 기본값. 세로셈 시 0으로 부하 감소</td>
+</tr>
+</table>
+
+<p><strong>W_총점</strong> = W1 + W2 + W3 + W4 + W5 + W6 (범위: 0 ~ 약 9.5)</p>
+
+<p><strong>W 레벨 (1~23)</strong>: W_총점을 0.5 단위로 구간화한 23단계 레벨</p>
+
+<h4>15개 교과과정(C) 단원 체계</h4>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>C 단원</th>
+<th>조건</th>
+<th>예시</th>
+</tr>
+<tr>
+<td>C1</td>
+<td>1부터 9까지의 수끼리의 덧셈 문제</td>
+<td>1+1, 3+3</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>1부터 9까지의 수끼리의 뺄셈 문제</td>
+<td>3-1, 5-2</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>어떤 수에 0을 더하거나 빼는 문제</td>
+<td>0+5, 7-0</td>
+</tr>
+<tr>
+<td>C4</td>
+<td>어떤 수에서 0을 빼는 문제</td>
+<td>5-0, 9-0</td>
+</tr>
+<tr>
+<td>C5</td>
+<td>더해서 10이 되는 문제</td>
+<td>5+5, 8+2</td>
+</tr>
+<tr>
+<td>C6</td>
+<td>10에서 어떤 수를 빼는 문제</td>
+<td>10-3, 10-7</td>
+</tr>
+<tr>
+<td>C7</td>
+<td>(몇) + (몇) = (십몇), (십몇) - (몇) = (몇)</td>
+<td>9+4, 13-5</td>
+</tr>
+<tr>
+<td>C8</td>
+<td>받아올림이 없는 두자리수 덧셈</td>
+<td>12+3, 20+30</td>
+</tr>
+<tr>
+<td>C9</td>
+<td>받아내림이 없는 두자리수 뺄셈</td>
+<td>35-2, 50-20</td>
+</tr>
+<tr>
+<td>C10</td>
+<td>일의자리에서 받아올림이 있는 (두자리수)+(한자리수)</td>
+<td>15+7, 28+5</td>
+</tr>
+<tr>
+<td>C11</td>
+<td>일의자리에서 받아올림이 있는 (두자리수)+(두자리수)</td>
+<td>27+15, 38+24</td>
+</tr>
+<tr>
+<td>C12</td>
+<td>십의자리에서 받아올림이 있는 (두자리수)+(두자리수)</td>
+<td>53+72, 45+81</td>
+</tr>
+<tr>
+<td>C13</td>
+<td>받아내림이 있는 (두자리수)-(한자리수)</td>
+<td>23-7, 41-5</td>
+</tr>
+<tr>
+<td>C14</td>
+<td>받아내림이 있는 (몇십)-(몇십몇)</td>
+<td>30-14, 50-27</td>
+</tr>
+<tr>
+<td>C15</td>
+<td>받아내림이 있는 (두자리수)-(두자리수)</td>
+<td>42-18, 63-29</td>
+</tr>
+</table>
+
+<h4>문제 뱅크 구조</h4>
+
+<ul>
+<li>모든 문제가 (문제, 정답, W1~W6, W_총점, W레벨, C레벨) 형태로 정규화</li>
+<li>W 레벨(1~23)과 C 레벨(1~15) 두 축으로 문제를 색인</li>
+<li>동일 C 레벨 내에서 W 레벨이 다양하게 분포하여 세밀한 난이도 조절 가능</li>
+<li>동일 W 레벨 내에서도 숫자 조합이 다양하여 같은 부하의 변형 문제 반복 가능</li>
+</ul>
+
+<h3>FR-004. 데이터 기반 적응형 오답 교정 알고리즘 (v2 신규)</h3>
+
+<p>아동이 오답을 내거나 반응이 느릴 때, W(작업기억 부하)와 C(교과 위계)를 독립적으로 조절하여 최적의 다음 문제를 결정하는 알고리즘이다.</p>
+
+<h4>4.1 현재 문제의 부하 프로필 확인</h4>
+
+<p>오답 발생 시 문제 뱅크에서 해당 문제의 W_총점과 C 레벨을 즉시 조회한다.</p>
+
+<p>예시: 아이가 <code>8+6</code>을 틀린 경우</p>
+<ul>
+<li>W_총점: 4.5 / C 레벨: 7 (십몇이 되는 덧셈)</li>
+</ul>
+
+<h4>4.2 수감각 진단 질문 기반 경로 분기</h4>
+
+<p><strong>경로 A: W 하향 (작업기억 최적화)</strong></p>
+
+<ul>
+<li>조건: 전략은 알지만 계산에서 막힐 때</li>
+<li>진단 예: "8이 10이 되려면 2가 필요해요"라고 말하지만, 6을 가르다가 에러가 남</li>
+<li>로직: 동일한 C 레벨 내에서 W_총점이 더 낮은 문제를 검색</li>
+<li>예시: <code>8+6</code> (W:4.5) → <code>9+2</code> (W:2.5) — 전략 구조는 유지하되 정보 처리량을 감소</li>
+<li>목표: 가르기와 모으기의 구조를 유지하면서 성공 경험 축적</li>
+</ul>
+
+<p><strong>경로 B: C 하향 (개념적 후퇴)</strong></p>
+
+<ul>
+<li>조건: 가르는 이유나 보수(complement) 자체를 모를 때</li>
+<li>진단 예: "8이 10 되려면 얼마가 필요해?"에 답을 못 하거나 양적 관계가 깨진 경우</li>
+<li>로직: C 레벨을 1~2단계 아래로 낮추어 검색</li>
+<li>예시: <code>8+6</code> (C:7) → <code>8+□=10</code> (C:5) — 더해서 10이 되는 문제로 기초 복구</li>
+<li>목표: '어디서 가를지' 결정하기 위한 기초 체력(거리 감각) 재활</li>
+</ul>
+
+<h4>4.3 아동 반응 유형별 다음 문제 결정 로직</h4>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>아이의 반응</th>
+<th>다음 문제 결정 (쿼리 조건)</th>
+<th>훈련 목적</th>
+</tr>
+<tr>
+<td>심각한 오답 (예: 8+6=1)</td>
+<td>C 레벨 -2 하향 &amp; W_총점 &lt; 1.0</td>
+<td>수 관계(부피, 양) 기초 복구</td>
+</tr>
+<tr>
+<td>논리적 오답 (가르기 실수)</td>
+<td>C 레벨 유지 &amp; W_총점 1.5점 이상 낮은 문제</td>
+<td>작업기억 부하 경감 및 자신감 회복</td>
+</tr>
+<tr>
+<td>정답이지만 느림 (5초 이상)</td>
+<td>C, W 동일 수준의 다른 숫자 문제</td>
+<td>수 관계의 자동화 (Fluency)</td>
+</tr>
+<tr>
+<td>정답 및 빠른 반응</td>
+<td>W_총점 +1.0 혹은 C 레벨 +1 상향</td>
+<td>도전적 과제 부여</td>
+</tr>
+</table>
+
+<h4>4.4 Up &amp; Down Loop (적응형 반복 구조)</h4>
+
+<pre style="background-color:#f5f5f5; padding:12px; border:1px solid #ddd; font-family:monospace; white-space:pre;">[문제 제시] → [아동 반응 관찰] → [반응 유형 분류]
+                                       │
+                   ┌───────────────────┼───────────────────┐
+                   ▼                   ▼                   ▼
+             [심각한 오답]        [논리적 오답/느림]        [정답+빠름]
+             C↓↓ + W↓↓          경로A(W↓) 또는 경로B(C↓)   W↑ 또는 C↑
+                   │                   │                   │
+                   └───────────────────┼───────────────────┘
+                                       ▼
+                                  [다음 문제 결정]
+                                  (문제 뱅크 쿼리)
+                                       │
+                                       ▼
+                                  [문제 제시] ← 반복</pre>
+
+<h4>4.5 구체적 Downscaling 방법</h4>
+
+<ol>
+<li><strong>시각적 보조 투입</strong>: 문제 위에 10 프레임(계란판 그림)을 놓아 머릿속 부하를 시각으로 분산</li>
+<li><strong>단계 분리 질문</strong>: "계산하지 말고, 8을 10으로 만들려면 7에서 얼마만 가져올지만 결정해봐"</li>
+<li><strong>숫자 크기 축소</strong>: 가르는 숫자를 작게 조절 (예: 8+7 → 8+3)</li>
+<li><strong>세로셈 전환</strong>: 가로셈(W6: +0.5) → 세로셈(W6: 0)으로 표현 부하 감소</li>
+</ol>
+
+<h4>4.6 Upscaling 조건</h4>
+
+<ol>
+<li><strong>시각 힌트 제거</strong>: 10 프레임 그림 없이 머릿속으로 상상</li>
+<li><strong>추상화</strong>: 가르기 선 없이 눈으로만 풀기</li>
+<li><strong>수치 확장</strong>: 동일 전략 문제의 자릿수 확장 (예: 8+7 → 18+7 → 28+7)</li>
+</ol>
+
+<h3>FR-005. 훈련 모듈 자동 매핑</h3>
+
+<ul>
+<li>85개 오답원인 → 30+2개 훈련 모듈 1:1 매핑</li>
+<li>훈련 유형 5가지: Perception(지각), Concept(개념), Strategy(전략), Drill(자동화), Intervention(긴급 개입)</li>
+<li>훈련 모듈별 완료 기준(pass_criterion): 정답률 또는 RT 기반 통과 조건</li>
+<li>MVP Phase 1 핵심 훈련 모듈: T12(10짝찾기), T17(10만들어더하기), T26(자릿값이해), T27(받아올림개념), T30(주의력환기), T04, T08, T11, T15, T22, T24, T06</li>
+</ul>
+
+<h3>FR-006. RT(반응 시간) 측정 및 분석</h3>
+
+<ul>
+<li>밀리초 단위 클라이언트 사이드 측정 (performance.now())</li>
+<li>RT &lt; 1초 + 오답 = 충동적 반응(ATTENTION_L0_IMPULSE) 감지</li>
+<li><strong>RT ≥ 5초 + 정답 = 자동화 미완성 상태로 판정</strong> → 동일 난이도 반복 문제 제시</li>
+<li>z-score 기반 평가를 위한 기준 데이터 축적 (파일럿에서 수집)</li>
+</ul>
+
+<h3>FR-007. Probe 문제 (제한적)</h3>
+
+<ul>
+<li>오답 원인 중복 시 변인 통제 확인 문제 출제</li>
+<li>MVP에서는 공간지각 vs 절차수행 감별 시나리오 1개만 구현</li>
+<li>3문제당 최대 1회 Probe 삽입, 게이미피케이션으로 자연스럽게 제시</li>
+</ul>
+
+<h3>FR-008. AI 피드백 시스템</h3>
+
+<ul>
+<li>보이스 톤 가이드 준수:
+<ul>
+<li>반말, 부드러운 톤, 3문장 이내, 문장당 10자 이내</li>
+<li>비난/재촉/비교 금지, 힌트 1개만 제공</li>
+</ul>
+</li>
+<li>상황별 4가지 템플릿 풀: 정답 / 오답 / 실수 / 무응답</li>
+<li><strong>적응형 루프 내 피드백</strong>: Downscaling 시 격려 메시지("괜찮아, 이건 쉬운 문제야"), Upscaling 시 도전 메시지("잘했어! 좀 더 어려운 거 해볼까?")</li>
+<li>MVP에서는 LLM 생성 배제, 템플릿 기반 운영</li>
+<li>금지어 하드코딩 필터 적용</li>
+</ul>
+
+<h3>FR-009. 수감각 진단 질문 시스템 (v2 신규)</h3>
+
+<p>적응형 루프의 경로 분기를 위한 진단 질문 엔진:</p>
+
+<ul>
+<li><strong>질문 1 (양적 방향)</strong>: "답이 커져야 해, 작아져야 해?" → 수 관계 기초 확인</li>
+<li><strong>질문 2 (보수 인식)</strong>: "8이 10이 되려면 얼마가 더 필요해?" → 거리 감각 확인</li>
+<li><strong>질문 3 (전략 선택)</strong>: "어디서 가를 거야?" → 전략 수립 능력 확인</li>
+<li>질문은 Thinking Aloud 방식으로 자연스럽게 유도</li>
+<li>답변에 따라 Path A(W 하향) 또는 Path B(C 하향) 자동 결정</li>
+<li><strong>결정권 존중</strong>: 아이가 '수학적 수술 설계자'라는 느낌을 받게 유도</li>
+</ul>
+
+<hr>
+
+<h2>7. 비기능 요구사항</h2>
+
+<h3>성능</h3>
+<ul>
+<li>문제 출제 응답 시간: &lt; 200ms</li>
+<li><strong>적응형 루프 문제 결정 시간: &lt; 100ms</strong> (W/C 기반 쿼리 최적화)</li>
+<li>RT 측정 정밀도: ±10ms 이내</li>
+<li>진단 엔진 처리 시간: &lt; 500ms</li>
+</ul>
+
+<h3>보안 및 개인정보</h3>
+<ul>
+<li>아동 사용자 대상 COPPA/PIPA 준수</li>
+<li>아동 식별자는 익명 UUID로 관리</li>
+<li>RT/응답 데이터 암호화 저장</li>
+<li>학부모 동의 플로우 필수 탑재</li>
+</ul>
+
+<h3>접근성</h3>
+<ul>
+<li>난산증 아동의 인지적 특성(작업기억 부하 임계치가 낮음) 고려</li>
+<li>UI 자극 최소화, 단계별 정보 제시</li>
+<li>기찻길 메타포 기반 시각적 학습 체계</li>
+<li><strong>10 프레임(계란판) 시각적 보조의 동적 표시/숨김</strong></li>
+</ul>
+
+<h3>데이터 무결성</h3>
+<ul>
+<li>7대 카테고리 × 85개 오답원인 × 30개 훈련모듈 매핑의 MECE 정합성 검증 자동화</li>
+<li>4개 데이터베이스(문제정의, 오답원인, 훈련매핑, 훈련모듈) 간 참조 무결성 CI 테스트</li>
+<li><strong>문제 뱅크 W/C 태그 일관성 검증</strong>: 모든 문제의 W_총점 = W1+W2+W3+W4+W5+W6 자동 확인</li>
+</ul>
+
+<hr>
+
+<h2>8. UX 노트</h2>
+
+<h3>아동 경험 설계</h3>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>상황</th>
+<th>피드백 예시</th>
+<th>원칙</th>
+</tr>
+<tr>
+<td>정답 + 빠름</td>
+<td>"좋아!" "정답이야!" "다음 가자!"</td>
+<td>칭찬 + Upscaling</td>
+</tr>
+<tr>
+<td>정답 + 느림</td>
+<td>"맞았어!" "한 번 더 해볼까?"</td>
+<td>칭찬 + 동일 난이도 반복</td>
+</tr>
+<tr>
+<td>오답 (논리적)</td>
+<td>"괜찮아." "하나만 더!" "다시 해볼까?"</td>
+<td>공감 + W 하향</td>
+</tr>
+<tr>
+<td>오답 (심각)</td>
+<td>"괜찮아." "하나씩 하자." "쉬운 거 해보자!"</td>
+<td>안심 + C 하향</td>
+</tr>
+<tr>
+<td>무응답</td>
+<td>"괜찮아." "하나씩 하자." "어느 게 맞아?"</td>
+<td>안심 + 작은 단계</td>
+</tr>
+</table>
+
+<h3>적응형 루프 내 시각적 보조</h3>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>보조 수준</th>
+<th>적용 조건</th>
+<th>보조 도구</th>
+</tr>
+<tr>
+<td>Level 0</td>
+<td>Upscaling 단계</td>
+<td>보조 없음 (추상적 계산)</td>
+</tr>
+<tr>
+<td>Level 1</td>
+<td>기본 문제 제시</td>
+<td>가르기 선 그리기</td>
+</tr>
+<tr>
+<td>Level 2</td>
+<td>Downscaling 1단계</td>
+<td>10 프레임(계란판) 그림</td>
+</tr>
+<tr>
+<td>Level 3</td>
+<td>Downscaling 2단계</td>
+<td>구체물(바둑돌, 손가락) 안내</td>
+</tr>
+</table>
+
+<h3>시각 메타포: 기찻길 6단계</h3>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>단계</th>
+<th>지표</th>
+<th>메타포</th>
+</tr>
+<tr>
+<td>1 기초</td>
+<td>C1/S1</td>
+<td>기찻길과 낱개 블록</td>
+</tr>
+<tr>
+<td>2 비교</td>
+<td>C2/S2</td>
+<td>기차 길이 비교</td>
+</tr>
+<tr>
+<td>3 기준</td>
+<td>C3/S3</td>
+<td>5번 중간역과 색상 변화</td>
+</tr>
+<tr>
+<td>4 단위</td>
+<td>C4/S4</td>
+<td>황금 기차 변신 (10개 묶음)</td>
+</tr>
+<tr>
+<td>5 연산</td>
+<td>C5/S5</td>
+<td>5-10 채우기 작전</td>
+</tr>
+<tr>
+<td>6 검토</td>
+<td>C6/S6</td>
+<td>기차 후진</td>
+</tr>
+</table>
+
+<h3>훈련의 핵심 원칙</h3>
+
+<ol>
+<li><strong>절대 비난 금지</strong>: 틀린 이유는 머리가 나빠서가 아니라 '수감각 내비게이션'이 잠시 길을 잃었기 때문</li>
+<li><strong>반응 속도가 기준</strong>: 정답이어도 5초 이상이면 자동화(Automation) 미완성 → 난이도 유지/하향</li>
+<li><strong>결정권 존중</strong>: "어디서 가를까?" 질문을 반복하여 아이가 '수학적 수술 설계자'라는 느낌을 받게 함</li>
+</ol>
+
+<hr>
+
+<h2>9. 기술 노트</h2>
+
+<h3>아키텍처 개요</h3>
+
+<pre style="background-color:#f5f5f5; padding:12px; border:1px solid #ddd; font-family:monospace; white-space:pre;">[클라이언트] ──── [API Gateway] ──── [진단 엔진] ──── [문제 뱅크 DB]
+     │                                    │              (W/C 이중 태그)
+     │                              [룰 엔진]
+     │                              (70~90%)
+     │                                    │
+     ├── RT 측정 (로컬)              [AI 보조]
+     │                              (10~30%)
+     │                                    │
+     ├── 진단 질문 UI              [적응형 루프 엔진] ← (v2 신규)
+     │                                    │
+     │                              [훈련 매핑 DB]
+     └── 피드백 렌더링                    │
+          + 시각적 보조              [훈련 모듈]</pre>
+
+<h3>적응형 루프 엔진 설계 (v2 신규)</h3>
+
+<pre style="background-color:#f5f5f5; padding:12px; border:1px solid #ddd; font-family:monospace; white-space:pre;">adaptive_loop_engine:
+  input:
+    - current_problem: { id, W_score, C_level, W1~W6 }
+    - child_response: { answer, is_correct, rt_ms }
+    - diagnostic_answers: { direction_sense, complement_sense, strategy_choice }
+
+  process:
+    1. classify_response_type(child_response, rt_ms)
+       → SEVERE_ERROR | LOGICAL_ERROR | CORRECT_SLOW | CORRECT_FAST
+
+    2. if SEVERE_ERROR:
+         query: C_level -= 2, W_score &lt; 1.0
+
+    3. if LOGICAL_ERROR:
+         run_diagnostic_questions()
+         if path_A: query: same C_level, W_score -= 1.5+
+         if path_B: query: C_level -= 1~2
+
+    4. if CORRECT_SLOW:
+         query: same C_level, same W_level, different numbers
+
+    5. if CORRECT_FAST:
+         query: W_score += 1.0 OR C_level += 1
+
+  output:
+    - next_problem: { id, W_score, C_level }
+    - visual_aid_level: 0~3
+    - feedback_template: { type, message }</pre>
+
+<h3>문제 뱅크 쿼리 최적화</h3>
+
+<pre style="background-color:#f5f5f5; padding:12px; border:1px solid #ddd; font-family:monospace; white-space:pre;">-- 경로 A 쿼리 예시: 동일 C 레벨, W 1.5+ 낮은 문제
+SELECT * FROM problem_bank
+WHERE c_level = :current_c_level
+  AND w_total &lt;= :current_w_total - 1.5
+ORDER BY ABS(w_total - (:current_w_total - 2.0))
+LIMIT 5;
+
+-- 경로 B 쿼리 예시: C 레벨 하향
+SELECT * FROM problem_bank
+WHERE c_level = :current_c_level - 1
+  AND w_total &lt;= :current_w_total
+ORDER BY w_total ASC
+LIMIT 5;</pre>
+
+<h3>주요 기술 의사결정</h3>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>결정 사항</th>
+<th>선택</th>
+<th>근거</th>
+</tr>
+<tr>
+<td>진단 엔진</td>
+<td>결정론적 룰 엔진 우선</td>
+<td>트리거 룰의 자의적 해석 배제 요구</td>
+</tr>
+<tr>
+<td>AI 활용</td>
+<td>2차 분석에만 제한적 활용</td>
+<td>MVP 진단 일관성 확보</td>
+</tr>
+<tr>
+<td>피드백 생성</td>
+<td>템플릿 기반 (LLM 배제)</td>
+<td>보이스 톤 가이드 일관성 리스크 방지</td>
+</tr>
+<tr>
+<td>RT 측정</td>
+<td>클라이언트 사이드</td>
+<td>네트워크 지연 배제 필요</td>
+</tr>
+<tr>
+<td><strong>적응형 루프</strong></td>
+<td><strong>W/C 독립 조절</strong></td>
+<td><strong>오답 원인에 따른 최적 경로 분리</strong></td>
+</tr>
+<tr>
+<td><strong>문제 뱅크 인덱싱</strong></td>
+<td><strong>W레벨 + C레벨 복합 인덱스</strong></td>
+<td><strong>&lt; 100ms 쿼리 보장</strong></td>
+</tr>
+<tr>
+<td>Probe 로직</td>
+<td>상태 머신(FSM)</td>
+<td>오답→가설→Probe→확정 4단계 전이</td>
+</tr>
+<tr>
+<td>태그 체계</td>
+<td>계층형 (C5→C5a/C5b 확장 대비)</td>
+<td>MECE 강화 및 하위 호환성</td>
+</tr>
+</table>
+
+<h3>데이터 모델 (v2 확장)</h3>
+
+<pre style="background-color:#f5f5f5; padding:12px; border:1px solid #ddd; font-family:monospace; white-space:pre;">problem_bank
+├── problem_text (예: "8+6")
+├── answer (예: 14)
+├── w1_operation, w2_digits, w3_magnitude, w4_complexity, w5_special, w6_representation
+├── w_total (W1~W6 합산)
+├── w_level (1~23)
+├── c_level (1~15)
+├── c_unit_description (단원 설명)
+├── strategy_tag (6종, 정적)
+├── concept_tags (C1~C6, 문제 유형별 활성화)
+└── level_tag (L1~L5)
+
+session_response (동적)
+├── user_id (UUID)
+├── problem_id
+├── answer, is_correct
+├── rt_ms
+├── response_type (SEVERE_ERROR / LOGICAL_ERROR / CORRECT_SLOW / CORRECT_FAST)
+├── diagnostic_path (PATH_A / PATH_B / null)
+├── visual_aid_level (0~3)
+├── observation_tag (15종)
+└── error_tag (85개 중 매칭)
+
+adaptive_history (v2 신규)
+├── session_id
+├── sequence_number
+├── from_problem_id
+├── to_problem_id
+├── transition_type (UPSCALE / DOWNSCALE_W / DOWNSCALE_C / MAINTAIN)
+├── w_delta, c_delta
+└── timestamp
+
+training_mapping (85)
+├── error_tag_id
+└── training_module_id
+
+training_module (30+2)
+├── type (perception/concept/strategy/drill/intervention)
+├── pass_criterion
+└── fallback_module_id</pre>
+
+<hr>
+
+<h2>10. GTM 전략</h2>
+
+<h3>포지셔닝</h3>
+
+<p><strong>이중 메시징 전략</strong>:</p>
+<ul>
+<li><strong>B2B (전문가 채널)</strong>: "난산증 전용 인지 훈련 프로그램" — 전문성 강조</li>
+<li><strong>B2C (학부모 채널)</strong>: "수감각이 약한 아이를 위한 AI 수학 훈련" — 접근성 강조</li>
+<li><strong>v2 차별화</strong>: "아이가 왜 틀렸는지 알아내고, 딱 맞는 수준의 문제로 자신감을 되찾아줍니다"</li>
+</ul>
+
+<h3>차별화 포인트</h3>
+
+<ol>
+<li><strong>인지 원인 진단</strong>: 정오답이 아닌 '왜 틀렸는가'를 분석</li>
+<li><strong>W/C 이중 난이도 조절</strong>: 작업기억 부하와 교과 위계를 독립 조절하는 유일한 시스템</li>
+<li><strong>적응형 오답 교정 루프</strong>: "틀리면 쉬운 문제로 자신감 회복 → 다시 도전"의 과학적 루프</li>
+<li><strong>과학적 체계</strong>: C-S-E 인지 모델, 85개 오답원인 MECE 분류</li>
+<li><strong>감별 진단</strong>: Probe 문제로 변인 통제 기반 원인 규명</li>
+<li><strong>아동 친화적 톤</strong>: "혼내지 않는 AI"</li>
+</ol>
+
+<h3>타겟 채널</h3>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>채널</th>
+<th>대상</th>
+<th>전략</th>
+</tr>
+<tr>
+<td>B2B (1차)</td>
+<td>특수교육센터, 치료실</td>
+<td>KOL 네트워크, 학술 컨퍼런스</td>
+</tr>
+<tr>
+<td>B2C (병행)</td>
+<td>학부모</td>
+<td>체험판, 콘텐츠 마케팅</td>
+</tr>
+<tr>
+<td>학술</td>
+<td>연구자, 임상가</td>
+<td>파일럿 결과 논문화</td>
+</tr>
+</table>
+
+<h3>런칭 단계</h3>
+
+<ol>
+<li><strong>Alpha</strong>: 내부 QA + 전문가 리뷰 (4주)</li>
+<li><strong>파일럿 Phase 1</strong>: 소규모(n=20~30) 사용성 테스트 (6주)</li>
+<li><strong>파일럿 Phase 2</strong>: 확대(n=50~100) RT baseline 수집 (8주)</li>
+<li><strong>Beta</strong>: 제한 공개 (8주)</li>
+<li><strong>GA(General Availability)</strong>: 정식 출시</li>
+</ol>
+
+<h3>용어 가이드라인</h3>
+
+<ul>
+<li>사용: '훈련', '분석', '지원', '인지 훈련 프로그램'</li>
+<li>금지: '치료', '진단' (의료법 위반 소지)</li>
+</ul>
+
+<hr>
+
+<h2>11. 성공 지표</h2>
+
+<h3>Primary KPI</h3>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>지표</th>
+<th>목표</th>
+<th>측정 방법</th>
+</tr>
+<tr>
+<td>전략 전환율</td>
+<td>파일럿 대상 40%+</td>
+<td>동일 문제 유형에서 상위 전략 사용 비율</td>
+</tr>
+<tr>
+<td>진단-전문가 일치도</td>
+<td>80%+</td>
+<td>AI 진단 vs 임상가 코딩 일치도 (Inter-rater reliability)</td>
+</tr>
+<tr>
+<td>재시도율</td>
+<td>오답 후 70%+</td>
+<td>오답 발생 후 자발적 재도전 비율</td>
+</tr>
+<tr>
+<td><strong>적응형 루프 성공 복귀율</strong></td>
+<td><strong>60%+</strong></td>
+<td><strong>Downscaling 후 원래 C 레벨로 복귀한 비율</strong></td>
+</tr>
+</table>
+
+<h3>Secondary KPI</h3>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>지표</th>
+<th>목표</th>
+</tr>
+<tr>
+<td>세션 완료율</td>
+<td>85%+</td>
+</tr>
+<tr>
+<td>파일럿 참여자 만족도 (NPS)</td>
+<td>50+</td>
+</tr>
+<tr>
+<td>RT 개선율</td>
+<td>동일 레벨 문제 RT 20%+ 감소</td>
+</tr>
+<tr>
+<td><strong>Downscaling 평균 회복 시간</strong></td>
+<td><strong>5분제 이내</strong></td>
+</tr>
+<tr>
+<td><strong>시각적 보조 의존도 감소율</strong></td>
+<td><strong>4주 내 Level 2→0 전환 50%+</strong></td>
+</tr>
+</table>
+
+<hr>
+
+<h2>12. 리스크</h2>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>#</th>
+<th>리스크</th>
+<th>영향</th>
+<th>완화 전략</th>
+</tr>
+<tr>
+<td>1</td>
+<td>RT baseline 데이터 부재로 오진 위험</td>
+<td>High</td>
+<td>2단계 파일럿(20→100명)으로 연령별 기준 RT 실측</td>
+</tr>
+<tr>
+<td>2</td>
+<td>AI 비결정론적 특성으로 진단 일관성 저하</td>
+<td>High</td>
+<td>룰 엔진 우선, AI는 2차 분석에만 활용</td>
+</tr>
+<tr>
+<td>3</td>
+<td>'치료' 표현의 의료법 위반 소지</td>
+<td>High</td>
+<td>'인지 훈련 프로그램'으로 포지셔닝, 용어 가이드라인</td>
+</tr>
+<tr>
+<td>4</td>
+<td>난산증 인지도 부족으로 시장 교육 비용 과다</td>
+<td>High</td>
+<td>'수감각이 약한 아이'로 1차 진입, 인식 캠페인 병행</td>
+</tr>
+<tr>
+<td>5</td>
+<td>아동 개인정보보호 규정 미준수</td>
+<td>High</td>
+<td>COPPA/PIPA 준수, 익명 UUID, 학부모 동의 필수</td>
+</tr>
+<tr>
+<td>6</td>
+<td>AI 피드백이 톤 가이드 위반 시 심리적 부정 경험</td>
+<td>High</td>
+<td>템플릿 기반, 금지어 필터 하드코딩</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>적응형 루프의 과도한 Downscaling으로 학습 정체</strong></td>
+<td><strong>High</strong></td>
+<td><strong>최소 C 레벨(C1) 하한선 설정, 3회 연속 하향 시 전문가 알림</strong></td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>진단 질문이 아동의 몰입을 방해</strong></td>
+<td><strong>Medium</strong></td>
+<td><strong>게이미피케이션 포장, 최소한의 질문만 자연스럽게 삽입</strong></td>
+</tr>
+<tr>
+<td>9</td>
+<td>트리거 룰 경계 조건에서 과잉/미진단</td>
+<td>Medium</td>
+<td>문제 유형별 태그 스캔 범위 명시적 제한</td>
+</tr>
+<tr>
+<td>10</td>
+<td>85개 원인→30개 모듈 수렴 시 교정 효과 희석</td>
+<td>Medium</td>
+<td>동일 모듈 내 파라미터 동적 조절</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Probe 빈번 삽입으로 학습 몰입 저해</td>
+<td>Medium</td>
+<td>3문제당 최대 1회, 게이미피케이션 포장</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Level 1 문제 81개(0.5%)로 초기 진단 정밀도 저하</td>
+<td>Medium</td>
+<td>Level 1 문제 풀 확장 또는 CAT 방식 초기 레벨 판정</td>
+</tr>
+</table>
+
+<hr>
+
+<h2>13. 마일스톤</h2>
+
+<h3>MVP Phase 1 (14주, v2 확장)</h3>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>주차</th>
+<th>목표</th>
+<th>산출물</th>
+</tr>
+<tr>
+<td>W1~W2</td>
+<td>데이터 모델 설계, W/C 태그 문제 뱅크 구축</td>
+<td>DB 스키마, 문제 뱅크 임포트 (W1~W6 + C1~C15 태그)</td>
+</tr>
+<tr>
+<td>W3~W4</td>
+<td>룰 엔진 핵심 구현</td>
+<td>트리거 룰 엔진, C1~C6 활성화 로직</td>
+</tr>
+<tr>
+<td>W5~W6</td>
+<td>오답 진단 파이프라인 + 적응형 루프 엔진</td>
+<td>85개 오답원인 매핑, 반응 유형 분류기, W/C 쿼리 엔진</td>
+</tr>
+<tr>
+<td>W7~W8</td>
+<td>훈련 모듈 10개 구현 + 진단 질문 시스템</td>
+<td>T12, T17, T26, T27, T30 등 핵심 모듈, 경로 분기 로직</td>
+</tr>
+<tr>
+<td>W9~W10</td>
+<td>클라이언트 UI + RT 측정 + 시각적 보조</td>
+<td>아동 UI, 피드백 시스템, RT 측정, 10 프레임 시각 보조</td>
+</tr>
+<tr>
+<td>W11~W12</td>
+<td>통합 테스트 + 적응형 루프 QA</td>
+<td>엔드투엔드 시나리오 테스트, 매핑 무결성 검증</td>
+</tr>
+<tr>
+<td>W13~W14</td>
+<td>Alpha + 전문가 리뷰</td>
+<td>QA, 전문가 피드백, 적응형 루프 파라미터 튜닝</td>
+</tr>
+</table>
+
+<h3>MVP Phase 2 (8주)</h3>
+
+<ul>
+<li>두자리수 연산 확장 (C8~C15 완전 활성화)</li>
+<li>C5a/C5b 분리, C1-Zero 서브태그</li>
+<li>Probe 시스템 확장</li>
+<li>학부모/교사 대시보드</li>
+<li>AI 보조 진단 (제한적 LLM 활용)</li>
+<li><strong>적응형 루프 히스토리 분석 대시보드</strong></li>
+</ul>
+
+<h3>Phase 3 (계획)</h3>
+
+<ul>
+<li>Cogassist Agent 자율 매핑</li>
+<li>DTx 인허가 검토</li>
+<li>글로벌 로컬라이제이션</li>
+<li>곱셈/나눗셈 확장</li>
+</ul>
+
+<hr>
+
+<h2>14. 미해결 질문</h2>
+
+<h3>High Priority</h3>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>#</th>
+<th>질문</th>
+<th>담당</th>
+</tr>
+<tr>
+<td>1</td>
+<td>RT z-score 산출을 위한 연령별/레벨별 기준 분포 데이터를 어디서 확보할 것인가?</td>
+<td>Data Science</td>
+</tr>
+<tr>
+<td>2</td>
+<td>C5a(합성)과 C5b(분해)의 분리가 실제 진단 정확도를 유의미하게 향상시키는가?</td>
+<td>Research</td>
+</tr>
+<tr>
+<td>3</td>
+<td>AI/LLM 의존 범위 — 트리거 룰만으로 해결되지 않는 '복합 오답 패턴'의 비율은?</td>
+<td>Tech</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Probe 기반 변인 통제 진단의 실시간 적용이 아동의 학습 흐름을 방해하지 않는가?</td>
+<td>UX/Research</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>적응형 루프의 Downscaling 임계값 — 몇 점 차이로 다음 문제를 결정할 것인가?</strong></td>
+<td><strong>Research/Data</strong></td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>진단 질문의 최소 필요 개수 — 경로 분기에 질문 1개면 충분한가, 2~3개가 필요한가?</strong></td>
+<td><strong>UX/Research</strong></td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>W_총점 동일 구간 내 문제 풀 크기가 부족한 구간은 없는가?</strong></td>
+<td><strong>Domain Expert</strong></td>
+</tr>
+</table>
+
+<h3>Medium Priority</h3>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>#</th>
+<th>질문</th>
+</tr>
+<tr>
+<td>8</td>
+<td>C7 등가성 태그가 필요한 문제 유형의 범위와 난산증 아동 발생 빈도</td>
+</tr>
+<tr>
+<td>9</td>
+<td>뺄셈 문제 유형의 전략 태그(S1~S7) 매핑이 덧셈과 동일한 구조로 적용 가능한가?</td>
+</tr>
+<tr>
+<td>10</td>
+<td>오프라인 환경(학교, 치료실) 지원 필요 여부</td>
+</tr>
+<tr>
+<td>11</td>
+<td>학부모/교사 대시보드 MVP 범위: 진단 리포트만 vs 훈련 이력 추적 포함</td>
+</tr>
+<tr>
+<td>12</td>
+<td>적응형 루프 히스토리의 시각화 방식 — 학부모에게 어떻게 보여줄 것인가?</td>
+</tr>
+</table>
+
+<hr>
+
+<h2>부록 A: 적응형 루프 시뮬레이션 시나리오</h2>
+
+<h3>시나리오 1: 8+6 → 1 (심각한 오답)</h3>
+
+<ol>
+<li><strong>문제 제시</strong>: <code>8+6</code> (C=7, W=4.5)</li>
+<li><strong>아이 응답</strong>: "1" (심각한 오답 — 양적 관계가 깨짐)</li>
+<li><strong>진단 질문</strong>: "답이 커져야 해, 작아져야 해?" → (헷갈려함)</li>
+<li><strong>경로 결정</strong>: C↓↓ + W↓↓ (양적 보존 개념 기초 상실)</li>
+<li><strong>다음 문제</strong>: <code>3+2</code> (C=1, W=0) — "합치면 많아진다"는 본능 회복</li>
+<li><strong>성공 시</strong>: C를 점진적으로 올림 (C=1 → C=3 → C=5 → C=7)</li>
+</ol>
+
+<h3>시나리오 2: 8+6 = 가르기 실수 (논리적 오답)</h3>
+
+<ol>
+<li><strong>문제 제시</strong>: <code>8+6</code> (C=7, W=4.5)</li>
+<li><strong>아이 응답</strong>: "8이 10 되려면 2요!" (보수 인식 OK) → "6에서 2를 빼면... 3?" (가르기 실수)</li>
+<li><strong>경로 결정</strong>: Path A (W 하향) — 전략은 알지만 부하 초과</li>
+<li><strong>다음 문제</strong>: <code>9+2</code> (C=7, W=2.5) — 가르기 단순화 (2→1+1)</li>
+<li><strong>성공 시</strong>: W를 점진적으로 올림 (W:2.5 → 3.0 → 3.5 → 4.5)</li>
+</ol>
+
+<h3>시나리오 3: 15+7 = 전략 부재</h3>
+
+<ol>
+<li><strong>문제 제시</strong>: <code>15+7</code> (C=10, W=약4.5)</li>
+<li><strong>진단 질문</strong>: "15를 20으로 만들 거야, 7을 10으로 만들 거야?" → (대답 못 함)</li>
+<li><strong>경로 결정</strong>: Path B (C 하향) — 전략 수립 능력 부재</li>
+<li><strong>C 하향</strong>: C=10 → C=7로 내리고, W≤3.0 필터</li>
+<li><strong>다음 문제</strong>: <code>9+4</code> (C=7, W=2.5) — "9는 10이랑 가깝지? 4에서 몇 개만 가져올까?"</li>
+<li><strong>성공 시</strong>: C=10으로 복귀하되 <code>29+1</code> (W 낮은 문제)부터 단계적 복구</li>
+</ol>
+
+<hr>
+
+<h2>부록 B: W/C 태그 통계 요약</h2>
+
+<h3>W 레벨별 문제 분포 (C 시트 기준)</h3>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>W 레벨</th>
+<th>W_총점 범위</th>
+<th>대표 문제 유형</th>
+</tr>
+<tr>
+<td>1</td>
+<td>0.0</td>
+<td>같은 수 덧셈 (1+1, 2+2)</td>
+</tr>
+<tr>
+<td>2~3</td>
+<td>0.5~1.0</td>
+<td>한자리수 덧셈 (1+2, 6+3)</td>
+</tr>
+<tr>
+<td>4~5</td>
+<td>1.5~2.0</td>
+<td>한자리수 뺄셈 (3-1, 5-2)</td>
+</tr>
+<tr>
+<td>6~7</td>
+<td>2.5~3.0</td>
+<td>큰 수 뺄셈, 두자리+0 (7-3, 10+0)</td>
+</tr>
+<tr>
+<td>8~10</td>
+<td>3.5~4.5</td>
+<td>두자리수+0, 큰 수 조합</td>
+</tr>
+<tr>
+<td>11~13</td>
+<td>5.0~6.0</td>
+<td>두자리수-0</td>
+</tr>
+<tr>
+<td>14~16</td>
+<td>6.5~7.5</td>
+<td>10에서 빼기, 받아올림 덧셈</td>
+</tr>
+<tr>
+<td>17~19</td>
+<td>8.0~9.0</td>
+<td>받아내림 뺄셈 (11-6, 15-9)</td>
+</tr>
+<tr>
+<td>20~23</td>
+<td>9.5+</td>
+<td>복합 연산</td>
+</tr>
+</table>
+
+<h3>C 레벨별 교과 매핑 요약</h3>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>C 레벨</th>
+<th>교과 단원</th>
+<th>학년 대응</th>
+</tr>
+<tr>
+<td>C1~C4</td>
+<td>한자리수 기본 연산 + 0의 역할</td>
+<td>1학년 1학기</td>
+</tr>
+<tr>
+<td>C5~C6</td>
+<td>10 만들기, 10에서 빼기</td>
+<td>1학년 2학기</td>
+</tr>
+<tr>
+<td>C7</td>
+<td>십몇이 되는 덧뺄셈</td>
+<td>1학년 2학기</td>
+</tr>
+<tr>
+<td>C8~C9</td>
+<td>받아올림/받아내림 없는 두자리수</td>
+<td>2학년 1학기</td>
+</tr>
+<tr>
+<td>C10~C12</td>
+<td>받아올림 있는 두자리수 덧셈</td>
+<td>2학년 1~2학기</td>
+</tr>
+<tr>
+<td>C13~C15</td>
+<td>받아내림 있는 두자리수 뺄셈</td>
+<td>2학년 2학기</td>
+</tr>
+</table>
+
+<hr>
+
+<h2>부록 C: 충돌 해결 요약 (v1 기반)</h2>
+
+<p>이 PRD 생성 과정에서 6개 에이전트 간 7건의 충돌이 식별되고 해결되었다. 상세 내용은 <code>v1/conflicts.json</code> 참조.</p>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>#</th>
+<th>주제</th>
+<th>관련 역할</th>
+<th>해결</th>
+</tr>
+<tr>
+<td>1</td>
+<td>DTx vs 에듀테크 포지셔닝</td>
+<td>biz, marketing</td>
+<td>에듀테크 우선, DTx는 Phase 2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>B2B vs B2C 우선순위</td>
+<td>biz, marketing</td>
+<td>B2B2C 하이브리드, B2B 1차</td>
+</tr>
+<tr>
+<td>3</td>
+<td>AI/LLM 활용 범위</td>
+<td>tech, biz</td>
+<td>룰 엔진 우선, AI는 2차 분석</td>
+</tr>
+<tr>
+<td>4</td>
+<td>파일럿 규모 (20 vs 50 vs 100명)</td>
+<td>biz, pm, tech</td>
+<td>2단계 (20→100명)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>MVP 연산 범위</td>
+<td>pm, biz</td>
+<td>Phase 1은 한자리수만</td>
+</tr>
+<tr>
+<td>6</td>
+<td>난산증 전용 vs 수학 기초 역량</td>
+<td>marketing, biz</td>
+<td>이중 메시징 전략</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Probe의 MVP 포함 여부</td>
+<td>pm, research</td>
+<td>제한적 포함 (1개 시나리오)</td>
+</tr>
+</table>
+
+<hr>
+
+<h2>v1 → v2 변경 이력</h2>
+
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>섹션</th>
+<th>변경 내용</th>
+</tr>
+<tr>
+<td>1. 개요</td>
+<td>적응형 오답 교정 알고리즘, W/C 이중 태그 체계 추가</td>
+</tr>
+<tr>
+<td>3. 가설</td>
+<td>가설 4, 5 신규 추가 (W/C 독립 조절, 성공 경험 누적)</td>
+</tr>
+<tr>
+<td>4. 목표</td>
+<td>P0 목표 2개 추가 (적응형 루프, 경로 분기)</td>
+</tr>
+<tr>
+<td>6. FR-003</td>
+<td>W/C 이중 태그 체계 전면 재작성 (6개 W 가중치, 15개 C 단원 상세)</td>
+</tr>
+<tr>
+<td>6. FR-004</td>
+<td>적응형 오답 교정 알고리즘 신규 (4개 반응 유형, Path A/B, Up&Down Loop)</td>
+</tr>
+<tr>
+<td>6. FR-006</td>
+<td>느린 정답(5초+) 판정 기준 추가</td>
+</tr>
+<tr>
+<td>6. FR-008</td>
+<td>적응형 루프 내 피드백 템플릿 추가</td>
+</tr>
+<tr>
+<td>6. FR-009</td>
+<td>수감각 진단 질문 시스템 신규</td>
+</tr>
+<tr>
+<td>7. 비기능</td>
+<td>적응형 루프 쿼리 응답 시간(&lt; 100ms), 10 프레임 시각 보조</td>
+</tr>
+<tr>
+<td>8. UX</td>
+<td>시각적 보조 4단계, 핵심 원칙 3가지 추가</td>
+</tr>
+<tr>
+<td>9. 기술</td>
+<td>적응형 루프 엔진 설계, 쿼리 최적화, adaptive_history 테이블 추가</td>
+</tr>
+<tr>
+<td>11. 성공 지표</td>
+<td>적응형 루프 KPI 2개 추가 (복귀율, 회복 시간)</td>
+</tr>
+<tr>
+<td>12. 리스크</td>
+<td>적응형 루프 관련 리스크 2개 추가 (과도한 하향, 진단 질문 몰입 방해)</td>
+</tr>
+<tr>
+<td>13. 마일스톤</td>
+<td>14주로 확장, 적응형 루프/진단 질문/시각 보조 일정 반영</td>
+</tr>
+<tr>
+<td>14. 미해결 질문</td>
+<td>적응형 루프 관련 질문 3개 추가</td>
+</tr>
+<tr>
+<td>부록 A</td>
+<td>시뮬레이션 시나리오 3건 신규</td>
+</tr>
+<tr>
+<td>부록 B</td>
+<td>W/C 태그 통계 요약 신규</td>
+</tr>
+</table>
+
+<hr>
+
+<p><em>이 PRD v2는 PRD v1 (6역할 에이전트 팀 생성)에 훈련로직 Path-Tag 스프레드시트 데이터와 적응형 오답 교정 알고리즘 기획 문서를 통합하여 작성되었습니다.</em><br>
+<em>추가 증거: Solution_Epic_Plan_Lab-AI-MVP_Maththera_훈련로직-Path-Tag (스프레드시트), 데이터 기반 오답 교정 알고리즘 (기획 문서)</em></p>

@@ -1,0 +1,282 @@
+{
+  "claims": [
+    {
+      "citations": [
+        {
+          "chunk_id": "maththera-matrix-usecase/chunk-0000",
+          "line_end": 16,
+          "line_start": 15,
+          "quote_sha256": "4d3effef5b20cf68030bc3e1449cc26a8154cb7056a24894346b60810e81115f",
+          "source_name": "maththera-matrix-usecase"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-001",
+      "statement": "Maththera의 Master Matrix는 문제 정의-오답 진단-훈련 처방 간의 상관관계를 자동화하여, 기획자가 명시하지 않은 복합적인 오답 패턴에 대해서도 자율적으로 정확한 맵핑을 수행한다. 이것이 '수학이 어려운 아이를 위한 AI 맞춤 훈련'이라는 핵심 포지셔닝의 기술적 근거이다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "maththera-matrix-usecase/chunk-0000",
+          "line_end": 47,
+          "line_start": 29,
+          "quote_sha256": "8e1d9a3c1e1a27914c67c48ee6395c72576a74a2ac28317a6677fa1bfa8f08b8",
+          "source_name": "maththera-matrix-usecase"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-002",
+      "statement": "유스케이스 1(10의 보수 전략 미숙)은 정답을 맞혔더라도 반응 시간(12초)과 비효율적 전략(세기 의존)을 감지하여 훈련을 처방한다. 단순 정답/오답이 아닌 '전략 유창성'까지 분석하는 것이 경쟁사 대비 핵심 차별점이며, B2C 메시지에서 '맞아도 더 잘할 수 있게 도와줘요'로 전달 가능하다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "maththera-matrix-usecase/chunk-0000",
+          "line_end": 77,
+          "line_start": 53,
+          "quote_sha256": "2f737f618418eade4e4ede99164d55dfd3b613dd7b900c415904f4e48963bebe",
+          "source_name": "maththera-matrix-usecase"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-003",
+      "statement": "유스케이스 2(자릿값 혼동)는 오답 패턴(23+4=6)에서 산술적 실수가 아닌 공간처리(SPATIAL) 영역의 인지 문제를 정확히 분류한다. '왜 틀렸는지'를 인지 도메인(공간, 전략, 주의력)으로 분리 진단하는 것이 B2B 전문가에게 어필하는 과학적 차별점이다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "maththera-matrix-usecase/chunk-0000",
+          "line_end": 104,
+          "line_start": 84,
+          "quote_sha256": "9e1a8dcf67df4841a5dd67453849de3740e72374d430fbeee0ed8ec65e4061e4",
+          "source_name": "maththera-matrix-usecase"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-004",
+      "statement": "유스케이스 3(작업기억 부족/충동적 반응)은 극도로 빠른 반응(0.8초)과 무작위 추측을 감지하여 수학적 지식이 아닌 ATTENTION(주의력) 도메인의 개입을 우선한다. 이는 '수학 실력이 아니라 아이 상태를 먼저 봐요'라는 학부모 대상 감성적 메시지의 기반이다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "maththera-matrix-usecase/chunk-0000",
+          "line_end": 138,
+          "line_start": 112,
+          "quote_sha256": "7f542962d68645c68f01bf802b21310d71566933ab625a2dd0ef1992106a811a",
+          "source_name": "maththera-matrix-usecase"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-005",
+      "statement": "유스케이스 4(오답 원인 중복 책정)는 변인 통제 Probe를 활용하여 공간 지각 문제인지 절차 수행 문제인지 정밀하게 판별한다. 이는 B2B 전문가 채널에서 '과학적 변인 통제 기반 진단'이라는 학술적 신뢰성을 확보하는 핵심 근거이다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+          "line_end": 17,
+          "line_start": 14,
+          "quote_sha256": "ef7e5a58ca115b059012d182fb87d416a9e6baa770e78b676eba76eb8eab59e6",
+          "source_name": "prd-template-voice-tone-guide"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-006",
+      "statement": "B2C 핵심 페르소나는 '따뜻하고 격려하는 친구 같은 튜터'이다. 반말 사용(존댓말 금지), 비난/재촉/비교 금지 원칙이 톤 가이드에 명시되어 있으며, '틀려도 괜찮다'는 느낌으로 재시도를 유도하는 것이 핵심이다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+          "line_end": 32,
+          "line_start": 22,
+          "quote_sha256": "cc004ef0f209af73ec27f0fc1c5281c46e97bc7c93fc188f806bcdd4f5e4889b",
+          "source_name": "prd-template-voice-tone-guide"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-007",
+      "statement": "3문장 이내, 문장당 10자 이내 규칙은 난산증 아동의 인지 부하를 최소화하는 UX 설계 원칙이다. 감탄/칭찬은 짧게('좋아!', '멋져!'), 행동 유도 시 한 번에 하나만 말하기(힌트 1개만) 원칙이 적용된다. 이는 마케팅에서 '아이에게 부담을 주지 않는 AI'로 전달 가능하다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+          "line_end": 61,
+          "line_start": 36,
+          "quote_sha256": "d136cb0327c9164137d63fb194b4bc3c126fff37a4765b55c7afd353884dda57",
+          "source_name": "prd-template-voice-tone-guide"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-008",
+      "statement": "4가지 상황별 응답 템플릿(정답/오답/과정은 좋지만 실수/모르겠어)이 체계화되어 있어 AI 반응이 일관되고 예측 가능하다. B2B 전문가에게 '표준화된 인지 훈련 커뮤니케이션 프로토콜'로 포지셔닝할 수 있다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+          "line_end": 79,
+          "line_start": 72,
+          "quote_sha256": "f8799d309e8fb1cf01349bf0053696baaafe44629adcc43d37701db6191b3d41",
+          "source_name": "prd-template-voice-tone-guide"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-009",
+      "statement": "금지 표현('틀렸어', '아니야', '왜 못해', '정신 차려', '빨리', '당연히')과 금지 방식(긴 설명, 정보 과다, 비교/압박)이 명시적으로 관리된다. 이는 의료법 준수 및 브랜드 안전성 확보를 위한 마케팅 가이드라인의 기반이 된다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+          "line_end": 10,
+          "line_start": 8,
+          "quote_sha256": "a63c1542056287194247b2688bd1314c00f18dc5fd985a922d44bb9a812bdbd4",
+          "source_name": "prd-template-voice-tone-guide"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-010",
+      "statement": "AI 피드백의 궁극적 목표는 아이가 '틀려도 괜찮다'는 느낌으로 다시 시도하게 만드는 것이다. 이는 학부모 대상 핵심 마케팅 메시지 '아이가 수학을 무서워하지 않게'로 직결된다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "maththera-matrix-usecase/chunk-0000",
+          "line_end": 43,
+          "line_start": 40,
+          "quote_sha256": "8c9053cbb71177ccba6f1feb9ffb4879fa9cf9166de52780bba57b68f722b2cd",
+          "source_name": "maththera-matrix-usecase"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-011",
+      "statement": "훈련 매핑은 구체적 모듈 ID(T12 10짝찾기 -> T17 10만들어더하기)와 명확한 목표(10의 보수 개념 시각적 인지 및 전략 전환)로 이어진다. 추상적 추천이 아닌 구체적 훈련 경로를 제시하는 것이 제품의 핵심 가치이다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+          "line_end": 68,
+          "line_start": 64,
+          "quote_sha256": "a3063123a8519e7c8dc73b6ffc4c6928b90497ee00515d864fe95e3d48d2ced3",
+          "source_name": "prd-template-voice-tone-guide"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-012",
+      "statement": "힌트는 1개만, 답을 직접 말하지 않기, 아이가 할 수 있는 작은 행동으로 만들기('손가락 써봐', '하나 더해봐') 원칙은 자기주도 학습을 유도하는 교육학적 설계이다. B2C에서 '아이 스스로 깨닫게 해주는 AI'로 포지셔닝 가능하다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "maththera-matrix-usecase/chunk-0000",
+          "line_end": 138,
+          "line_start": 136,
+          "quote_sha256": "5b5104a1e678e8a148d7bd9c462a74cdd33da914ba826d32acaceca77a0ad825",
+          "source_name": "maththera-matrix-usecase"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-013",
+      "statement": "Variable Control(변인 통제 Probe)는 두 가지 가설(공간 vs 절차) 중 원인을 정밀 감별하기 위해 복잡도 변인(Complexity)을 제거한 확인용 문제를 제시한다. 이는 B2B 전문가 대상에서 '과학적 실험 설계 기반 진단'이라는 메시지의 핵심 근거이다."
+    }
+  ],
+  "inputs": {
+    "chunks_used": [
+      "maththera-matrix-usecase/chunk-0000",
+      "prd-template-example/chunk-0000",
+      "prd-template-voice-tone-guide/chunk-0000"
+    ],
+    "evidence_index": ".claude/knowledge/evidence/index/sources.jsonl"
+  },
+  "open_questions": [
+    {
+      "citations": [],
+      "id": "Q-001",
+      "priority": "high",
+      "question": "런칭 단계(Alpha -> Pilot -> Beta -> GA) 각 단계별 구체적 마케팅 예산과 채널 배분 계획이 증거 자료에 명시되지 않았다. 단계별 GTM 전략의 구체화가 필요하다."
+    },
+    {
+      "citations": [],
+      "id": "Q-002",
+      "priority": "high",
+      "question": "B2B 채널(학술 컨퍼런스, KOL 네트워크) 구축을 위한 구체적 파트너십 전략과 타겟 KOL 리스트가 부재하다. 난산증 전문가 커뮤니티 접근 방안이 필요하다."
+    },
+    {
+      "citations": [],
+      "id": "Q-003",
+      "priority": "medium",
+      "question": "경쟁사(토도수학, 매쓰홈, Khan Academy 등) 대비 정량적 포지셔닝 맵이 부재하다. Maththera의 '난산증 전용 인지 훈련' 포지션이 어떤 시장 공백을 차지하는지 분석이 필요하다."
+    },
+    {
+      "citations": [],
+      "id": "Q-004",
+      "priority": "medium",
+      "question": "가격 전략(B2B SaaS 모델 vs B2C 구독 vs 프리미엄)이 증거 자료에 포함되어 있지 않다. 이중 채널 가격 체계 설계가 필요하다."
+    },
+    {
+      "citations": [],
+      "id": "Q-005",
+      "priority": "high",
+      "question": "디지털 치료제(DTx) 인증 추진 여부에 따라 마케팅 메시지와 규제 전략이 크게 달라진다. '교육 도구' vs 'DTx' 포지셔닝 의사결정이 선행되어야 한다."
+    }
+  ],
+  "project": "Maththera",
+  "risks": [
+    {
+      "citations": [
+        {
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+          "line_end": 79,
+          "line_start": 72,
+          "quote_sha256": "f8799d309e8fb1cf01349bf0053696baaafe44629adcc43d37701db6191b3d41",
+          "source_name": "prd-template-voice-tone-guide"
+        }
+      ],
+      "id": "RSK-001",
+      "impact": "high",
+      "mitigation": "모든 마케팅 자료에서 '치료/진단/처방' 용어 사용 금지. B2B 자료에는 '인지 훈련 지원 도구'로 명확히 표기. 금지 표현 체크리스트를 마케팅팀에 배포. 법무 검토 프로세스 도입.",
+      "risk": "의료법 위반 리스크: '난산증 치료'나 '진단'으로 오인될 수 있는 마케팅 메시지가 의료법에 저촉될 수 있다. B2B 채널에서 전문가 대상 메시징 시 경계가 모호해질 위험이 있다."
+    },
+    {
+      "citations": [],
+      "id": "RSK-002",
+      "impact": "high",
+      "mitigation": "B2C에서는 '수감각이 약한 아이를 위한 맞춤 AI 수학'으로 포지셔닝. 학부모 대상 메시징에서 '난산증' 의학 용어 사용 최소화. 대신 '수학이 어려운 아이를 위한 맞춤 AI' 프레임 사용.",
+      "risk": "난산증 레이블링 부담: B2C에서 '난산증'이라는 의학적 용어가 학부모에게 부담감이나 낙인 효과를 줄 수 있다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "maththera-matrix-usecase/chunk-0000",
+          "line_end": 17,
+          "line_start": 15,
+          "quote_sha256": "4d3effef5b20cf68030bc3e1449cc26a8154cb7056a24894346b60810e81115f",
+          "source_name": "maththera-matrix-usecase"
+        }
+      ],
+      "id": "RSK-003",
+      "impact": "medium",
+      "mitigation": "Alpha/Pilot 단계에서 사전/사후 비교 효과성 데이터 수집 우선. 학술 논문 공동 연구 파트너십 추진. 유스케이스 기반 진단 정확도를 정량적으로 입증.",
+      "risk": "효과성 입증 부담: B2B 전문가 채널에서는 Matrix 기반 적응형 훈련의 효과성에 대한 학술적 근거를 요구할 가능성이 높다."
+    },
+    {
+      "citations": [],
+      "id": "RSK-004",
+      "impact": "medium",
+      "mitigation": "난산증 인지도가 낮은 시장에서는 '수감각이 약한 아이'라는 쉬운 표현으로 진입 후, 난산증 인식 캠페인을 병행하여 점진적으로 전문 용어를 도입.",
+      "risk": "시장 교육 비용: 한국에서 난산증이라는 용어 자체가 생소한 학부모가 대다수이므로, 시장 교육에 상당한 비용이 소요될 수 있다."
+    },
+    {
+      "citations": [],
+      "id": "RSK-005",
+      "impact": "high",
+      "mitigation": "PIPA(개인정보보호법) 준수, 아동 데이터 특별 보호 정책 수립. 학습 이력 데이터의 수집/활용 범위를 투명하게 공개. 데이터 보안을 마케팅 자료에 명시.",
+      "risk": "아동 데이터 프라이버시: 적응형 알고리즘의 정밀 진단을 위해 아동의 반응 속도, 오답 패턴 등 민감한 학습 데이터를 수집해야 한다."
+    }
+  ],
+  "role": "marketing",
+  "version": "1.0"
+}

@@ -1,0 +1,459 @@
+{
+  "total_citations": 67,
+  "by_role": {
+    "biz": [
+      {
+        "claim_id": "CLM-001",
+        "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0000",
+        "source_name": "dyscalculia-cse-cognitive-model",
+        "quote_sha256": "83a0d07d76ed120b495cb7097a6bdb5bc663875e79afb54b0e385683d9c1386e"
+      },
+      {
+        "claim_id": "CLM-002",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "3329981b3d716159326680b66101e340c53e2a9e3b890be878c9f277ba2d2792"
+      },
+      {
+        "claim_id": "CLM-002",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "aa5f06f2ca8fcf2b3ad57f9236997202e51b36c6b10e75a2ac9300b1646f8bcc"
+      },
+      {
+        "claim_id": "CLM-003",
+        "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0001",
+        "source_name": "dyscalculia-cse-cognitive-model",
+        "quote_sha256": "3827591fd89620d17fe6ef5e2321ddf0bad2bcf39dc5a81575a6577a33c4cc1a"
+      },
+      {
+        "claim_id": "CLM-004",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "4702d31b66fce1ecd75c4585e4ba19cc4d46beddae6908b6fad3cb77b08291a3"
+      },
+      {
+        "claim_id": "CLM-004",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "8909f65887228686c5080465f9cbc97c126581969314a72f4df5838747719b0e"
+      },
+      {
+        "claim_id": "CLM-005",
+        "chunk_id": "maththera-concept-tag/chunk-0006",
+        "source_name": "maththera-concept-tag",
+        "quote_sha256": "c5a30c21d4535726e6ded172583ab9030716ccbf2292814789c4600d5a16ceb3"
+      },
+      {
+        "claim_id": "CLM-006",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "ff1e6542e9294d158bab434da53c901b7e385efe93321423937f57b67ef5e63b"
+      },
+      {
+        "claim_id": "CLM-006",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "2091aaa7e2bb490e148967be81e0083e1fce6ab50a35a9333f882d7a4371da86"
+      },
+      {
+        "claim_id": "CLM-007",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "8decda3427ddc317e29c94b8e8cac7b9f519e4626241f22f525692ee5dec90d9"
+      },
+      {
+        "claim_id": "CLM-007",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "d25a52bc3192937d27e450170b1b8ba7ecddb6bfbd4eb9b45122b596a67e4823"
+      },
+      {
+        "claim_id": "CLM-008",
+        "chunk_id": "maththera-matrix-usecase/chunk-0000",
+        "source_name": "maththera-matrix-usecase",
+        "quote_sha256": "21d5dbef44ec88e4c514a3ad73eee362ad3d88fe32cb97edc531ff849d62e3db"
+      },
+      {
+        "claim_id": "CLM-011",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "ae2fe6649c42b7053bd6089da95ce215ea62386992e74a6cb7d33e5c7572dbfd"
+      },
+      {
+        "claim_id": "CLM-011",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "b69159f13ac5b8bafb8afb6a66aa29f396579a76b2365927b8c56379cddfcf9f"
+      },
+      {
+        "claim_id": "CLM-013",
+        "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+        "source_name": "prd-template-voice-tone-guide",
+        "quote_sha256": "5a3ead9520583f332b8fb820a6f9a8acd1e453c96f322e42e19724bb90d998fe"
+      },
+      {
+        "claim_id": "CLM-015",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "536db92d3bdd8505c4ce62339ff9cd5ac2e0612c27ab825508eeb2622570e904"
+      }
+    ],
+    "marketing": [
+      {
+        "claim_id": "CLM-001",
+        "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0000",
+        "source_name": "dyscalculia-cse-cognitive-model",
+        "quote_sha256": "83a0d07d76ed120b495cb7097a6bdb5bc663875e79afb54b0e385683d9c1386e"
+      },
+      {
+        "claim_id": "CLM-002",
+        "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0001",
+        "source_name": "dyscalculia-cse-cognitive-model",
+        "quote_sha256": "3827591fd89620d17fe6ef5e2321ddf0bad2bcf39dc5a81575a6577a33c4cc1a"
+      },
+      {
+        "claim_id": "CLM-003",
+        "chunk_id": "maththera-concept-tag/chunk-0006",
+        "source_name": "maththera-concept-tag",
+        "quote_sha256": "c5a30c21d4535726e6ded172583ab9030716ccbf2292814789c4600d5a16ceb3"
+      },
+      {
+        "claim_id": "CLM-004",
+        "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+        "source_name": "prd-template-voice-tone-guide",
+        "quote_sha256": "5a3ead9520583f332b8fb820a6f9a8acd1e453c96f322e42e19724bb90d998fe"
+      },
+      {
+        "claim_id": "CLM-005",
+        "chunk_id": "maththera-matrix-usecase/chunk-0000",
+        "source_name": "maththera-matrix-usecase",
+        "quote_sha256": "21d5dbef44ec88e4c514a3ad73eee362ad3d88fe32cb97edc531ff849d62e3db"
+      },
+      {
+        "claim_id": "CLM-006",
+        "chunk_id": "maththera-matrix-usecase/chunk-0000",
+        "source_name": "maththera-matrix-usecase",
+        "quote_sha256": "13607b65c7f16aa755ef0cb685bd6e947e9e1c5cdf2d97f5dc0fd3d1bff1a025"
+      },
+      {
+        "claim_id": "CLM-007",
+        "chunk_id": "maththera-matrix-usecase/chunk-0000",
+        "source_name": "maththera-matrix-usecase",
+        "quote_sha256": "f7867c99b16c00b5c0083ba83289b39ec34ce328def7beebbce7be93481fa20c"
+      },
+      {
+        "claim_id": "CLM-008",
+        "chunk_id": "maththera-matrix-usecase/chunk-0000",
+        "source_name": "maththera-matrix-usecase",
+        "quote_sha256": "dfdcb7e3c95ac4fff583af12a8f626c71e99bf06e4e76153b6d699bae39f1f9a"
+      },
+      {
+        "claim_id": "CLM-009",
+        "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0002",
+        "source_name": "dyscalculia-cse-cognitive-model",
+        "quote_sha256": "aa4b04e998fe77a39a05c94249149fde84c91ab7a9a5494942beed1ca31e6e19"
+      },
+      {
+        "claim_id": "CLM-010",
+        "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0004",
+        "source_name": "dyscalculia-cse-cognitive-model",
+        "quote_sha256": "71ee6273dada9da51a66e7e906c394cf572ac6472ae4ed31f3b92338b937c6b0"
+      },
+      {
+        "claim_id": "CLM-011",
+        "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+        "source_name": "prd-template-voice-tone-guide",
+        "quote_sha256": "572e2ae1d5fa92d7ba38a0d6ef2d0973c26d68f6cff85791cb822c2ff7f9a3c4"
+      },
+      {
+        "claim_id": "CLM-012",
+        "chunk_id": "maththera-concept-tag/chunk-0007",
+        "source_name": "maththera-concept-tag",
+        "quote_sha256": "6daadb304e69878fb41b66f679e32620af2b5f7fc757623ea1df39e6d6f3da98"
+      },
+      {
+        "claim_id": "CLM-013",
+        "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0003",
+        "source_name": "dyscalculia-cse-cognitive-model",
+        "quote_sha256": "c82fdfe1ee7009932dff3aaac4a650bff840fb609eec05f1dfd190a370636183"
+      },
+      {
+        "claim_id": "CLM-014",
+        "chunk_id": "maththera-matrix-usecase/chunk-0000",
+        "source_name": "maththera-matrix-usecase",
+        "quote_sha256": "2b3f158c95b7618a3940fa7136a4ea69eb2837cc4fbeb122943fa318b3339a1b"
+      },
+      {
+        "claim_id": "CLM-015",
+        "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0005",
+        "source_name": "dyscalculia-cse-cognitive-model",
+        "quote_sha256": "c6ddb2e82b44c01e29d40f4721eb4f13d8eb931bee1ba5d786def49ba7059dac"
+      }
+    ],
+    "research": [
+      {
+        "claim_id": "CLM-001",
+        "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0000",
+        "source_name": "dyscalculia-cse-cognitive-model",
+        "quote_sha256": "83a0d07d76ed120b495cb7097a6bdb5bc663875e79afb54b0e385683d9c1386e"
+      },
+      {
+        "claim_id": "CLM-002",
+        "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0001",
+        "source_name": "dyscalculia-cse-cognitive-model",
+        "quote_sha256": "3827591fd89620d17fe6ef5e2321ddf0bad2bcf39dc5a81575a6577a33c4cc1a"
+      },
+      {
+        "claim_id": "CLM-003",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "aa5f06f2ca8fcf2b3ad57f9236997202e51b36c6b10e75a2ac9300b1646f8bcc"
+      },
+      {
+        "claim_id": "CLM-004",
+        "chunk_id": "maththera-concept-tag/chunk-0007",
+        "source_name": "maththera-concept-tag",
+        "quote_sha256": "c5a30c21d4535726e6ded172583ab9030716ccbf2292814789c4600d5a16ceb3"
+      },
+      {
+        "claim_id": "CLM-005",
+        "chunk_id": "maththera-concept-tag/chunk-0006",
+        "source_name": "maththera-concept-tag",
+        "quote_sha256": "60489132c4fca7417c9c46fe737830ccd34c049e9bedff78c75b4001d92bf5c6"
+      },
+      {
+        "claim_id": "CLM-006",
+        "chunk_id": "maththera-matrix-usecase/chunk-0000",
+        "source_name": "maththera-matrix-usecase",
+        "quote_sha256": "6d524a9d064c44aeecd66840ca573812b4fd0bf9d3051eb0970ac775740ca8c0"
+      },
+      {
+        "claim_id": "CLM-007",
+        "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0004",
+        "source_name": "dyscalculia-cse-cognitive-model",
+        "quote_sha256": "120df2f88ce0d6f4375684f20e032d87433666663fa05396321b7e363fd8ee72"
+      },
+      {
+        "claim_id": "CLM-008",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "8909f65887228686c5080465f9cbc97c126581969314a72f4df5838747719b0e"
+      },
+      {
+        "claim_id": "CLM-009",
+        "chunk_id": "maththera-matrix-usecase/chunk-0000",
+        "source_name": "maththera-matrix-usecase",
+        "quote_sha256": "e4e182555cba224ede25ccaf0bde9948c61669779ab5ce6733cabc2fbc8bf6da"
+      },
+      {
+        "claim_id": "CLM-010",
+        "chunk_id": "maththera-level-tag/T1-level-tag/chunk-0000",
+        "source_name": "maththera-level-tag",
+        "quote_sha256": "0de96aecc8f840eb35f1bb85d71994e18a26669416080975cd01dfbcaace84de"
+      },
+      {
+        "claim_id": "CLM-011",
+        "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+        "source_name": "prd-template-voice-tone-guide",
+        "quote_sha256": "c008ec6ec9e52e0149a8ed8ebb619c9edc10f05c8c0609a8ba5a7dc34e4eb859"
+      },
+      {
+        "claim_id": "CLM-012",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "4cf812c4a057978756a7d1b04d4b2b1011035b682f10d4820a6730daec238df9"
+      }
+    ],
+    "tech": [
+      {
+        "claim_id": "TECH-001",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "aa5f06f2ca8fcf2b3ad57f9236997202e51b36c6b10e75a2ac9300b1646f8bcc"
+      },
+      {
+        "claim_id": "TECH-002",
+        "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0001",
+        "source_name": "dyscalculia-cse-cognitive-model",
+        "quote_sha256": "0d4aa6a134d0eb5c4f0192070611ac4c1cc8f3d862e0be690464e6b8d3611c6a"
+      },
+      {
+        "claim_id": "TECH-003",
+        "chunk_id": "maththera-concept-tag/chunk-0006",
+        "source_name": "maththera-concept-tag",
+        "quote_sha256": "1d1d0968f1b27f73f2475909a54b241d47da0613f622d663b8803dbb54ecad87"
+      },
+      {
+        "claim_id": "TECH-004",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "8909f65887228686c5080465f9cbc97c126581969314a72f4df5838747719b0e"
+      },
+      {
+        "claim_id": "TECH-005",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "8decda3427ddc317e29c94b8e8cac7b9f519e4626241f22f525692ee5dec90d9"
+      },
+      {
+        "claim_id": "TECH-006",
+        "chunk_id": "maththera-matrix-usecase/chunk-0000",
+        "source_name": "maththera-matrix-usecase",
+        "quote_sha256": "7eac008fb6eb6ad267d8db705ea056c5c15906cc128e194962e9303c3c2c8ade"
+      },
+      {
+        "claim_id": "TECH-007",
+        "chunk_id": "maththera-matrix-usecase/chunk-0000",
+        "source_name": "maththera-matrix-usecase",
+        "quote_sha256": "87307dc80ecc5c03a18d0e6e3a6444c631d47878150ec4f63b30b577dde4dd48"
+      },
+      {
+        "claim_id": "TECH-008",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "536db92d3bdd8505c4ce62339ff9cd5ac2e0612c27ab825508eeb2622570e904"
+      },
+      {
+        "claim_id": "TECH-009",
+        "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+        "source_name": "prd-template-voice-tone-guide",
+        "quote_sha256": "e8dd6beb4dde12c65bb41c0e8bc319dd7028feec9648b958bc4212db83c8eda3"
+      },
+      {
+        "claim_id": "TECH-010",
+        "chunk_id": "maththera-concept-tag/chunk-0007",
+        "source_name": "maththera-concept-tag",
+        "quote_sha256": "6daadb304e69878fb41b66f679e32620af2b5f7fc757623ea1df39e6d6f3da98"
+      },
+      {
+        "claim_id": "TECH-011",
+        "chunk_id": "maththera-concept-tag/chunk-0004",
+        "source_name": "maththera-concept-tag",
+        "quote_sha256": "60489132c4fca7417c9c46fe737830ccd34c049e9bedff78c75b4001d92bf5c6"
+      },
+      {
+        "claim_id": "TECH-012",
+        "chunk_id": "maththera-matrix-usecase/chunk-0000",
+        "source_name": "maththera-matrix-usecase",
+        "quote_sha256": "42ae5e6c5810b8b1fdd1aae052898a1cacf2a30d2e28351206057d5be15cfddc"
+      }
+    ],
+    "pm": [
+      {
+        "claim_id": "CLM-SCOPE-001",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "3329981b3d716159326680b66101e340c53e2a9e3b890be878c9f277ba2d2792"
+      },
+      {
+        "claim_id": "CLM-SCOPE-002",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "99902202243fe491c469603c8859398a6b73d197beea5c22252d230f2c380ee8"
+      },
+      {
+        "claim_id": "CLM-SCOPE-003",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "8decda3427ddc317e29c94b8e8cac7b9f519e4626241f22f525692ee5dec90d9"
+      },
+      {
+        "claim_id": "CLM-FR-001",
+        "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0000",
+        "source_name": "dyscalculia-cse-cognitive-model",
+        "quote_sha256": "0d4aa6a134d0eb5c4f0192070611ac4c1cc8f3d862e0be690464e6b8d3611c6a"
+      },
+      {
+        "claim_id": "CLM-FR-002",
+        "chunk_id": "maththera-concept-tag/chunk-0000",
+        "source_name": "maththera-concept-tag",
+        "quote_sha256": "c5a30c21d4535726e6ded172583ab9030716ccbf2292814789c4600d5a16ceb3"
+      },
+      {
+        "claim_id": "CLM-FR-003",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "536db92d3bdd8505c4ce62339ff9cd5ac2e0612c27ab825508eeb2622570e904"
+      },
+      {
+        "claim_id": "CLM-FR-004",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "c5df57b4cf017ef73c2e3cd3c2704952ab31460187910c4f8b5208a63c714aa8"
+      },
+      {
+        "claim_id": "CLM-FR-005",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "b6fabc21c932333ad1f5af83f8ccd1ca1ddb862b0675f15e983538dabd8116ba"
+      },
+      {
+        "claim_id": "CLM-FR-006",
+        "chunk_id": "maththera-matrix-usecase/chunk-0000",
+        "source_name": "maththera-matrix-usecase",
+        "quote_sha256": "13607b65c7f16aa755ef0cb685bd6e947e9e1c5cdf2d97f5dc0fd3d1bff1a025"
+      },
+      {
+        "claim_id": "CLM-FR-007",
+        "chunk_id": "maththera-matrix-usecase/chunk-0000",
+        "source_name": "maththera-matrix-usecase",
+        "quote_sha256": "2b3f158c95b7618a3940fa7136a4ea69eb2837cc4fbeb122943fa318b3339a1b"
+      },
+      {
+        "claim_id": "CLM-FR-008",
+        "chunk_id": "maththera-matrix-usecase/chunk-0000",
+        "source_name": "maththera-matrix-usecase",
+        "quote_sha256": "42ae5e6c5810b8b1fdd1aae052898a1cacf2a30d2e28351206057d5be15cfddc"
+      },
+      {
+        "claim_id": "CLM-FR-009",
+        "chunk_id": "maththera-matrix-usecase/chunk-0000",
+        "source_name": "maththera-matrix-usecase",
+        "quote_sha256": "6d524a9d064c44aeecd66840ca573812b4fd0bf9d3051eb0970ac775740ca8c0"
+      },
+      {
+        "claim_id": "CLM-FR-010",
+        "chunk_id": "maththera-concept-tag/chunk-0000",
+        "source_name": "maththera-concept-tag",
+        "quote_sha256": "6daadb304e69878fb41b66f679e32620af2b5f7fc757623ea1df39e6d6f3da98"
+      },
+      {
+        "claim_id": "CLM-FR-011",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "aaf9aa073598fbadd8da9a5b7f1bfeb2c2a0d671fea0961e6ae837b7fb0324fd"
+      },
+      {
+        "claim_id": "CLM-NFR-001",
+        "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+        "source_name": "prd-template-voice-tone-guide",
+        "quote_sha256": "5a3ead9520583f332b8fb820a6f9a8acd1e453c96f322e42e19724bb90d998fe"
+      },
+      {
+        "claim_id": "CLM-NFR-002",
+        "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0000",
+        "source_name": "dyscalculia-cse-cognitive-model",
+        "quote_sha256": "83a0d07d76ed120b495cb7097a6bdb5bc663875e79afb54b0e385683d9c1386e"
+      },
+      {
+        "claim_id": "CLM-NFR-003",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "8909f65887228686c5080465f9cbc97c126581969314a72f4df5838747719b0e"
+      },
+      {
+        "claim_id": "CLM-MS-001",
+        "chunk_id": "maththera-master-matrix/chunk-0000",
+        "source_name": "maththera-master-matrix",
+        "quote_sha256": "19287a70c2c06e7013124a94a3d9ce640aaa76380116386e19c9f5d617dc3c18"
+      },
+      {
+        "claim_id": "CLM-MS-002",
+        "chunk_id": "maththera-concept-tag/chunk-0000",
+        "source_name": "maththera-concept-tag",
+        "quote_sha256": "60489132c4fca7417c9c46fe737830ccd34c049e9bedff78c75b4001d92bf5c6"
+      }
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "created_at": "2026-02-13T15:10:00+09:00",
+  "base_version": 1,
+  "source_count": 9,
+  "chunk_count": 55,
+  "additional_sources": [
+    {
+      "name": "Solution_Epic_Plan_Lab-AI-MVP_Maththera_훈련로직-Path-Tag",
+      "type": "spreadsheet",
+      "url": "https://docs.google.com/spreadsheets/d/1CBRGBGuGpN25CYw5WLb8NVXMZxVnA-Rr_ytStT6i_Xc/edit?gid=1605296366",
+      "description": "W/C 이중 태그 기반 문제 뱅크 (6개 W 가중치, 15개 C 단원)"
+    },
+    {
+      "name": "데이터 기반 오답 교정 알고리즘",
+      "type": "document",
+      "url": "https://docs.google.com/document/d/140aryLLzfV3QkxW8cnqFOuCQTosbcU3mS5QMiekGFi0/edit",
+      "description": "적응형 오답 교정 알고리즘 (Adaptive Logic), Path A/B 분기, Up&Down Loop"
+    }
+  ],
+  "agent_roles": ["biz", "marketing", "research", "tech", "pm", "synth"],
+  "project_name": "Maththera",
+  "changes_from_v1": [
+    "FR-003: W/C 이중 태그 체계 전면 재작성",
+    "FR-004: 적응형 오답 교정 알고리즘 신규",
+    "FR-009: 수감각 진단 질문 시스템 신규",
+    "적응형 루프 엔진 아키텍처 및 데이터 모델 추가",
+    "시뮬레이션 시나리오 3건 추가",
+    "마일스톤 12주→14주 확장"
+  ],
+  "prd_outputs": {
+    "prd": ".claude/artifacts/prd/v2/PRD.md",
+    "metadata": ".claude/artifacts/prd/v2/metadata.json"
+  }
+}

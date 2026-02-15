@@ -1,0 +1,272 @@
+{
+  "claims": [
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-adaptive-logic@92f6e625#chunk-0000",
+          "line_end": 10,
+          "line_start": 5,
+          "quote_sha256": "880a05e645d34f492354a6151b6fa98dd67d0027645c6a8ebf429879f912e693",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)"
+        },
+        {
+          "chunk_id": "SRC-path-tag-w-order@d17fde4f#chunk-0000",
+          "line_end": 3,
+          "line_start": 2,
+          "quote_sha256": "dce7660ad9451605ebbf673bb04ca075a70529b587a59da94890de7f331af101",
+          "source_name": "훈련로직-Path-Tag (W*C 이중태그 15,053문제)"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-001",
+      "statement": "Maththera의 적응형 알고리즘은 사전 태깅된 CSV 기반 문제 뱅크(15,053문제)의 W_총점과 C 레벨을 실시간 쿼리하여 다음 문제를 결정하므로, 복잡한 ML 모델 없이 규칙 기반(rule-based) 엔진으로 구현이 가능하다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-adaptive-logic@92f6e625#chunk-0001",
+          "line_end": 24,
+          "line_start": 7,
+          "quote_sha256": "e20f65c4e97d3dca6c20c8e527c355db2a87e1d447c854b598b262d3ad195a9b",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-002",
+      "statement": "핵심 분기 로직은 2개 경로(Path A: W 하향 - 작업기억 최적화, Path B: C 하향 - 개념적 후퇴)로 구성되며, 진단 질문의 응답을 입력으로 경로를 결정하는 이진 분기 구조이므로 결정 트리(Decision Tree) 패턴으로 직접 구현할 수 있다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-adaptive-logic@92f6e625#chunk-0002",
+          "line_end": 10,
+          "line_start": 5,
+          "quote_sha256": "736c78a5c95ce85b6f949e290d14d3ea3d575fa034e1e1218f29e58a5dff6223",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-003",
+      "statement": "훈련 루프는 4가지 반응 상태(심각한 오답, 논리적 오답, 정답+느림, 정답+빠름)에 따라 W/C 파라미터를 조정하는 상태 머신(State Machine)으로 모델링할 수 있으며, 각 전이 조건이 명확히 정의되어 있다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-wc-problem-bank@chunk-0000",
+          "line_end": 15,
+          "line_start": 3,
+          "quote_sha256": "976399e33674964be837c5e2bd8abe9ff444dc04528eede1bb88787b428bb012",
+          "source_name": "W/C 이중 태그 문제 뱅크 (Solution_Epic_Plan)"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-004",
+      "statement": "W_총점은 6개 하위 가중치(W1_연산, W2_자릿수, W3_숫자크기, W4_복잡성, W5_특수수, W6_표현)의 합산으로 계산되며, 범위는 0~9.5이다. 이 가중치 체계는 정적 데이터로서 앱 빌드 시 포함하거나 서버사이드 데이터베이스에 저장하여 빠른 인덱스 조회가 가능하다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-wc-problem-bank@chunk-0000",
+          "line_end": 35,
+          "line_start": 18,
+          "quote_sha256": "16e14de04b6a05c114fba01f6cc74694a4a37fe9a9557854fc4125f9739a55b9",
+          "source_name": "W/C 이중 태그 문제 뱅크 (Solution_Epic_Plan)"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-005",
+      "statement": "교과과정(C) 체계는 15개 단원으로 구성되어 있으며, 난이도 순서가 명확하다. C 레벨 간 상하 이동 로직은 정수 연산(C-1, C-2, C+1)으로 구현되므로 추가적인 난이도 보정 알고리즘이 불필요하다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-adaptive-logic@92f6e625#chunk-0004",
+          "line_end": 34,
+          "line_start": 23,
+          "quote_sha256": "9f1771f84a53a3b5ad77450cd36d3cde5087218a9da6d89795558efed278bfa8",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)"
+        },
+        {
+          "chunk_id": "SRC-adaptive-logic@92f6e625#chunk-0005",
+          "line_end": 32,
+          "line_start": 30,
+          "quote_sha256": "20760e24c63eac4c608c492a020d6b63216f04af283f0fe1ff496a256a635c8d",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-006",
+      "statement": "Downscaling은 C 레벨 -2와 W_총점 1.0 이하 필터링을 동시 적용하고, 복귀 시에는 단계적 Upscaling(기준점 고정 -> 미세 조정 -> 복귀)을 수행한다. 이 3단계 복귀 루프는 세션 상태 관리(session state management)로 구현해야 하며, 각 단계의 성공/실패를 추적하는 세션 컨텍스트가 필요하다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-adaptive-logic@92f6e625#chunk-0007",
+          "line_end": 6,
+          "line_start": 5,
+          "quote_sha256": "828c82ba88348182e0a99882bf9dbeff69dda0fdf043651f28aaa7814a6a072b",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)"
+        }
+      ],
+      "confidence": "medium",
+      "id": "CLM-007",
+      "statement": "가역성(Invertibility)과 결합/분해(Composition)의 연결이 느슨한 경우를 감지하려면, 단순 정오답 판정을 넘어 아이의 풀이 전략(어디서 가를지, 빌려오기 전략 사용 여부)을 추적해야 한다. 이를 위해 중간 단계 입력 UI(진단 질문 응답, 전략 선택)가 필수적이다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-adaptive-algorithm@chunk-0000",
+          "line_end": 38,
+          "line_start": 34,
+          "quote_sha256": "04501503989a37b8837a593461db5a2c8920c9c54dbaef0c57398d9bca7f78cf",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic) - 요약"
+        },
+        {
+          "chunk_id": "SRC-adaptive-algorithm@chunk-0000",
+          "line_end": 42,
+          "line_start": 40,
+          "quote_sha256": "45b002155c11df875e8adfe0c3dcb6fd2e5923b4b5f05dd7daadd5a1c895cdbe",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic) - 요약"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-008",
+      "statement": "Downscaling과 Upscaling은 대칭적 전략으로 설계되어 있다. Downscaling은 시각적 보조 투입, 단계 분리, 숫자 축소, 세로셈 전환 4가지이며, Upscaling은 시각 힌트 제거, 추상화, 수치 확장 3가지이다. 이 전략들은 UI 렌더링 모드(시각 보조 on/off, 세로셈/가로셈 전환)와 문제 선택 파라미터로 구현된다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+          "line_end": 10,
+          "line_start": 8,
+          "quote_sha256": "dc59a0e70f738ede6dea2a736727a72587f74e3123ca05d6df825a9b443e09b6",
+          "source_name": "Maththera AI 피드백 톤 가이드"
+        },
+        {
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+          "line_end": 32,
+          "line_start": 21,
+          "quote_sha256": "fb492ab4649e94244b486554c5aa63e4fb4aa0867b63b51e9940a697a896bd46",
+          "source_name": "Maththera AI 피드백 톤 가이드"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-009",
+      "statement": "AI 피드백은 3문장 이내, 문장당 10자 이내의 엄격한 제약 조건을 갖는다. 이 제약은 LLM 기반 자유 생성보다는 템플릿 기반 피드백 시스템(사전 정의된 문구 풀에서 상황별 선택)이 일관성과 안전성 면에서 적합함을 시사한다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-adaptive-algorithm@chunk-0000",
+          "line_end": 48,
+          "line_start": 45,
+          "quote_sha256": "085f9bfdc46330396d13ecb9fde95d4a0d24ddee15480a56a3ebb70aaa23c664",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic) - 요약"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-010",
+      "statement": "핵심 원칙 중 '반응 속도가 기준(정답이어도 느리면 자동화 미완성)'이라는 요구사항은, 문제 제시 시점부터 응답 완료까지의 시간을 밀리초 단위로 측정하는 타이머 시스템이 필수적임을 의미한다. 5초 임계값 기준으로 정답이더라도 Fluency 훈련 경로로 분기해야 한다."
+    }
+  ],
+  "inputs": {
+    "chunks_used": [
+      "SRC-adaptive-logic@92f6e625#chunk-0000",
+      "SRC-adaptive-logic@92f6e625#chunk-0001",
+      "SRC-adaptive-logic@92f6e625#chunk-0002",
+      "SRC-adaptive-logic@92f6e625#chunk-0003",
+      "SRC-adaptive-logic@92f6e625#chunk-0004",
+      "SRC-adaptive-logic@92f6e625#chunk-0005",
+      "SRC-adaptive-logic@92f6e625#chunk-0006",
+      "SRC-adaptive-logic@92f6e625#chunk-0007",
+      "SRC-path-tag-w-order@d17fde4f#chunk-0000",
+      "SRC-adaptive-algorithm@chunk-0000",
+      "SRC-wc-problem-bank@chunk-0000",
+      "prd-template-voice-tone-guide/chunk-0000"
+    ],
+    "evidence_index": ".claude/knowledge/evidence/index/sources.jsonl"
+  },
+  "open_questions": [
+    {
+      "citations": [],
+      "id": "Q-001",
+      "priority": "high",
+      "question": "진단 질문(예: '8이 10이 되려면 얼마가 필요해?')의 응답을 어떻게 입력받을 것인가? 음성 인식(STT), 객관식 버튼, 자유 텍스트 입력 중 어떤 방식이 대상 연령(초등 저학년)에 적합한지 결정이 필요하다."
+    },
+    {
+      "citations": [],
+      "id": "Q-002",
+      "priority": "high",
+      "question": "15,053문제 CSV 데이터의 업데이트 주기와 배포 전략은 무엇인가? 앱 번들에 포함할 것인지, 서버에서 동적으로 로드할 것인지에 따라 오프라인 지원 여부가 결정된다."
+    },
+    {
+      "citations": [],
+      "id": "Q-003",
+      "priority": "medium",
+      "question": "다중 사용자(교사 1명 - 학생 N명) 시나리오에서 각 학생의 세션 상태를 어떻게 관리하고 동기화할 것인가? 교사 대시보드에서 실시간 모니터링이 필요한지에 따라 백엔드 아키텍처가 달라진다."
+    },
+    {
+      "citations": [],
+      "id": "Q-004",
+      "priority": "medium",
+      "question": "시각적 보조(10 프레임, 동전 모델 등)의 렌더링 방식은? Canvas/SVG 기반 인터랙티브 요소가 필요한지, 정적 이미지로 충분한지 결정이 필요하다."
+    }
+  ],
+  "project": "Maththera",
+  "risks": [
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-adaptive-logic@92f6e625#chunk-0007",
+          "line_end": 6,
+          "line_start": 5,
+          "quote_sha256": "828c82ba88348182e0a99882bf9dbeff69dda0fdf043651f28aaa7814a6a072b",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)"
+        }
+      ],
+      "id": "RSK-001",
+      "impact": "high",
+      "mitigation": "진단 질문 입력 UI를 MVP에서는 객관식(2~3개 선택지)으로 단순화하고, 자유 응답 분석은 Phase 2에서 STT+NLU로 확장한다.",
+      "risk": "진단 질문 응답의 자동 분류가 정확하지 않을 경우, 잘못된 경로(Path A/B)로 분기하여 학습 효과가 저하될 수 있다. 가역성/결합-분해 진단은 특히 판별이 어렵다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "SRC-adaptive-logic@92f6e625#chunk-0002",
+          "line_end": 10,
+          "line_start": 5,
+          "quote_sha256": "736c78a5c95ce85b6f949e290d14d3ea3d575fa034e1e1218f29e58a5dff6223",
+          "source_name": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)"
+        }
+      ],
+      "id": "RSK-002",
+      "impact": "medium",
+      "mitigation": "W_총점 기준 인덱스(B-tree 또는 정렬 배열)를 C 레벨별로 사전 구축하여 O(log N) 쿼리를 보장한다. 15,053문제는 메모리에 전체 로드해도 수 MB 수준이므로 인메모리 캐시가 적합하다.",
+      "risk": "훈련 루프에서 'C 레벨 유지 & W_총점 1.5점 이상 낮은 문제' 같은 복합 쿼리가 실시간으로 수행되어야 한다. 문제 뱅크 크기가 커지면 쿼리 지연이 발생할 수 있다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+          "line_end": 10,
+          "line_start": 8,
+          "quote_sha256": "dc59a0e70f738ede6dea2a736727a72587f74e3123ca05d6df825a9b443e09b6",
+          "source_name": "Maththera AI 피드백 톤 가이드"
+        }
+      ],
+      "id": "RSK-003",
+      "impact": "medium",
+      "mitigation": "피드백 문구를 사전 검수된 템플릿 풀로 관리하고, 변수 슬롯(숫자, 연산자)만 동적으로 채우는 방식으로 안전성을 확보한다. LLM 자유 생성은 금지한다.",
+      "risk": "AI 피드백이 톤 가이드의 엄격한 제약(3문장 이내, 10자 이내, 비난 금지)을 위반할 경우 아동에게 부정적 영향을 줄 수 있다."
+    },
+    {
+      "citations": [],
+      "id": "RSK-004",
+      "impact": "medium",
+      "mitigation": "응답 시간 측정은 클라이언트 사이드에서 수행하고, 네트워크 지연과 분리한다. 오프라인 모드에서도 타이머가 정확히 동작하도록 로컬 타임스탬프를 사용한다.",
+      "risk": "반응 속도 측정(5초 임계값)의 정확성이 네트워크 지연, 디바이스 성능, UI 렌더링 시간에 영향받을 수 있다."
+    }
+  ],
+  "role": "tech",
+  "version": "1.0"
+}

@@ -1,0 +1,524 @@
+{
+  "version": 3,
+  "total_citations": 70,
+  "agents": {
+    "biz": {
+      "claim_count": 15,
+      "claims": [
+        {
+          "id": "CLM-001",
+          "statement": "난산증은 전 세계 학령기 아동의 3~6%에 영향을 미치는 신경발달적 수학 학습장애",
+          "confidence": "high",
+          "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0000"
+        },
+        {
+          "id": "CLM-002",
+          "statement": "13,981개 문제 -> 85개 오답원인 -> 30개 훈련으로 압축하는 파이프라인",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        },
+        {
+          "id": "CLM-003",
+          "statement": "C-S-E 인지 모델이 '왜 틀렸는가'를 뇌과학적으로 설명",
+          "confidence": "high",
+          "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0001"
+        },
+        {
+          "id": "CLM-004",
+          "statement": "85개 오답원인이 7대 인지 카테고리로 MECE 분류",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        },
+        {
+          "id": "CLM-005",
+          "statement": "Rule-based(70%) + AI(30%) 하이브리드 진단",
+          "confidence": "high",
+          "chunk_id": "maththera-concept-tag/chunk-0006"
+        },
+        {
+          "id": "CLM-006",
+          "statement": "훈련 목적은 정답률이 아닌 전략 전환",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        },
+        {
+          "id": "CLM-007",
+          "statement": "L x C 2축 난이도로 사람과 AI가 동일 언어 사용",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        },
+        {
+          "id": "CLM-008",
+          "statement": "Cogassist Agent의 자율적 오답 패턴 매핑 가능",
+          "confidence": "medium",
+          "chunk_id": "maththera-matrix-usecase/chunk-0000"
+        },
+        {
+          "id": "CLM-009",
+          "statement": "글로벌 에듀테크/AI교육 시장 폭발적 성장세",
+          "confidence": "medium",
+          "chunk_id": null
+        },
+        {
+          "id": "CLM-010",
+          "statement": "85개 MECE 오답원인 분류 체계는 시장 내 유일",
+          "confidence": "medium",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        },
+        {
+          "id": "CLM-011",
+          "statement": "4DB 구조가 AI 설명가능성을 구조적으로 담보",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        },
+        {
+          "id": "CLM-012",
+          "statement": "한국 DTx 시장 급성장 중 난산증 특화 제품 부재",
+          "confidence": "medium",
+          "chunk_id": null
+        },
+        {
+          "id": "CLM-013",
+          "statement": "비난 없는 피드백으로 수학 불안 감소",
+          "confidence": "high",
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000"
+        },
+        {
+          "id": "CLM-014",
+          "statement": "15,050개 레벨 태깅 완료로 MVP 개발 가속 가능",
+          "confidence": "high",
+          "chunk_id": null
+        },
+        {
+          "id": "CLM-015",
+          "statement": "전략태그/관찰태그 분리로 진단-처방 혼합 방지",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        }
+      ]
+    },
+    "marketing": {
+      "claim_count": 15,
+      "claims": [
+        {
+          "id": "MKT-CLM-001",
+          "statement": "신경학적 정의 기반 '인지 재활 도구' 포지셔닝",
+          "confidence": "high",
+          "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0000"
+        },
+        {
+          "id": "MKT-CLM-002",
+          "statement": "C-S-E 인지 모델이 과학적 신뢰도 뒷받침하는 핵심 메시징 필러",
+          "confidence": "high",
+          "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0001"
+        },
+        {
+          "id": "MKT-CLM-003",
+          "statement": "개념 태그 트리거 룰이 '왜 틀렸는지 알려주는 AI' 메시지의 기술적 근거",
+          "confidence": "high",
+          "chunk_id": "maththera-concept-tag/chunk-0006"
+        },
+        {
+          "id": "MKT-CLM-004",
+          "statement": "브랜드 톤은 '따뜻하고 격려하는 친구 같은 튜터'",
+          "confidence": "high",
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000"
+        },
+        {
+          "id": "MKT-CLM-005",
+          "statement": "마스터 매트릭스 자동화가 1:1 전문 치료사 수준의 개인화 실현",
+          "confidence": "high",
+          "chunk_id": "maththera-matrix-usecase/chunk-0000"
+        },
+        {
+          "id": "MKT-CLM-006",
+          "statement": "UC1: 정답이어도 전략 미숙 포착 -- 차별적 마케팅 메시지",
+          "confidence": "high",
+          "chunk_id": "maththera-matrix-usecase/chunk-0000"
+        },
+        {
+          "id": "MKT-CLM-007",
+          "statement": "UC2: 오답 패턴으로 공간 지각 진단 가능",
+          "confidence": "high",
+          "chunk_id": "maththera-matrix-usecase/chunk-0000"
+        },
+        {
+          "id": "MKT-CLM-008",
+          "statement": "UC3: 비인지적 요인(주의력) 감지 -- 의료 경계 주의",
+          "confidence": "medium",
+          "chunk_id": "maththera-matrix-usecase/chunk-0000"
+        },
+        {
+          "id": "MKT-CLM-009",
+          "statement": "C1~C6 계층적 개념 진단이 B2B 핵심 가치",
+          "confidence": "high",
+          "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0002"
+        },
+        {
+          "id": "MKT-CLM-010",
+          "statement": "48단계 난이도 + 15,050개 문항이 B2B/투자 어필 포인트",
+          "confidence": "medium",
+          "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0004"
+        },
+        {
+          "id": "MKT-CLM-011",
+          "statement": "3문장/10자 규칙이 인지 부하 최소화 UX 원칙",
+          "confidence": "high",
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000"
+        },
+        {
+          "id": "MKT-CLM-012",
+          "statement": "Bottom-up Selection이 '과잉 진단 없는 정확한 처방' 메시지 근거",
+          "confidence": "high",
+          "chunk_id": "maththera-concept-tag/chunk-0007"
+        },
+        {
+          "id": "MKT-CLM-013",
+          "statement": "S1~S7 전략 체계가 '전략적 성장' 가치 제안",
+          "confidence": "high",
+          "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0003"
+        },
+        {
+          "id": "MKT-CLM-014",
+          "statement": "Probe 감별 진단이 학술 마케팅 핵심 소구점",
+          "confidence": "medium",
+          "chunk_id": "maththera-matrix-usecase/chunk-0000"
+        },
+        {
+          "id": "MKT-CLM-015",
+          "statement": "기찻길 메타포 6단계 시각적 학습 체계",
+          "confidence": "medium",
+          "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0005"
+        }
+      ]
+    },
+    "research": {
+      "claim_count": 12,
+      "claims": [
+        {
+          "id": "RES-CLM-001",
+          "statement": "C-S-E 3축 인지 모델로 난산증 분석 가능",
+          "confidence": "high",
+          "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0000"
+        },
+        {
+          "id": "RES-CLM-002",
+          "statement": "C-S-E는 C1~C6, S1~S7, E1~E3으로 세분화, C-S 1:1 대응",
+          "confidence": "high",
+          "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0001"
+        },
+        {
+          "id": "RES-CLM-003",
+          "statement": "13,981 -> 85 -> 30 수렴 파이프라인",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        },
+        {
+          "id": "RES-CLM-004",
+          "statement": "트리거 룰 Bottom-up Selection이 과진단 방지",
+          "confidence": "high",
+          "chunk_id": "maththera-concept-tag/chunk-0007"
+        },
+        {
+          "id": "RES-CLM-005",
+          "statement": "C5a(합성)/C5b(분해) 분리로 MECE 강화 필요",
+          "confidence": "medium",
+          "chunk_id": "maththera-concept-tag/chunk-0006"
+        },
+        {
+          "id": "RES-CLM-006",
+          "statement": "Probe 변인 통제로 오답 원인 분리 가능",
+          "confidence": "high",
+          "chunk_id": "maththera-matrix-usecase/chunk-0000"
+        },
+        {
+          "id": "RES-CLM-007",
+          "statement": "E축: 작업기억 부하(E1/E2/E3), 난산증 아동 임계치 낮음",
+          "confidence": "high",
+          "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0004"
+        },
+        {
+          "id": "RES-CLM-008",
+          "statement": "85개 오답원인 7대 카테고리 MECE 분류",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        },
+        {
+          "id": "RES-CLM-009",
+          "statement": "정답이어도 전략 불일치 감지 가능 (RT + 관찰 태그)",
+          "confidence": "high",
+          "chunk_id": "maththera-matrix-usecase/chunk-0000"
+        },
+        {
+          "id": "RES-CLM-010",
+          "statement": "W1~W6 가중치로 Level 1~5 분류, 15,050개 태깅",
+          "confidence": "high",
+          "chunk_id": "maththera-level-tag/T1-level-tag/chunk-0000"
+        },
+        {
+          "id": "RES-CLM-011",
+          "statement": "피드백 톤: 반말, 3문장, 10자, 비난 금지",
+          "confidence": "high",
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000"
+        },
+        {
+          "id": "RES-CLM-012",
+          "statement": "4DB(문제정의/오답원인/훈련매핑/훈련모듈) + L/C 2축 난이도",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        }
+      ]
+    },
+    "tech": {
+      "claim_count": 12,
+      "claims": [
+        {
+          "id": "TECH-001",
+          "statement": "수렴 파이프라인은 결정론적 룰 엔진으로 구현 가능",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        },
+        {
+          "id": "TECH-002",
+          "statement": "C-S-E 3축 분석 병렬 처리 가능",
+          "confidence": "high",
+          "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0001"
+        },
+        {
+          "id": "TECH-003",
+          "statement": "트리거 룰은 결정론적 룰 엔진, LLM 자의적 해석 배제",
+          "confidence": "high",
+          "chunk_id": "maththera-concept-tag/chunk-0006"
+        },
+        {
+          "id": "TECH-004",
+          "statement": "7대 카테고리 x 85개 태그 라우팅 테이블 O(1) 조회",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        },
+        {
+          "id": "TECH-005",
+          "statement": "L(0~5) x C(1~5) = 30셀 매트릭스 적응형 출제",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        },
+        {
+          "id": "TECH-006",
+          "statement": "RT 밀리초 측정, 클라이언트 performance.now()",
+          "confidence": "medium",
+          "chunk_id": "maththera-matrix-usecase/chunk-0000"
+        },
+        {
+          "id": "TECH-007",
+          "statement": "Probe FSM: 가설-검증 4단계 상태 전이",
+          "confidence": "high",
+          "chunk_id": "maththera-matrix-usecase/chunk-0000"
+        },
+        {
+          "id": "TECH-008",
+          "statement": "strategy_tag(정적) vs observation_tag(동적) DB 분리",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        },
+        {
+          "id": "TECH-009",
+          "statement": "피드백: 템플릿 기반 + 금지어 필터 (MVP)",
+          "confidence": "high",
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000"
+        },
+        {
+          "id": "TECH-010",
+          "statement": "Bottom-up 태그 스캔: short-circuit evaluation",
+          "confidence": "high",
+          "chunk_id": "maththera-concept-tag/chunk-0007"
+        },
+        {
+          "id": "TECH-011",
+          "statement": "C5a/C5b 분리: 계층형 태그 구조 + 스키마 버전 관리",
+          "confidence": "medium",
+          "chunk_id": "maththera-concept-tag/chunk-0004"
+        },
+        {
+          "id": "TECH-012",
+          "statement": "충동적 반응: 클라이언트 경량 룰 평가기로 즉시 감지",
+          "confidence": "high",
+          "chunk_id": "maththera-matrix-usecase/chunk-0000"
+        }
+      ]
+    },
+    "pm": {
+      "claim_count": 16,
+      "claims": [
+        {
+          "id": "PM-CLM-SCOPE-001",
+          "statement": "MVP: 한자리/두자리 덧뺄셈, C-S-E 진단, 훈련 매핑",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        },
+        {
+          "id": "PM-CLM-SCOPE-002",
+          "statement": "3계층 파이프라인: 13,981 -> 85 -> 30+2",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        },
+        {
+          "id": "PM-CLM-FR-001",
+          "statement": "C-S-E 인지 모델 기반 진단 엔진 필수",
+          "confidence": "high",
+          "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0000"
+        },
+        {
+          "id": "PM-CLM-FR-002",
+          "statement": "트리거 룰 엔진 Rule-based 구현",
+          "confidence": "high",
+          "chunk_id": "maththera-concept-tag/chunk-0000"
+        },
+        {
+          "id": "PM-CLM-FR-003",
+          "statement": "전략 태그 6종 + 관찰 태그 15종 분리",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        },
+        {
+          "id": "PM-CLM-FR-004",
+          "statement": "85개 오답원인 -> 30+2개 훈련모듈 매핑",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        },
+        {
+          "id": "PM-CLM-FR-005",
+          "statement": "Rule-based 70~90% + AI 보조 10~30%",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        },
+        {
+          "id": "PM-CLM-FR-006",
+          "statement": "UC1: 전략 미숙 RT 분석 감지",
+          "confidence": "high",
+          "chunk_id": "maththera-matrix-usecase/chunk-0000"
+        },
+        {
+          "id": "PM-CLM-FR-007",
+          "statement": "UC2: 자릿값 혼동 패턴 분석",
+          "confidence": "high",
+          "chunk_id": "maththera-matrix-usecase/chunk-0000"
+        },
+        {
+          "id": "PM-CLM-FR-008",
+          "statement": "UC3: 충동적 반응 RT<1초 감지",
+          "confidence": "high",
+          "chunk_id": "maththera-matrix-usecase/chunk-0000"
+        },
+        {
+          "id": "PM-CLM-FR-009",
+          "statement": "UC4: Probe 변인 통제 감별 진단",
+          "confidence": "medium",
+          "chunk_id": "maththera-matrix-usecase/chunk-0000"
+        },
+        {
+          "id": "PM-CLM-FR-010",
+          "statement": "Bottom-up Selection으로 과진단 방지",
+          "confidence": "high",
+          "chunk_id": "maththera-concept-tag/chunk-0000"
+        },
+        {
+          "id": "PM-CLM-NFR-001",
+          "statement": "보이스 톤: 반말, 3문장, 10자, 비난 금지",
+          "confidence": "high",
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000"
+        },
+        {
+          "id": "PM-CLM-NFR-002",
+          "statement": "난산증 아동 작업기억 고려 UI 설계",
+          "confidence": "high",
+          "chunk_id": "dyscalculia-cse-cognitive-model/chunk-0000"
+        },
+        {
+          "id": "PM-CLM-NFR-003",
+          "statement": "4DB 참조 무결성 자동 검증",
+          "confidence": "high",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        },
+        {
+          "id": "PM-CLM-MS-001",
+          "statement": "MVP Phase 1: 핵심 훈련 모듈 10개 우선 구현",
+          "confidence": "medium",
+          "chunk_id": "maththera-master-matrix/chunk-0000"
+        }
+      ]
+    },
+    "synth": {
+      "claim_count": 2,
+      "claims": [
+        {
+          "id": "SYNTH-NEW-001",
+          "statement": "W/C 이중 태그 시스템: 6개 Working Memory 가중치(W1~W6), W_총점, W 레벨 1~23, 15개 교과과정(C) 단원으로 모든 문제를 정밀 분류",
+          "confidence": "high",
+          "chunk_id": "wc-problem-bank/chunk-0000",
+          "source": "W/C 이중 태그 문제 뱅크 (Solution_Epic_Plan)",
+          "is_new_in_v3": true
+        },
+        {
+          "id": "SYNTH-NEW-002",
+          "statement": "적응형 오답 교정 알고리즘: 수감각 진단 질문 기반 경로 A(W 하향/작업기억 최적화)와 경로 B(C 하향/개념적 후퇴) 결정, 훈련 루프(심각한 오답->논리적 오답->정답+느림->정답+빠름), Downscaling/Upscaling 방법",
+          "confidence": "high",
+          "chunk_id": "adaptive-algorithm/chunk-0000",
+          "source": "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)",
+          "is_new_in_v3": true
+        }
+      ]
+    }
+  },
+  "evidence_sources": [
+    {
+      "source_id": "dyscalculia-cse-cognitive-model",
+      "chunks": ["chunk-0000", "chunk-0001", "chunk-0002", "chunk-0003", "chunk-0004", "chunk-0005", "chunk-0006"],
+      "type": "theory_model",
+      "cited_by": ["biz", "marketing", "research", "tech", "pm"]
+    },
+    {
+      "source_id": "maththera-master-matrix",
+      "chunks": ["chunk-0000", "chunk-0001", "chunk-0002", "chunk-0003"],
+      "type": "system_architecture",
+      "cited_by": ["biz", "marketing", "research", "tech", "pm"]
+    },
+    {
+      "source_id": "maththera-concept-tag",
+      "chunks": ["chunk-0000", "chunk-0001", "chunk-0002", "chunk-0003", "chunk-0004", "chunk-0005", "chunk-0006", "chunk-0007"],
+      "type": "system_design",
+      "cited_by": ["biz", "marketing", "research", "tech", "pm"]
+    },
+    {
+      "source_id": "maththera-matrix-usecase",
+      "chunks": ["chunk-0000"],
+      "type": "validation_scenario",
+      "cited_by": ["biz", "marketing", "research", "tech", "pm"]
+    },
+    {
+      "source_id": "maththera-level-tag",
+      "chunks": ["T1-level-tag/chunk-0000"],
+      "type": "dataset",
+      "cited_by": ["research", "pm"]
+    },
+    {
+      "source_id": "prd-template-voice-tone-guide",
+      "chunks": ["chunk-0000"],
+      "type": "ux_guide",
+      "cited_by": ["biz", "marketing", "research", "tech", "pm"]
+    },
+    {
+      "source_id": "adaptive-algorithm",
+      "chunks": ["chunk-0000"],
+      "type": "algorithm",
+      "cited_by": ["synth"],
+      "is_new_in_v3": true
+    },
+    {
+      "source_id": "wc-problem-bank",
+      "chunks": ["chunk-0000"],
+      "type": "dataset",
+      "cited_by": ["synth"],
+      "is_new_in_v3": true
+    }
+  ]
+}
