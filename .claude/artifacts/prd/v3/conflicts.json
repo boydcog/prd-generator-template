@@ -1,0 +1,75 @@
+{
+  "version": 3,
+  "total_conflicts": 6,
+  "conflicts": [
+    {
+      "id": "CONF-001",
+      "topic": "가격 전략 (B2C)",
+      "agents_involved": ["biz", "marketing"],
+      "description": "B2C 프리미엄 구독 가격이 에이전트 간 차이가 있다.",
+      "biz_position": "월 29,900원 / 연 249,000원 (단일 프리미엄 플랜)",
+      "marketing_position": "베이직 월 19,900원 + 프리미엄 월 39,900원 (2-tier)",
+      "resolution": "마케팅의 2-tier 구조를 채택하되, biz의 연간 할인 모델도 프리미엄에 적용. 최종: 베이직 월 19,900원 / 프리미엄 월 39,900원 (연간 결제 시 할인). 근거: 2-tier가 무료->유료 전환 단계에서 진입 장벽을 낮추고, 프리미엄은 상세 진단 리포트 + 전문가 상담 연결로 차별화.",
+      "severity": "low",
+      "resolved": true
+    },
+    {
+      "id": "CONF-002",
+      "topic": "무료 체험 기간",
+      "agents_involved": ["biz", "marketing"],
+      "description": "무료 체험 기간이 에이전트 간 차이가 있다.",
+      "biz_position": "14일 무료 체험",
+      "marketing_position": "7일 무료 체험",
+      "resolution": "7일을 채택. 근거: 난산증 진단 + 초기 훈련 체험은 7일이면 충분하며, 14일은 무료 사용 후 이탈 리스크가 높다. 단, 파일럿 데이터로 최적 기간을 A/B 테스트할 예정.",
+      "severity": "low",
+      "resolved": true
+    },
+    {
+      "id": "CONF-003",
+      "topic": "Probe 문제 MVP 포함 여부",
+      "agents_involved": ["pm", "research", "tech"],
+      "description": "변인 통제 Probe 문제(UC4)를 MVP에 포함할지 의견이 갈린다.",
+      "pm_position": "MVP 제외 (Phase 2로 이관). 유스케이스 4의 Probe 자동 생성은 임상 유효성 미검증.",
+      "research_position": "Probe 기반 진단 신뢰도가 높으므로 MVP에서 제한적으로라도 포함 권장.",
+      "tech_position": "FSM으로 구현 가능하나, Probe 출제 빈도의 UX 영향이 미검증.",
+      "resolution": "PM의 결정을 존중하되 부분 타협. MVP에서는 수동 트리거 Probe만 포함(치료사/교사가 명시적으로 요청 시). 자동 Probe 생성은 Phase 2로 이관. 근거: 임상 유효성 + UX 영향 모두 파일럿에서 검증 후 자동화.",
+      "severity": "medium",
+      "resolved": true
+    },
+    {
+      "id": "CONF-004",
+      "topic": "성능 목표값 (문제 출제 응답 시간)",
+      "agents_involved": ["tech", "pm"],
+      "description": "문제 출제 응답 시간 목표가 다르다.",
+      "tech_position": "< 200ms (p95). 아동 집중력 유지를 위해 엄격한 기준.",
+      "pm_position": "< 500ms. MVP에서 현실적인 기준.",
+      "resolution": "tech의 200ms를 채택. 근거: W/C 이중 태그 기반 복합 인덱스 쿼리는 50ms 이내로 충분히 가능하며(PostgreSQL), 200ms는 진단 로직 포함 기준으로도 달성 가능. 아동 집중력 유지가 핵심.",
+      "severity": "low",
+      "resolved": true
+    },
+    {
+      "id": "CONF-005",
+      "topic": "난이도 체계: 기존 L/C 2축 vs 새로운 W/C 이중 태그",
+      "agents_involved": ["research", "tech", "synth"],
+      "description": "기존 에이전트들이 참조한 L-level(L0~L5) + C-level(C1~C5) 2축 체계와, 새로운 W/C 이중 태그(W 레벨 1~23, C 레벨 1~15)의 관계 정립이 필요하다.",
+      "research_position": "기존 L/C 체계가 마스터 매트릭스에 명시되어 있으며, W1~W6 가중치도 레벨 태그에서 확인됨.",
+      "tech_position": "적응형 출제기에서 어떤 축을 1차 필터로 사용할지 결정 필요.",
+      "synth_position": "W/C 이중 태그가 더 정밀한 체계이며, 기존 L-level은 W 레벨의 구간화(coarser granularity)로 볼 수 있다. 두 체계는 상호 보완적.",
+      "resolution": "두 체계를 병행 운영. W/C 이중 태그(W 레벨 1~23, C 단원 1~15)가 적응형 알고리즘의 1차 기준이 되고, 기존 L-level(L0~L5)은 아동 프로필의 거시적 역량 레벨로 사용. C-level(C1~C5)은 문항 복잡도의 거시 지표로 유지. 근거: W/C가 세밀한 적응형 교정에 적합하고, L-level은 대시보드 리포팅 및 전문가 소통에 적합.",
+      "severity": "medium",
+      "resolved": true
+    },
+    {
+      "id": "CONF-006",
+      "topic": "초기 GTM 채널 우선순위 (B2B vs B2C)",
+      "agents_involved": ["biz", "marketing"],
+      "description": "초기 GTM 채널의 우선순위에 대해 두 에이전트가 명확한 합의에 이르지 못했다.",
+      "biz_position": "B2B vs B2C 우선순위를 미해결 질문(OQ-004)으로 남김. CAC/LTV 비교 필요.",
+      "marketing_position": "B2C(학부모)를 P0으로, B2B(전문가/기관)를 동시 P0으로 설정. 맘카페/인스타 마케팅과 전문가 직접 영업을 병행.",
+      "resolution": "미해결 질문으로 유지. 마케팅의 병행 전략을 기본으로 하되, 파일럿 데이터에서 채널별 전환율/CAC를 측정한 후 Phase 2에서 집중 채널을 결정. 근거: 초기에는 양쪽 모두 테스트하여 데이터 기반 의사결정이 바람직.",
+      "severity": "medium",
+      "resolved": false,
+      "deferred_to": "OQ-004 (Phase 1 파일럿 후 결정)"
+    }
+  ]
+}

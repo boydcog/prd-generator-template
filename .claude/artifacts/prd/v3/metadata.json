@@ -1,0 +1,87 @@
+{
+  "version": 3,
+  "document_type": "prd",
+  "project": "Maththera",
+  "generated_by": "agent-team",
+  "team": "research-v3",
+  "agents": ["biz", "marketing", "research", "tech", "pm", "synth"],
+  "created_at": "2026-02-13T09:00:00+09:00",
+  "additional_sources": [
+    "W/C 이중 태그 문제 뱅크 (Solution_Epic_Plan)",
+    "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)"
+  ],
+  "statistics": {
+    "total_claims": 72,
+    "claims_by_agent": {
+      "biz": 15,
+      "marketing": 15,
+      "research": 12,
+      "tech": 12,
+      "pm": 16,
+      "synth": 2
+    },
+    "high_confidence_claims": 54,
+    "medium_confidence_claims": 18,
+    "total_evidence_sources": 9,
+    "new_sources_in_v3": 2,
+    "total_conflicts": 6,
+    "resolved_conflicts": 5,
+    "unresolved_conflicts": 1,
+    "total_open_questions": 20,
+    "high_priority_open_questions": 8,
+    "total_risks": 12,
+    "high_severity_risks": 8,
+    "prd_sections": 12,
+    "prd_word_count_approx": 7500
+  },
+  "output_files": [
+    {
+      "path": ".claude/artifacts/prd/v3/PRD.md",
+      "type": "main_document",
+      "description": "최종 통합 PRD 문서 (한국어)"
+    },
+    {
+      "path": ".claude/artifacts/prd/v3/citations.json",
+      "type": "citations",
+      "description": "전체 에이전트 Citations 통합"
+    },
+    {
+      "path": ".claude/artifacts/prd/v3/conflicts.json",
+      "type": "conflicts",
+      "description": "에이전트 간 충돌 및 해결 내역"
+    },
+    {
+      "path": ".claude/artifacts/prd/v3/metadata.json",
+      "type": "metadata",
+      "description": "버전 메타데이터"
+    }
+  ],
+  "agent_inputs": {
+    "biz": ".claude/artifacts/agents/biz.json",
+    "marketing": ".claude/artifacts/agents/marketing.json",
+    "research": ".claude/artifacts/agents/research.json",
+    "tech": ".claude/artifacts/agents/tech.json",
+    "pm": ".claude/artifacts/agents/pm.json"
+  },
+  "evidence_chunks_directories": [
+    ".claude/knowledge/evidence/chunks/dyscalculia-cse-cognitive-model/",
+    ".claude/knowledge/evidence/chunks/maththera-master-matrix/",
+    ".claude/knowledge/evidence/chunks/maththera-concept-tag/",
+    ".claude/knowledge/evidence/chunks/maththera-matrix-usecase/",
+    ".claude/knowledge/evidence/chunks/maththera-level-tag/",
+    ".claude/knowledge/evidence/chunks/prd-template-voice-tone-guide/",
+    ".claude/knowledge/evidence/chunks/prd-template-example/",
+    ".claude/knowledge/evidence/chunks/adaptive-algorithm/",
+    ".claude/knowledge/evidence/chunks/wc-problem-bank/"
+  ],
+  "key_improvements_over_v2": [
+    "W/C 이중 태그 시스템 통합 (6개 W 가중치, W 레벨 1~23, 15개 C 단원)",
+    "적응형 오답 교정 알고리즘 (경로 A: W 하향, 경로 B: C 하향)",
+    "수감각 진단 질문 기반 경로 결정 로직",
+    "훈련 루프 설계 (심각한 오답 -> 논리적 오답 -> 정답+느림 -> 정답+빠름)",
+    "Downscaling/Upscaling 방법론 구체화",
+    "기존 L/C 2축과 W/C 이중 태그의 관계 정립",
+    "6개 에이전트의 다관점 통합 (biz, marketing, research, tech, pm, synth)",
+    "에이전트 간 충돌 6건 식별 및 5건 해결"
+  ]
+}

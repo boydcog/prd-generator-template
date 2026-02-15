@@ -1,0 +1,30 @@
+{
+  "agents_used": [
+    "biz",
+    "marketing",
+    "pedagogy",
+    "pm",
+    "research",
+    "tech"
+  ],
+  "conflicts_count": 6,
+  "created_at": "2026-02-13T16:30:00+09:00",
+  "document_type": "prd",
+  "open_questions_count": 21,
+  "project_name": "Maththera",
+  "risks_count": 12,
+  "source_count": 10,
+  "sources": [
+    "Maththera AI 피드백 톤 가이드",
+    "Maththera Concept Tag",
+    "W/C 이중 태그 문제 뱅크 (Solution_Epic_Plan)",
+    "dyscalculia-cse-cognitive-model",
+    "maththera-matrix-usecase",
+    "prd-template-example",
+    "prd-template-voice-tone-guide",
+    "난산증/CSE 인지 모델",
+    "데이터 기반 오답 교정 알고리즘 (Adaptive Logic)",
+    "훈련로직-Path-Tag (W*C 이중태그 15,053문제)"
+  ],
+  "version": 4
+}

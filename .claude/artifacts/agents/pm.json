@@ -1,0 +1,303 @@
+{
+  "claims": [
+    {
+      "citations": [
+        {
+          "chunk_id": "prd-template-example/chunk-0000",
+          "line_end": 95,
+          "line_start": 62,
+          "quote_sha256": "dfc3d8c0708855d226d71c4a2e2b88c189570151f38c93219495b3db1952f4ef",
+          "source_name": "prd-template-example"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-001",
+      "statement": "Maththera의 핵심 문제는 난산증 아동이 지능과 교육 기회가 충분함에도 수적 정보 처리에 발달적 결함을 보인다는 점이다. 기존 교육은 정오답만 판별하며, '왜 틀렸는지'를 인지적으로 설명하지 못한다. 가설: Master Matrix의 문제 정의-오답 진단-훈련 처방 체계를 통해 오답 원인을 자동 분류하고 적응형 훈련을 제공하면, 난산증 아동의 수감각을 개선할 수 있다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "prd-template-example/chunk-0000",
+          "line_end": 136,
+          "line_start": 98,
+          "quote_sha256": "de03ecba8ec810b5999c99fcafdeccbc6249185e01d3a4eba22060a5d25b3466",
+          "source_name": "prd-template-example"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-002",
+      "statement": "스코프 정의 - In-Scope: (1) Master Matrix 기반 문제 정의 로직 (L-level, C-level, 전략 태그 자동 설정), (2) 오답 원인 진단 (관찰 기록 + 오답 원인 태그 자동 분류), (3) 훈련 매핑 (오답 원인에 따른 훈련 ID 자동 매핑), (4) AI 피드백 시스템 (톤 가이드 준수), (5) 반응 시간(RT) 기반 유창성 판별. Out-of-Scope: 곱셈/나눗셈 연산, DTx 인허가, 다국어 지원, 보호자 대시보드 고급 기능."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "maththera-matrix-usecase/chunk-0000",
+          "line_end": 27,
+          "line_start": 15,
+          "quote_sha256": "26c1eebef38327f75dec33b62e3e0670c2aedd52d6cc00e97cba123db465f959",
+          "source_name": "maththera-matrix-usecase"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-003",
+      "statement": "FR-001 Master Matrix 오답 진단 파이프라인: 사용자가 문제를 풀면 -> Matrix가 문제 정의 로직을 통해 문제 태그(L-level, C-level, 전략 태그)를 설정하고 -> 관찰 기록(RT, 행동 태그)을 분석하고 -> 오답 원인 태그를 결정하고 -> 훈련 ID를 매핑하고 -> 훈련 모듈을 적용하는 5단계 파이프라인을 구현한다. Cogassist Agent가 기획자가 명시하지 않은 복합적인 오답 패턴에 대해서도 매트릭스 체계에 따라 자율적으로 정확한 매핑을 수행해야 한다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "maththera-matrix-usecase/chunk-0000",
+          "line_end": 48,
+          "line_start": 29,
+          "quote_sha256": "b11bbc10a70b5b7206ad059d4f73334396e5febccd43d423e156faf8ad7cbde8",
+          "source_name": "maththera-matrix-usecase"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-004",
+      "statement": "FR-002 전략 불일치 진단 (유스케이스 1): 정답이더라도 RT가 느리면(예: 12초) 전략 미숙으로 진단한다. 예: 8+6 문제에서 STR_MAKE10 전략이 요구되나 아동이 OBS_OVERRELIANCE_COUNTING(하나씩 세기)을 보이면, MAKE10_STRATEGY_UNAVAILABLE_COUNTING_FALLBACK으로 태깅하고 T12(10짝찾기) -> T17(10만들어더하기)로 훈련을 매핑한다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "maththera-matrix-usecase/chunk-0000",
+          "line_end": 77,
+          "line_start": 53,
+          "quote_sha256": "fce5b0e8501b2015d430dbde83aa33f2e8a39fcf09edc15aaa8d5a195946ec25",
+          "source_name": "maththera-matrix-usecase"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-005",
+      "statement": "FR-003 공간 인지 결손 진단 (유스케이스 2): 오답 값이 특정 자릿수만 계산한 결과와 일치하면 SPATIAL 영역의 인지 문제로 판단한다. 예: 23+4에서 오답 6이 나오면(일의 자리 4를 십의 자리 2에 더한 결과), SPATIAL_L4_PLACE_VALUE로 태깅하고 T26(자릿값이해) 훈련을 매핑한다. 산술적 실수가 아닌 공간처리 영역의 인지 문제로 분류하는 것이 핵심이다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "maththera-matrix-usecase/chunk-0000",
+          "line_end": 105,
+          "line_start": 84,
+          "quote_sha256": "561a30f18a0122a6306fae5cd6ecd91ab9c778c2c6ba57d8dc16588fab40fb10",
+          "source_name": "maththera-matrix-usecase"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-006",
+      "statement": "FR-004 주의력/충동성 진단 (유스케이스 3): L < C(아동 레벨 < 문제 복잡도) 상황에서 극도로 빠른 RT(예: 0.8초)와 무작위 응답이 관찰되면, 수학적 지식이 아닌 ATTENTION(주의력) 도메인의 개입을 우선 설정한다. ATTENTION_L0_IMPULSE로 태깅하고 T30(주의력환기) 또는 T19(단계별힌트표시)를 매핑한다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "maththera-matrix-usecase/chunk-0000",
+          "line_end": 139,
+          "line_start": 112,
+          "quote_sha256": "b02149316678874fb8553679e3dd78c56b6d50f659c1a1c744017493bd8a36d3",
+          "source_name": "maththera-matrix-usecase"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-007",
+      "statement": "FR-005 변인 통제 Probe 시스템 (유스케이스 4): 오답 원인이 2가지 이상으로 추정될 때(예: 공간 지각 vs 절차 수행), 변인을 통제한 확인용 문제(Probe)를 즉시 출제하여 원인을 확정한다. 예: 28+15에서 오답 33이 나오면 정답과 -10 차이를 포착하고, 받아올림 변인을 제거한 20+15를 출제하여 Case A(공간 결손: T26)와 Case B(절차 누락: T27)를 분기한다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+          "line_end": 33,
+          "line_start": 22,
+          "quote_sha256": "fb492ab4649e94244b486554c5aa63e4fb4aa0867b63b51e9940a697a896bd46",
+          "source_name": "prd-template-voice-tone-guide"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-008",
+      "statement": "FR-006 AI 피드백 시스템 기본 규칙: 전체 3문장 이내, 문장당 10자 이내(수식/힌트 필요 시 최대 15자), 초저학년 기준 쉬운 단어만 사용, 비난/단정 금지('틀렸어', '아니야', '왜 몰라' 등), 항상 다음 한 걸음 제시, 힌트는 1개만. 이 규칙은 모든 AI 피드백에 예외 없이 적용된다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+          "line_end": 61,
+          "line_start": 36,
+          "quote_sha256": "9a0291049318d94fb5df1edf8d80828882eddf5994bfbae31d3694127c417b14",
+          "source_name": "prd-template-voice-tone-guide"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-009",
+      "statement": "FR-007 상황별 피드백 템플릿: (A) 정답 -> 칭찬 1 + 확인 1, (B) 오답 -> 공감 1 + 힌트 1 + 재도전 1, (C) 과정 실수(계산/부호/자릿수) -> 칭찬 1 + 실수 포인트 힌트 1 + 재시도 1, (D) '모르겠어'/무응답 -> 안심 1 + 아주 작은 단계 1 + 선택지 1. 4가지 상황 분류가 오답 진단 파이프라인의 결과와 연동된다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+          "line_end": 79,
+          "line_start": 72,
+          "quote_sha256": "a429e4e15a95f56a23d2748890d1c5a08f6f42d0ec3cd8a029ef2aa92bd67c36",
+          "source_name": "prd-template-voice-tone-guide"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-010",
+      "statement": "NFR-001 피드백 금지 목록: 금지 표현('틀렸어', '아니야', '왜 못해', '정신 차려', '빨리', '당연히', 비꼼/평가 표현)과 금지 방식(3문장 초과 설명, 한 문장에 힌트 2개 이상, 비교/압박/벌점 느낌)을 구현한다. 모든 AI 생성 피드백에 후처리 검증 레이어를 적용하여 금지 목록 위반을 자동 차단해야 한다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+          "line_end": 17,
+          "line_start": 14,
+          "quote_sha256": "ef7e5a58ca115b059012d182fb87d416a9e6baa770e78b676eba76eb8eab59e6",
+          "source_name": "prd-template-voice-tone-guide"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-011",
+      "statement": "NFR-002 피드백 페르소나: '따뜻하고 격려하는 친구 같은 튜터' 페르소나를 일관되게 유지한다. 반말 사용(존댓말 금지), 혼내지 않기, 재촉하지 않기, 비교하지 않기의 4대 원칙을 준수한다. 이 페르소나는 난산증 아동이 '틀려도 괜찮다'는 느낌으로 다시 시도하게 만드는 것을 목표로 한다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "prd-template-example/chunk-0000",
+          "line_end": 285,
+          "line_start": 246,
+          "quote_sha256": "44741e0d43b2f1fcb0f115cbdf744d5fe10ca9648482fee7f42390f9231797e7",
+          "source_name": "prd-template-example"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-012",
+      "statement": "마일스톤 체계: 14주 MVP Phase 1을 3개 하위 Phase로 구성한다. Phase 1(W1~W4): Master Matrix 데이터 구축 + 오답 진단 코어, Phase 2(W5~W8): 훈련 모듈 + AI 피드백, Phase 3(W9~W14): 통합 + 파일럿 검증 + 출시 준비."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "prd-template-example/chunk-0000",
+          "line_end": 218,
+          "line_start": 201,
+          "quote_sha256": "044e4ec9b154f33b3605b71fcadb9cb8aff210eb8ae979665bfd95f6cc93bcc8",
+          "source_name": "prd-template-example"
+        }
+      ],
+      "confidence": "high",
+      "id": "CLM-013",
+      "statement": "성공 지표 정의: (1) Primary - 오답 진단 정확도(오답 원인 태그와 실제 인지 결함의 일치율), 훈련 후 정답률 향상(동일 유형 문제 재출제 시), (2) Secondary - RT 자동화 진행도(5초 기준 이하 비율 추이), 세션 완료율, 사용자 재방문율."
+    }
+  ],
+  "inputs": {
+    "chunks_used": [
+      "prd-template-example/chunk-0000",
+      "maththera-matrix-usecase/chunk-0000",
+      "prd-template-voice-tone-guide/chunk-0000"
+    ],
+    "evidence_index": ".claude/knowledge/evidence/index/sources.jsonl"
+  },
+  "open_questions": [
+    {
+      "citations": [],
+      "id": "Q-001",
+      "priority": "high",
+      "question": "Probe 주기/정확도 기준: 유스케이스 4처럼 변인 통제 Probe를 출제하는 조건이 '오답 원인이 2가지 이상 추정될 때'로만 정의되어 있다. Probe 출제 빈도 제한, 아동에게 허용되는 연속 Probe 수, Probe 정확도 판정 기준이 구체적으로 정의되지 않았다."
+    },
+    {
+      "citations": [],
+      "id": "Q-002",
+      "priority": "high",
+      "question": "세션 길이 및 문제 수 제한: 유스케이스 3에서 주의력 분산이 관찰되는 상황(L < C)을 고려하면, 1회 세션당 최대 문제 수와 권장 세션 시간(분)이 핵심 설계 파라미터이다. 난산증 아동의 인지 피로를 감안한 세션 한도가 정의되지 않았다."
+    },
+    {
+      "citations": [],
+      "id": "Q-003",
+      "priority": "high",
+      "question": "훈련 모듈 상세 사양: 유스케이스에서 훈련 ID(T12, T17, T19, T26, T27, T30)가 언급되지만, 각 훈련 모듈의 구체적 인터랙션 설계(화면 구성, 단계, 완료 조건)가 정의되지 않았다."
+    },
+    {
+      "citations": [],
+      "id": "Q-004",
+      "priority": "medium",
+      "question": "RT 기준값의 연령별 보정: 유스케이스 1에서 12초를 '느림'으로 판단하고, 유스케이스 3에서 0.8초를 '극도로 빠름'으로 판단하지만, 이 기준이 초1과 초3에 동일하게 적용 가능한지 검증 데이터가 부재하다."
+    },
+    {
+      "citations": [],
+      "id": "Q-005",
+      "priority": "medium",
+      "question": "보호자/교사 리포트 MVP 범위: 진단 결과(오답 원인 태그, 훈련 매핑 이력)를 보호자/교사에게 어떤 형태(리포트, 대시보드, 알림)로 전달할지 미정이다."
+    },
+    {
+      "citations": [],
+      "id": "Q-006",
+      "priority": "medium",
+      "question": "오답 원인 태그 체계의 완전성: 유스케이스 1~4는 전략 불일치, 공간 인지, 주의력, 원인 중복을 다루지만, 기억 인출 실패(retrieval failure)나 언어적 이해 결손 등 추가 오답 원인 카테고리의 포함 범위가 정의되지 않았다."
+    },
+    {
+      "citations": [],
+      "id": "Q-007",
+      "priority": "low",
+      "question": "다국어 확장 시 피드백 톤 가이드의 문화적 적응: 현재 한국어 반말 기반이지만, 해외 확장 시 반말/존댓말 규칙의 문화적 적응 방안이 미정이다."
+    }
+  ],
+  "project": "Maththera",
+  "risks": [
+    {
+      "citations": [
+        {
+          "chunk_id": "maththera-matrix-usecase/chunk-0000",
+          "line_end": 139,
+          "line_start": 112,
+          "quote_sha256": "b02149316678874fb8553679e3dd78c56b6d50f659c1a1c744017493bd8a36d3",
+          "source_name": "maththera-matrix-usecase"
+        }
+      ],
+      "id": "RSK-001",
+      "impact": "high",
+      "mitigation": "유스케이스 4의 Probe 패턴을 상태 머신으로 구현하고, 변인 통제 규칙(예: Complexity 제거 C3->C1)을 룰 엔진으로 정형화한다. Probe 결과에 따른 Case A/B 분기를 단위 테스트 100% 커버리지로 검증한다.",
+      "risk": "오답 원인 중복 책정 시 Probe 분기 로직이 복잡하여, 변인 통제가 불완전하면 잘못된 원인을 확정하고 부적절한 훈련을 매핑할 위험이 있다. 유스케이스 4에서 공간 결손과 절차 누락을 가르는 것이 핵심이지만, 실제로는 두 원인이 동시에 존재할 수 있다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "maththera-matrix-usecase/chunk-0000",
+          "line_end": 105,
+          "line_start": 84,
+          "quote_sha256": "561a30f18a0122a6306fae5cd6ecd91ab9c778c2c6ba57d8dc16588fab40fb10",
+          "source_name": "maththera-matrix-usecase"
+        }
+      ],
+      "id": "RSK-002",
+      "impact": "high",
+      "mitigation": "RT 기준값을 '극도로 빠름(<1초)', '빠름(1~3초)', '정상(3~5초)', '느림(5~12초)', '매우 느림(12초+)'으로 구간화하고, 파일럿(n=30) 데이터를 통해 연령별 기준값을 보정한다. Phase 1에서는 보수적 기준으로 시작한다.",
+      "risk": "주의력/충동성 진단(유스케이스 3)에서 RT 0.8초를 '충동적 반응'으로 판단하지만, 빠른 RT가 반드시 무작위 찍기를 의미하지는 않는다. 실제로 자동화가 완료된 아동도 빠르게 응답할 수 있어 오진단(false positive) 위험이 있다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "prd-template-voice-tone-guide/chunk-0000",
+          "line_end": 79,
+          "line_start": 72,
+          "quote_sha256": "a429e4e15a95f56a23d2748890d1c5a08f6f42d0ec3cd8a029ef2aa92bd67c36",
+          "source_name": "prd-template-voice-tone-guide"
+        }
+      ],
+      "id": "RSK-003",
+      "impact": "medium",
+      "mitigation": "상황별 최소 20개 피드백 템플릿을 사전 검수하고, 금지 표현 필터를 규칙 기반(정규식 + 블랙리스트)으로 구현한다. AI 생성 피드백에는 글자수, 문장수, 금지어 후처리 검증 레이어를 적용한다.",
+      "risk": "AI 피드백 톤 가이드 제약(3문장 이내, 10자 이내, 금지어 목록)이 엄격하여, 특히 오답 상황에서 힌트를 포함한 피드백이 15자 제한을 초과하거나 금지 방식(한 문장에 힌트 2개 이상)을 위반할 가능성이 있다."
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "maththera-matrix-usecase/chunk-0000",
+          "line_end": 48,
+          "line_start": 29,
+          "quote_sha256": "b11bbc10a70b5b7206ad059d4f73334396e5febccd43d423e156faf8ad7cbde8",
+          "source_name": "maththera-matrix-usecase"
+        }
+      ],
+      "id": "RSK-004",
+      "impact": "medium",
+      "mitigation": "유스케이스 1~4를 기본 학습 데이터로 사용하되, 파일럿 테스트에서 발견되는 신규 오답 패턴을 유스케이스 라이브러리에 지속 추가한다. 미분류 패턴을 위한 'UNKNOWN' 폴백 태그와 수동 리뷰 큐를 구현한다.",
+      "risk": "유스케이스 4개만으로 실제 난산증 아동의 다양한 오답 패턴을 모두 커버하지 못할 수 있다. 기획자가 명시하지 않은 복합적인 오답 패턴에 대한 Agent의 자율 매핑 정확도가 검증되지 않았다."
+    }
+  ],
+  "role": "pm",
+  "version": "2.0"
+}
