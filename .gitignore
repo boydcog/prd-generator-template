@@ -13,3 +13,8 @@
 # Node (if workspace added later)
 node_modules/
 .playwright-mcp/
+
+# Generated outputs
+.qodo/
+docs/
+*.png

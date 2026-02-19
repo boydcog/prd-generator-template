@@ -103,3 +103,17 @@ function resolveModel(role_id, wave):
 - `resolveModel`이 반환하는 값은 반드시 `opus`, `sonnet`, `haiku` 중 하나여야 합니다.
 - 유효하지 않은 모델명이 지정되면 해당 wave의 기본값으로 폴백합니다.
 - 폴백 시 "모델 '{invalid}' 는 유효하지 않습니다. 기본값 '{default}'를 사용합니다." 로그를 남깁니다.
+
+---
+
+## 구현 제약사항
+
+### Task Tool의 모델 선택 제한
+
+현재 Claude Code의 Task tool은 명시적 모델 지정 파라미터(`model=`)를 지원하지 않습니다.
+따라서 이 스펙에서 정의한 `resolveModel()` 결과는:
+
+- **프롬프트 내 권장 모델 안내**로만 활용 가능 (참고사항 수준)
+- 실제 에이전트 모델 선택은 Claude Code의 기본 동작을 따름
+
+이 스펙의 오버라이드 체계는 향후 Task tool이 모델 지정을 지원할 때 적용될 수 있도록 정의되었습니다.

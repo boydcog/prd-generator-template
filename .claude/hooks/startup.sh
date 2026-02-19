@@ -219,20 +219,27 @@ fi
 HAS_PROJECT="false"
 HAS_SOURCES="false"
 HAS_EVIDENCE="false"
-HAS_PRD="false"
+HAS_DOCUMENT="false"
 
 [ -f ".claude/state/project.json" ] && HAS_PROJECT="true"
 if [ -f ".claude/manifests/drive-sources.yaml" ]; then
   grep -q "^  - name:" ".claude/manifests/drive-sources.yaml" 2>/dev/null && HAS_SOURCES="true"
 fi
 [ -f ".claude/knowledge/evidence/index/sources.jsonl" ] && HAS_EVIDENCE="true"
-ls .claude/artifacts/prd/v*/PRD.md &>/dev/null 2>&1 && HAS_PRD="true"
+
+# 다중 문서 유형 감지 (prd, tech-spec, design-spec, marketing-brief, business-plan 등)
+for dir in .claude/artifacts/*/v*/; do
+  if [ -d "$dir" ] && ls "$dir"*.md &>/dev/null 2>&1; then
+    HAS_DOCUMENT="true"
+    break
+  fi
+done
 
 # 추천 액션 (auto-generate 중심 — 내부에서 상태별 Phase 자동 판단)
 NEXT_ACTION=""
 if [ "$HAS_PROJECT" = "false" ]; then
   NEXT_ACTION="auto-generate"
-elif [ "$HAS_PRD" = "true" ]; then
+elif [ "$HAS_DOCUMENT" = "true" ]; then
   NEXT_ACTION="sync-drive-or-update"
 else
   NEXT_ACTION="auto-generate"

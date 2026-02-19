@@ -174,7 +174,8 @@ if ($HasGit) {
     # manifests 보호
     if ($GitReady) {
         Get-ChildItem ".claude/manifests/*.yaml" -ErrorAction SilentlyContinue | ForEach-Object {
-            git update-index --skip-worktree $_.FullName 2>$null
+            $relPath = Resolve-Path -Relative $_.FullName
+            git update-index --skip-worktree $relPath 2>$null
         }
     }
 }

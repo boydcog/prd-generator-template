@@ -130,9 +130,9 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
 
 ### Step 6: 공유 드라이브 이동 (선택)
 
-업로드 완료 후 사용자에게 질문합니다:
+업로드 완료 후 사용자에게 질문합니다 (env.yml의 `organization.name` 참조):
 
-> "emocog 공유 드라이브로 이동하시겠습니까?"
+> "{org_name} 공유 드라이브로 이동하시겠습니까?"
 
 - **수락 시**:
   1. `drive-sources.yaml`의 `shared_drive_folder` 확인.

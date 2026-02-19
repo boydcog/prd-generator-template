@@ -209,10 +209,12 @@ Task(
   team_name="research-v{N}",
   name="{role}-agent",
   subagent_type="general-purpose",
-  model="{resolved_model}",  # Step 0.8에서 결정 (기본: sonnet)
-  prompt="... (에이전트 프롬프트 + 팀 통신 블록)"
+  prompt="... (에이전트 프롬프트 + 팀 통신 블록)\n\n🤖 권장 모델: sonnet (Step 0.8에서 결정)"
 )
 ```
+
+> **주의**: Task tool에서 명시적 모델 지정을 지원하지 않으므로, 프롬프트 내 "권장 모델" 안내는 참고사항입니다.
+> 실제 모델 선택은 에이전트의 기본 동작을 따릅니다.
 
 각 에이전트에게 전달할 컨텍스트:
 - `.claude/state/project.json` (프로젝트 설정)
@@ -260,10 +262,12 @@ Task(
   team_name="research-v{N}",
   name="synth-agent",
   subagent_type="general-purpose",
-  model="{resolved_model}",  # Step 0.8에서 결정 (기본: opus)
-  prompt="... (synth 프롬프트 + 팀 통신 블록)"
+  prompt="... (synth 프롬프트 + 팀 통신 블록)\n\n🤖 권장 모델: opus (Step 0.8에서 결정)"
 )
 ```
+
+> **주의**: Task tool에서 명시적 모델 지정을 지원하지 않으므로, 프롬프트 내 "권장 모델" 안내는 참고사항입니다.
+> 실제 모델 선택은 에이전트의 기본 동작을 따릅니다.
 
 - 입력: Wave 1의 에이전트 JSON + MD 결과물 전체 (동적 역할 출력 포함)
 - 역할: 통합, 충돌 해결, 최종 문서 작성
@@ -365,7 +369,15 @@ Step 0.7에서 이 역할의 keywords에 매칭된 증거만 선별하여 전달
 
 ## 완료 후: Drive 업로드 확인
 
-문서 생성이 완료되면 사용자에게 물어봅니다:
+문서 생성이 완료되면:
+
+### `/auto-generate`에서 호출된 경우
+- 업로드 프롬프트를 **스킵**합니다.
+- 컨텍스트: 프롬프트에 `called_from: auto-generate` 표시가 있음을 확인.
+- 완료 상태만 반환 → auto-generate가 다음 단계(업로드 여부) 판단.
+
+### 단독 실행된 경우 (`/run-research` 직접 호출)
+사용자에게 물어봅니다:
 
 > "{document_type_name} v{N}이 생성되었습니다. Google Drive에 업로드하시겠습니까?"
 
