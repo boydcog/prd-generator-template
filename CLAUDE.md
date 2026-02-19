@@ -109,7 +109,7 @@ SessionStart hook 출력에서 `FAIL` 표시된 의존성이 있으면 **추천 
 SessionStart hook에서 "GitHub 토큰 없음"이 감지되면 **다른 작업보다 먼저** 토큰 설정을 진행합니다:
 
 1. 사용자에게 안내합니다:
-   > "Issue/PR을 자동으로 관리하려면 GitHub 토큰이 필요합니다. Boyd에게 슬랙으로 토큰을 요청하거나, 이미 갖고 계시면 붙여넣어 주세요."
+   > "Issue/PR을 자동으로 관리하려면 GitHub 토큰이 필요합니다. {contact.name}에게 {contact.channel}으로 토큰을 요청하거나, 이미 갖고 계시면 붙여넣어 주세요." (env.yml 참조)
 2. 사용자가 토큰을 제공하면:
    - `.gh-token` 파일에 저장합니다 (이 파일은 gitignored).
    - `gh auth status`로 유효성을 확인합니다.
@@ -175,6 +175,29 @@ SessionStart hook에서 "GitHub 토큰 없음"이 감지되면 **다른 작업�
 - `.claude/manifests/admins.yaml`에 등록된 사용자만 실행 가능합니다.
 - EnterPlanMode → 승인 → 구현 → 검증 → worktree PR 생성까지 자동 실행합니다.
 - 일반 사용자의 `/auto-generate` 워크플로우와 완전히 분리됩니다.
+
+---
+
+## 환경 변수 (env.yml)
+
+프로젝트 루트의 `env.yml`에 조직/배포별 설정이 정의됩니다.
+**다른 조직에 배포할 때는 이 파일만 수정합니다.**
+
+| 키 | 설명 | 기본값 |
+|----|------|--------|
+| `github.owner` | GitHub 사용자/조직명 | `boydcog` |
+| `github.repo` | 저장소 이름 | `prd-generator-template` |
+| `github.default_reviewer` | PR 기본 리뷰어 | `boydcog` |
+| `github.default_assignee` | Issue 기본 담당자 | `boydcog` |
+| `contact.name` | 관리자 연락처 이름 | `Boyd` |
+| `contact.channel` | 연락 채널 | `슬랙` |
+
+### 사용 규칙
+
+- 모든 명령 실행 시 `env.yml`을 먼저 읽고 해당 값을 사용합니다.
+- 명령 파일(`.claude/commands/*.md`)의 `{github.owner}`, `{github.repo}`, `{default_reviewer}`, `{default_assignee}`, `{contact.name}`, `{contact.channel}` 등은 env.yml 값으로 치환합니다.
+- startup hook(`.sh`/`.ps1`)은 env.yml을 직접 파싱합니다.
+- `env.yml`이 없으면 기본값(위 표)을 사용합니다.
 
 ---
 
@@ -245,7 +268,7 @@ SessionStart hook에서 "GitHub 토큰 없음"이 감지되면 **다른 작업�
 ### GitHub 토큰
 
 - `.gh-token` 파일이 프로젝트 루트에 있으면 SessionStart hook에서 자동으로 `GH_TOKEN` 환경변수에 로드합니다.
-- 이 파일은 gitignored입니다. 슬랙으로 Boyd에게 공유받습니다.
+- 이 파일은 gitignored입니다. 관리자에게 공유받습니다 (연락처: env.yml의 `contact` 참조).
 - **토큰이 없으면 세션 시작 시 토큰 세팅 플로우를 먼저 실행합니다** (세션 시작 규칙 5번 참조).
 - 토큰 없이도 동작하지만, Issue/PR 생성은 `.claude/state/pending-issues/`에 로컬 저장됩니다.
 - 토큰이 설정되면 pending-issues를 자동으로 일괄 업로드합니다.
@@ -254,7 +277,7 @@ SessionStart hook에서 "GitHub 토큰 없음"이 감지되면 **다른 작업�
 
 `.git/` 디렉토리가 없으면 startup hook(macOS: `.sh`, Windows: `.ps1`)이 자동 처리합니다:
 1. `git init`
-2. `git remote add origin https://github.com/boydcog/prd-generator-template.git` (HTTPS 우선, 실패 시 SSH 폴백)
+2. `git remote add origin https://github.com/{github.owner}/{github.repo}.git` (env.yml 참조, HTTPS 우선, 실패 시 SSH 폴백)
 3. `git fetch origin`
 4. `git reset origin/main` — ZIP 파일은 유지하면서 HEAD를 remote에 맞춤
 5. `git checkout -b main` + upstream 설정
@@ -300,6 +323,22 @@ SessionStart hook에서 "GitHub 토큰 없음"이 감지되면 **다른 작업�
   - `{commit_short}`: `git rev-parse --short HEAD` (기준 커밋)
   - `{branch_name}`: 현재 브랜치명
   - `{change_summary}`, `{detailed_changes}`, `{reason}`, `{file_list}`: 변경 내용 기반
+
+### Label 및 Reviewer 필수 규칙
+
+모든 PR과 Issue 생성 시 반드시 다음을 설정합니다:
+
+- **PR**: `--label {적절한_라벨} --reviewer {default_reviewer}` (env.yml)
+- **Issue**: `--label {적절한_라벨} --assignee {default_assignee}` (env.yml)
+
+| PR/브랜치 유형 | label |
+|---------------|-------|
+| `project/` (share-project) | `documentation` |
+| `fix/` | `bug` |
+| `improve/` | `enhancement` |
+| `feat/` | `enhancement` |
+| `doc/` | `documentation` |
+| `issue/` | `bug` |
 
 ### PR 리뷰 피드백 반영 규칙
 
@@ -374,7 +413,7 @@ GH 토큰이 없으면 `.claude/state/pending-issues/`에 로컬 저장 후 토�
    ```
    GH_TOKEN=$(cat "${PROJECT_DIR}/.gh-token" | tr -d '[:space:]')
    git -C ../.worktrees/${SLUG} push \
-     "https://user:${GH_TOKEN}@github.com/boydcog/prd-generator-template.git" \
+     "https://user:${GH_TOKEN}@github.com/{github.owner}/{github.repo}.git" \
      "HEAD:refs/heads/{branch_name}"
    ```
 6. PR 생성 (`pr-template.md` 사용)
@@ -396,7 +435,8 @@ GH 토큰이 없으면 `.claude/state/pending-issues/`에 로컬 저장 후 토�
 .
 ├── CLAUDE.md                          ← 이 파일 (프로젝트 규칙)
 ├── CHANGELOG.md                       ← 변경 이력 (날짜별 관리)
-├── .gh-token                          ← GitHub 토큰 (gitignored, 슬랙으로 공유)
+├── env.yml                            ← 환경 설정 (조직/배포별 변수)
+├── .gh-token                          ← GitHub 토큰 (gitignored)
 ├── .user-identity                     ← 사용자 이름 (gitignored)
 ├── .gitignore
 ├── .claude/

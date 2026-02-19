@@ -52,8 +52,17 @@ fi
 # 2. git repo 확인 / 자동 설정
 #    (git이 있을 때만 실행)
 # ──────────────────────────────────────
-HTTPS_URL="https://github.com/boydcog/prd-generator-template.git"
-SSH_URL="git@github.com:boydcog/prd-generator-template.git"
+# env.yml에서 GitHub owner/repo 로드
+ENV_FILE="env.yml"
+if [ -f "$ENV_FILE" ]; then
+  GH_OWNER=$(grep -E '^[[:space:]]*owner:' "$ENV_FILE" | head -1 | sed 's/.*owner:[[:space:]]*//' | sed 's/[[:space:]]*#.*//')
+  GH_REPO=$(grep -E '^[[:space:]]*repo:' "$ENV_FILE" | head -1 | sed 's/.*repo:[[:space:]]*//' | sed 's/[[:space:]]*#.*//')
+else
+  GH_OWNER="boydcog"
+  GH_REPO="prd-generator-template"
+fi
+HTTPS_URL="https://github.com/${GH_OWNER}/${GH_REPO}.git"
+SSH_URL="git@github.com:${GH_OWNER}/${GH_REPO}.git"
 GIT_READY="false"
 
 if [ "$HAS_GIT" = "true" ]; then

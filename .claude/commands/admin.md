@@ -71,16 +71,19 @@ git worktree add -b {branch_name} "$WORKTREE_DIR" main
 cp --parents {modified_files} "$WORKTREE_DIR/"
 
 # 3. worktree 안에서 commit + push (git -C로 디렉토리 이동 없이)
+# env.yml에서 {github.owner}, {github.repo}, {default_reviewer} 로드
 git -C "$WORKTREE_DIR" add .
 git -C "$WORKTREE_DIR" commit -m "{type}: {요약}"
 GH_TOKEN=$(cat "${PROJECT_DIR}/.gh-token" | tr -d '[:space:]')
 git -C "$WORKTREE_DIR" push \
-  "https://user:${GH_TOKEN}@github.com/boydcog/prd-generator-template.git" \
+  "https://user:${GH_TOKEN}@github.com/{github.owner}/{github.repo}.git" \
   "HEAD:refs/heads/{branch_name}"
 
-# 4. PR 생성
-GH_TOKEN=$GH_TOKEN gh pr create --repo boydcog/prd-generator-template \
-  --title "{type}: {요약}" --body "..." --head "{branch_name}"
+# 4. PR 생성 (label은 브랜치 type에 따라: fix→fix, improve→enhancement, feat→feature)
+GH_TOKEN=$GH_TOKEN gh pr create --repo {github.owner}/{github.repo} \
+  --title "{type}: {요약}" --body "..." --head "{branch_name}" \
+  --label "{type_label}" \
+  --reviewer "{default_reviewer}"
 
 # 5. worktree 정리
 git worktree remove "$WORKTREE_DIR"
