@@ -417,8 +417,20 @@ GH 토큰이 없으면 `.claude/state/pending-issues/`에 로컬 저장 후 토�
      "HEAD:refs/heads/{branch_name}"
    ```
 6. PR 생성 (`pr-template.md` 사용)
-7. Worktree 정리: `git worktree remove ../.worktrees/${SLUG}`
-8. main 작업 디렉토리 복원: `git checkout -- {modified_files}` + untracked 파일 삭제
+7. Worktree 정리 + main 복원 (필수):
+   ```
+   # worktree 제거 전에 새로 추가된 파일 목록 확보
+   NEW_FILES=$(git -C ../.worktrees/${SLUG} diff --name-only --diff-filter=A main...HEAD)
+
+   # worktree 제거
+   git worktree remove ../.worktrees/${SLUG}
+
+   # 수정된 tracked 파일 복원
+   git checkout -- .
+
+   # 새로 생성된 untracked 파일 삭제 (pull 시 충돌 방지)
+   echo "$NEW_FILES" | while read -r f; do [ -f "$f" ] && rm "$f"; done
+   ```
 
 ### 안전 장치
 

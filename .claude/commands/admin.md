@@ -85,12 +85,16 @@ GH_TOKEN=$GH_TOKEN gh pr create --repo {github.owner}/{github.repo} \
   --label "{type_label}" \
   --reviewer "{default_reviewer}"
 
-# 5. worktree 정리
+# 5. worktree 제거 전에 새로 추가된 파일 목록 확보
+NEW_FILES=$(git -C "$WORKTREE_DIR" diff --name-only --diff-filter=A main...HEAD 2>/dev/null)
+
+# 6. worktree 정리
 git worktree remove "$WORKTREE_DIR"
 
-# 6. main 작업 디렉토리 복원
-git -C "$PROJECT_DIR" checkout -- {modified_files}
-# 새로 생성한 untracked 파일이 있으면 삭제
+# 7. main 작업 디렉토리 복원
+git -C "$PROJECT_DIR" checkout -- .
+# 새로 생성된 untracked 파일 삭제 (merge 후 pull 시 충돌 방지)
+echo "$NEW_FILES" | while read -r f; do [ -f "${PROJECT_DIR}/$f" ] && rm "${PROJECT_DIR}/$f"; done
 ```
 
 3. PR 본문은 `.claude/templates/pr-template.md` 템플릿을 사용합니다.
