@@ -2,7 +2,7 @@
 
 ## 2026-02-19
 
-- feat: 하드코딩된 조직/배포 변수를 `env.yml`로 추출 + label/reviewer 필수 규칙 추가 ([`840f247`](https://github.com/boydcog/prd-generator-template/commit/840f247))
+- feat: 하드코딩된 조직/배포 변수를 `env.yml`로 추출 + label/reviewer/assignee 필수 규칙 + 다중 reviewer/assignee 지원 ([`840f247`](https://github.com/boydcog/prd-generator-template/commit/840f247))
 - fix: worktree 정리 시 untracked 신규 파일 삭제(path traversal 방지 포함) + PR 절차에 CHANGELOG 단계 추가 + CHANGELOG shortlink 형식 도입 ([`605b0ac`](https://github.com/boydcog/prd-generator-template/commit/605b0ac))
 
 ## 2026-02-13

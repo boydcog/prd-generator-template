@@ -71,7 +71,7 @@ git worktree add -b {branch_name} "$WORKTREE_DIR" main
 cp --parents {modified_files} "$WORKTREE_DIR/"
 
 # 3. worktree 안에서 commit + push (git -C로 디렉토리 이동 없이)
-# env.yml에서 {github.owner}, {github.repo}, {default_reviewer} 로드
+# env.yml에서 {github.owner}, {github.repo}, {default_reviewers}, {default_assignees} 로드
 git -C "$WORKTREE_DIR" add .
 git -C "$WORKTREE_DIR" commit -m "{type}: {요약}"
 GH_TOKEN=$(cat "${PROJECT_DIR}/.gh-token" | tr -d '[:space:]')
@@ -79,11 +79,13 @@ git -C "$WORKTREE_DIR" push \
   "https://user:${GH_TOKEN}@github.com/{github.owner}/{github.repo}.git" \
   "HEAD:refs/heads/{branch_name}"
 
-# 4. PR 생성 (label은 브랜치 type에 따라: fix→fix, improve→enhancement, feat→feature)
+# 4. PR 생성 (label은 브랜치 type에 따라: fix→bug, improve→enhancement, feat→enhancement)
+# PR 작성자는 --reviewer에서 자동 제외
 GH_TOKEN=$GH_TOKEN gh pr create --repo {github.owner}/{github.repo} \
   --title "{type}: {요약}" --body "..." --head "{branch_name}" \
   --label "{type_label}" \
-  --reviewer "{default_reviewer}"
+  --reviewer "{default_reviewers}" \
+  --assignee "{default_assignees}"
 
 # 5. worktree 제거 전에 새로 추가된 파일 목록 확보
 NEW_FILES=$(git -C "$WORKTREE_DIR" diff --name-only --diff-filter=A main...HEAD 2>/dev/null)

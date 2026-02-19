@@ -63,7 +63,7 @@
 
 ### Step 5: Issue 생성
 
-**env.yml에서 변수를 로드합니다**: `github.owner`, `github.repo`, `github.default_assignee`
+**env.yml에서 변수를 로드합니다**: `github.owner`, `github.repo`, `github.default_assignees`
 
 ```bash
 GH_TOKEN=$GH_TOKEN gh issue create \
@@ -71,7 +71,7 @@ GH_TOKEN=$GH_TOKEN gh issue create \
   --title "{issue_title}" \
   --body "{issue_body}" \
   --label "{labels}" \
-  --assignee "{default_assignee}"
+  --assignee "{default_assignees}"
 ```
 
 - `{issue_title}`: 사용자 메시지에서 핵심 내용을 추출하여 50자 이내로 작성

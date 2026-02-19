@@ -91,7 +91,7 @@ git -C "$WORKTREE_DIR" commit -m "project: {project_name} — {document_type} v{
 **중요: 인증된 URL로 push한 뒤 PR을 생성합니다.**
 브라우저 인증이나 `gh auth login` 등 interactive 플로우를 사용하지 않습니다.
 
-**env.yml에서 변수를 로드합니다**: `github.owner`, `github.repo`, `github.default_reviewer`
+**env.yml에서 변수를 로드합니다**: `github.owner`, `github.repo`, `github.default_reviewers`, `github.default_assignees`
 
 ```bash
 # push URL로 직접 토큰 전달 (remote config에 토큰을 남기지 않음)
@@ -100,11 +100,12 @@ git -C "$WORKTREE_DIR" push \
   "https://user:${GH_TOKEN}@github.com/{github.owner}/{github.repo}.git" \
   "HEAD:refs/heads/project/{branch_slug}"
 
-# PR 생성
+# PR 생성 (PR 작성자는 --reviewer에서 자동 제외)
 GH_TOKEN=$GH_TOKEN gh pr create --repo {github.owner}/{github.repo} \
   --head "project/{branch_slug}" \
   --label documentation \
-  --reviewer "{default_reviewer}" \
+  --reviewer "{default_reviewers}" \
+  --assignee "{default_assignees}" \
   ...
 ```
 

@@ -187,15 +187,15 @@ SessionStart hook에서 "GitHub 토큰 없음"이 감지되면 **다른 작업�
 |----|------|--------|
 | `github.owner` | GitHub 사용자/조직명 | `boydcog` |
 | `github.repo` | 저장소 이름 | `prd-generator-template` |
-| `github.default_reviewer` | PR 기본 리뷰어 | `boydcog` |
-| `github.default_assignee` | Issue 기본 담당자 | `boydcog` |
+| `github.default_reviewers` | PR 기본 리뷰어 (쉼표 구분) | `boydcog` |
+| `github.default_assignees` | Issue/PR 기본 담당자 (쉼표 구분) | `boydcog` |
 | `contact.name` | 관리자 연락처 이름 | `Boyd` |
 | `contact.channel` | 연락 채널 | `슬랙` |
 
 ### 사용 규칙
 
 - 모든 명령 실행 시 `env.yml`을 먼저 읽고 해당 값을 사용합니다.
-- 명령 파일(`.claude/commands/*.md`)의 `{github.owner}`, `{github.repo}`, `{default_reviewer}`, `{default_assignee}`, `{contact.name}`, `{contact.channel}` 등은 env.yml 값으로 치환합니다.
+- 명령 파일(`.claude/commands/*.md`)의 `{github.owner}`, `{github.repo}`, `{default_reviewers}`, `{default_assignees}`, `{contact.name}`, `{contact.channel}` 등은 env.yml 값으로 치환합니다.
 - startup hook(`.sh`/`.ps1`)은 env.yml을 직접 파싱합니다.
 - `env.yml`이 없으면 기본값(위 표)을 사용합니다.
 
@@ -324,12 +324,14 @@ SessionStart hook에서 "GitHub 토큰 없음"이 감지되면 **다른 작업�
   - `{branch_name}`: 현재 브랜치명
   - `{change_summary}`, `{detailed_changes}`, `{reason}`, `{file_list}`: 변경 내용 기반
 
-### Label 및 Reviewer 필수 규칙
+### Label, Reviewer, Assignee 필수 규칙
 
 모든 PR과 Issue 생성 시 반드시 다음을 설정합니다:
 
-- **PR**: `--label {적절한_라벨} --reviewer {default_reviewer}` (env.yml)
-- **Issue**: `--label {적절한_라벨} --assignee {default_assignee}` (env.yml)
+- **PR**: `--label {라벨} --reviewer "{default_reviewers}" --assignee "{default_assignees}"` (env.yml)
+- **Issue**: `--label {라벨} --assignee "{default_assignees}"` (env.yml)
+- env.yml의 `default_reviewers`, `default_assignees`는 쉼표 구분 (예: `alice,bob`)
+- **PR 작성자 자동 제외**: reviewer 목록에 PR 작성자(push한 토큰의 소유자)가 포함되어 있으면 해당 사용자를 제외합니다. GitHub은 자기 자신에게 리뷰를 요청할 수 없습니다. 제외 후 reviewer가 0명이면 `--reviewer` 플래그를 생략합니다.
 
 | PR/브랜치 유형 | label |
 |---------------|-------|
