@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-02-19
+
+- feat: 하드코딩된 조직/배포 변수를 `env.yml`로 추출 + label/reviewer 필수 규칙 추가 (`840f247`)
+- fix: worktree 정리 시 untracked 신규 파일 삭제 명령 추가 + PR 생성 절차에 CHANGELOG 단계 명시 (`605b0ac`)
+
 ## 2026-02-13
 
 - fix: sync-drive Step 2 전략 기반 재작성 — Download Event / Clipboard(폴링) / gviz 계층 도입, 다중 탭 지원, 입력 검증, 감사 로그, 에러 유형별 처리 (#16)
