@@ -57,18 +57,21 @@
 2. `GH_TOKEN` 환경변수가 이미 설정되어 있으면 → Step 5로.
 3. 둘 다 없으면:
    a. 사용자에게 안내:
-      > "Issue를 GitHub에 등록하려면 토큰이 필요합니다. Boyd에게 슬랙으로 요청하거나, 이미 갖고 계시면 붙여넣어 주세요."
+      > "Issue를 GitHub에 등록하려면 토큰이 필요합니다. {contact.name}에게 {contact.channel}으로 요청하거나, 이미 갖고 계시면 붙여넣어 주세요."
    b. 사용자가 토큰을 제공하면 → `.gh-token`에 저장 → `gh auth status`로 검증 → Step 5.
    c. 사용자가 "나중에" / "스킵"을 선택하면 → "토큰 없이 로컬에 저장합니다." → Step 6(로컬 저장).
 
 ### Step 5: Issue 생성
 
+**env.yml에서 변수를 로드합니다**: `github.owner`, `github.repo`, `github.default_assignee`
+
 ```bash
 GH_TOKEN=$GH_TOKEN gh issue create \
-  --repo boydcog/prd-generator-template \
+  --repo {github.owner}/{github.repo} \
   --title "{issue_title}" \
   --body "{issue_body}" \
-  --label "{labels}"
+  --label "{labels}" \
+  --assignee {default_assignee}
 ```
 
 - `{issue_title}`: 사용자 메시지에서 핵심 내용을 추출하여 50자 이내로 작성
