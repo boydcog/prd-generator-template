@@ -245,7 +245,7 @@ SessionStart hook에서 "GitHub 토큰 없음"이 감지되면 **다른 작업�
 
 1. **팀 생성**: `TeamCreate`로 `research-v{N}` 팀 생성
 2. **태스크 정의**: `TaskCreate`로 Wave 1 + Wave 2 태스크 생성, `blockedBy` 설정
-3. **Wave 1**: 팀원 병렬 생성 (model: "opus"), `SendMessage`로 실시간 진행 보고
+3. **Wave 1**: 팀원 병렬 생성 (model-selection-spec.md 기준, 기본: sonnet), `SendMessage`로 실시간 진행 보고
 4. **Wave 2**: Wave 1 완료 후 synth 팀원 생성
 5. **팀 정리**: 완료 후 `shutdown_request` → `TeamDelete`
 6. 각 에이전트에게 `.claude/spec/agent-team-spec.md`의 역할과 JSON 계약을 전달합니다.
@@ -488,6 +488,7 @@ GH 토큰이 없으면 `.claude/state/pending-issues/`에 로컬 저장 후 토�
 │   │   ├── agent-team-spec.md
 │   │   ├── citation-spec.md
 │   │   ├── evidence-spec.md
+│   │   ├── model-selection-spec.md    ← 에이전트 모델 선택 기준
 │   │   └── document-types.yaml        ← 문서 유형 레지스트리
 │   ├── state/                         ← 상태 (generated, gitignored)
 │   ├── knowledge/                     ← 증거 (generated, gitignored)
@@ -538,6 +539,7 @@ README.md는 프로젝트의 context 문서이다. 다음 파일이 변경될 �
 - `.claude/spec/agent-team-spec.md` — 에이전트 팀 정의
 - `.claude/spec/citation-spec.md` — 인용 규칙
 - `.claude/spec/evidence-spec.md` — 증거 정규화 규칙
+- `.claude/spec/model-selection-spec.md` — 에이전트 모델 선택 기준
 - `.claude/spec/document-types.yaml` — 문서 유형 레지스트리
 - `.claude/manifests/project-defaults.yaml` — 기본 설정값
 - `.claude/templates/pr-template.md` — PR 본문 템플릿

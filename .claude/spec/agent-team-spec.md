@@ -35,6 +35,16 @@ synth 에이전트가 Wave 1의 결과를 읽고 최종 문서를 생성합니�
 
 ---
 
+## 모델 선택
+
+각 에이전트에 할당되는 모델은 `.claude/spec/model-selection-spec.md`를 따릅니다.
+
+- **Wave 1 기본**: `sonnet` (단일 도메인 구조화 분석)
+- **Wave 2 기본**: `opus` (다중 소스 통합, 충돌 해결, 최종 문서 작성)
+- 프로젝트별/문서 유형별 오버라이드 가능 (`project.json` > `document-types.yaml` > 기본값)
+
+---
+
 ## 팀 통신 규칙 (TeamCreate 모드)
 
 ### 팀원 공통 절차
