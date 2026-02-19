@@ -70,6 +70,8 @@ Google Drive 문서를 기반으로 6역할 에이전트 팀이 PRD, 디자인 �
 | 기술 사양서 (tech-spec) | - | - | O | O | O | O |
 | 사용자 정의 (custom) | 선택 | 선택 | 선택 | 선택 | 선택 | O |
 
+> **모델 선택**: Wave 1 에이전트는 `sonnet`, synth(Wave 2)는 `opus`가 기본값입니다. 문서 유형별/프로젝트별 오버라이드가 가능합니다. 상세: `.claude/spec/model-selection-spec.md`
+
 ---
 
 ## 빠른 시작

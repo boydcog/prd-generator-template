@@ -41,7 +41,7 @@
 
 1. `/run-research` 실행.
    - TeamCreate로 리서치 팀 구성.
-   - Wave 1: 팀원 병렬 실행 (Opus 모델, 실시간 진행 보고).
+   - Wave 1: 팀원 병렬 실행 (model-selection-spec.md 기준, 기본: sonnet).
    - Wave 2: synth 팀원 실행.
    - 완료 후 팀 자동 정리.
 2. 완료 확인:
