@@ -77,7 +77,7 @@ PR 생성 전에 `CHANGELOG.md`에 프로젝트 공유 항목을 추가/갱신�
   - 새 항목 → 새 bullet 추가.
   - 기존 항목과 내용이 겹치면 → 이전 bullet 삭제 후 갱신된 내용으로 교체.
 - 없으면 `# Changelog` 바로 아래에 새 날짜 헤더 + bullet 생성.
-- 항목 형식: `- 프로젝트 공유: {project_name} — {document_type} v{version} (\`{commit_short}\`)`
+- 항목 형식: ``- 프로젝트 공유: {project_name} — {document_type} v{version} ([`{commit_short}`](https://github.com/{github.owner}/{github.repo}/commit/{commit_short}))``
 - 이 항목은 `project/` 브랜치에만 포함됩니다 (main에 머지하지 않으므로 main의 Changelog에는 영향 없음).
 
 ### Step 6: 커밋
@@ -153,19 +153,11 @@ PR 생성 성공/실패와 관계없이 **반드시** worktree를 정리합니�
 
 ```bash
 # PROJECT_DIR은 Step 4에서 설정됨
-WORKTREE_PATH="${PROJECT_DIR}/../.worktrees/${SLUG}"
-
-# worktree 제거 전에 새로 추가된 파일 목록 확보
-NEW_FILES=$(git -C "$WORKTREE_PATH" diff --name-only --diff-filter=A main...HEAD 2>/dev/null)
-
 # worktree 제거
-git worktree remove "$WORKTREE_PATH" 2>/dev/null || git worktree remove --force "$WORKTREE_PATH" 2>/dev/null || true
+git worktree remove "${PROJECT_DIR}/../.worktrees/${SLUG}" 2>/dev/null || git worktree remove --force "${PROJECT_DIR}/../.worktrees/${SLUG}" 2>/dev/null || true
 
-# main 작업 디렉토리 복원 (수정된 tracked 파일 되돌리기)
+# main 작업 디렉토리 복원 (수정된 tracked 파일 되돌리기 + 새로 생성한 untracked 파일 삭제)
 git -C "$PROJECT_DIR" checkout -- .
-
-# 새로 생성된 untracked 파일 삭제 (merge 후 pull 시 충돌 방지)
-echo "$NEW_FILES" | while read -r f; do [ -f "${PROJECT_DIR}/$f" ] && rm "${PROJECT_DIR}/$f"; done
 ```
 
 에러 발생 시에도 이 단계는 반드시 실행합니다.

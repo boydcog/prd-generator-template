@@ -408,21 +408,17 @@ GH 토큰이 없으면 `.claude/state/pending-issues/`에 로컬 저장 후 토�
    - 이슈: `issue/{이슈번호}-{요약}`
    - 프로젝트: `project/{slug}`
 3. 변경된 파일을 worktree로 복사
-4. **CHANGELOG.md 업데이트** (worktree 안에서, 커밋 전 필수):
-   - Changelog 업데이트 규칙(아래 "Changelog 업데이트 규칙" 섹션) 참조
-   - 형식: `- {변경 요약} (\`{commit_short}\`)`
-   - 이 단계를 건너뛰지 않는다. PR에는 반드시 CHANGELOG 항목이 포함되어야 한다.
-5. worktree 안에서 `git add` + `git commit`
-6. push URL로 직접 토큰 전달 (remote config에 토큰을 남기지 않음):
+4. worktree 안에서 `git add` + `git commit`
+5. push URL로 직접 토큰 전달 (remote config에 토큰을 남기지 않음):
    ```
    GH_TOKEN=$(cat "${PROJECT_DIR}/.gh-token" | tr -d '[:space:]')
    git -C ../.worktrees/${SLUG} push \
      "https://user:${GH_TOKEN}@github.com/{github.owner}/{github.repo}.git" \
      "HEAD:refs/heads/{branch_name}"
    ```
-7. PR 생성 (`pr-template.md` 사용)
-8. Worktree 정리: `git worktree remove ../.worktrees/${SLUG}`
-9. main 작업 디렉토리 복원: `git checkout -- {modified_files}` + untracked 파일 삭제
+6. PR 생성 (`pr-template.md` 사용)
+7. Worktree 정리: `git worktree remove ../.worktrees/${SLUG}`
+8. main 작업 디렉토리 복원: `git checkout -- {modified_files}` + untracked 파일 삭제
 
 ### 안전 장치
 
@@ -497,7 +493,7 @@ README.md는 프로젝트의 context 문서이다. 다음 파일이 변경될 �
 
 변경 이력은 `CHANGELOG.md`에 기록한다. README.md에는 기록하지 않는다.
 
-**작성 시점**: tracked 파일을 커밋할 때마다 작성한다. **PR 생성 절차의 Step 4에서 반드시 실행한다.**
+**작성 시점**: tracked 파일을 커밋할 때마다 작성한다.
 
 **같은 PR 내 갱신 규칙**:
 - 같은 PR에서 추가 커밋이 발생하면 기존 항목을 갱신한다.
@@ -508,7 +504,9 @@ README.md는 프로젝트의 context 문서이다. 다음 파일이 변경될 �
 **형식 규칙**:
 - 날짜 헤더 (`## YYYY-MM-DD`)로 그룹핑한다.
 - 같은 날짜가 이미 있으면 해당 날짜 아래에 bullet 추가/갱신, 없으면 맨 위에 새 날짜 헤더 생성.
-- 각 항목 형식: `- {변경 요약} (\`{commit_short}\`)`
+- 각 항목 형식: ``- {변경 요약} ([`{commit_short}`](https://github.com/{github.owner}/{github.repo}/commit/{commit_short}))``
+  - `{github.owner}`, `{github.repo}`는 env.yml 값 사용
+  - 커밋 해시를 클릭하면 해당 커밋 페이지로 이동한다.
 - 최신 날짜가 위 (역순).
 
 ---
