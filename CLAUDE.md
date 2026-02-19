@@ -334,9 +334,9 @@ SessionStart hook에서 "GitHub 토큰 없음"이 감지되면 **다른 작업�
 | PR/브랜치 유형 | label |
 |---------------|-------|
 | `project/` (share-project) | `documentation` |
-| `fix/` | `fix` |
+| `fix/` | `bug` |
 | `improve/` | `enhancement` |
-| `feat/` | `feature` |
+| `feat/` | `enhancement` |
 | `doc/` | `documentation` |
 | `issue/` | `bug` |
 
