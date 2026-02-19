@@ -83,7 +83,7 @@ git -C "$WORKTREE_DIR" push \
 GH_TOKEN=$GH_TOKEN gh pr create --repo {github.owner}/{github.repo} \
   --title "{type}: {요약}" --body "..." --head "{branch_name}" \
   --label "{type_label}" \
-  --reviewer {default_reviewer}
+  --reviewer "{default_reviewer}"
 
 # 5. worktree 정리
 git worktree remove "$WORKTREE_DIR"

@@ -104,7 +104,7 @@ git -C "$WORKTREE_DIR" push \
 GH_TOKEN=$GH_TOKEN gh pr create --repo {github.owner}/{github.repo} \
   --head "project/{branch_slug}" \
   --label documentation \
-  --reviewer {default_reviewer} \
+  --reviewer "{default_reviewer}" \
   ...
 ```
 

@@ -71,7 +71,7 @@ GH_TOKEN=$GH_TOKEN gh issue create \
   --title "{issue_title}" \
   --body "{issue_body}" \
   --label "{labels}" \
-  --assignee {default_assignee}
+  --assignee "{default_assignee}"
 ```
 
 - `{issue_title}`: 사용자 메시지에서 핵심 내용을 추출하여 50자 이내로 작성

@@ -47,8 +47,8 @@ if ($HasWinget) { $Status += "OK winget 설치됨" } else { $Status += "WARN win
 # env.yml에서 GitHub owner/repo 로드
 $EnvFile = "env.yml"
 if (Test-Path $EnvFile) {
-    $GhOwner = (Select-String -Path $EnvFile -Pattern "owner:" | Select-Object -First 1).Line -replace '.*owner:\s*' -replace '\s*#.*'
-    $GhRepo = (Select-String -Path $EnvFile -Pattern "repo:" | Select-Object -First 1).Line -replace '.*repo:\s*' -replace '\s*#.*'
+    $GhOwner = (Select-String -Path $EnvFile -Pattern "^\s*owner:" | Select-Object -First 1).Line -replace '.*owner:\s*' -replace '\s*#.*'
+    $GhRepo = (Select-String -Path $EnvFile -Pattern "^\s*repo:" | Select-Object -First 1).Line -replace '.*repo:\s*' -replace '\s*#.*'
 } else {
     $GhOwner = "boydcog"
     $GhRepo = "prd-generator-template"

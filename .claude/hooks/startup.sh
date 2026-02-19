@@ -55,8 +55,8 @@ fi
 # env.yml에서 GitHub owner/repo 로드
 ENV_FILE="env.yml"
 if [ -f "$ENV_FILE" ]; then
-  GH_OWNER=$(grep "owner:" "$ENV_FILE" | head -1 | sed 's/.*owner:[[:space:]]*//' | sed 's/[[:space:]]*#.*//')
-  GH_REPO=$(grep "repo:" "$ENV_FILE" | head -1 | sed 's/.*repo:[[:space:]]*//' | sed 's/[[:space:]]*#.*//')
+  GH_OWNER=$(grep -E '^[[:space:]]*owner:' "$ENV_FILE" | head -1 | sed 's/.*owner:[[:space:]]*//' | sed 's/[[:space:]]*#.*//')
+  GH_REPO=$(grep -E '^[[:space:]]*repo:' "$ENV_FILE" | head -1 | sed 's/.*repo:[[:space:]]*//' | sed 's/[[:space:]]*#.*//')
 else
   GH_OWNER="boydcog"
   GH_REPO="prd-generator-template"
