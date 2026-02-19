@@ -80,14 +80,14 @@ Google Drive 문서를 기반으로 6역할 에이전트 팀이 PRD, 디자인 �
 
 ```yaml
 github:
-  owner: your-org              # GitHub 사용자명 또는 조직명
-  repo: your-repo              # 저장소 이름
-  default_reviewers: alice,bob  # PR 리뷰어 (쉼표 구분)
-  default_assignees: alice      # Issue/PR 담당자 (쉼표 구분)
+  owner: boydcog                       # GitHub 사용자명 또는 조직명
+  repo: prd-generator-template         # 저장소 이름
+  default_reviewers: boydcog            # PR 리뷰어 (쉼표 구분)
+  default_assignees: boydcog            # Issue/PR 담당자 (쉼표 구분)
 
 contact:
-  name: Alice                   # 토큰 요청 연락처
-  channel: 슬랙                 # 연락 채널
+  name: Boyd                           # 토큰 요청 연락처
+  channel: 슬랙                        # 연락 채널
 ```
 
 ### 2. GitHub 토큰 설정
