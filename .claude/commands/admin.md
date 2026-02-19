@@ -49,7 +49,7 @@ Worktree에 커밋하기 전에 `CHANGELOG.md`에 항목을 추가/갱신합니�
   - 새 기능 → 새 bullet 추가.
   - 기존 항목과 내용이 겹치면 → 이전 bullet 삭제 후 갱신된 내용으로 교체.
 - 없으면 `# Changelog` 바로 아래에 새 날짜 헤더 + bullet 생성.
-- 항목 형식: `- {변경 요약} (\`{commit_short}\`)`
+- 항목 형식: ``- {변경 요약} ([`{commit_short}`](https://github.com/{github.owner}/{github.repo}/commit/{commit_short}))``
 
 ### Step 7: Worktree PR 생성
 
@@ -71,7 +71,7 @@ git worktree add -b {branch_name} "$WORKTREE_DIR" main
 cp --parents {modified_files} "$WORKTREE_DIR/"
 
 # 3. worktree 안에서 commit + push (git -C로 디렉토리 이동 없이)
-# env.yml에서 {github.owner}, {github.repo}, {default_reviewer} 로드
+# env.yml에서 {github.owner}, {github.repo}, {default_reviewers}, {default_assignees} 로드
 git -C "$WORKTREE_DIR" add .
 git -C "$WORKTREE_DIR" commit -m "{type}: {요약}"
 GH_TOKEN=$(cat "${PROJECT_DIR}/.gh-token" | tr -d '[:space:]')
@@ -79,18 +79,29 @@ git -C "$WORKTREE_DIR" push \
   "https://user:${GH_TOKEN}@github.com/{github.owner}/{github.repo}.git" \
   "HEAD:refs/heads/{branch_name}"
 
-# 4. PR 생성 (label은 브랜치 type에 따라: fix→fix, improve→enhancement, feat→feature)
+# 4. PR 생성 (label은 브랜치 type에 따라: fix→bug, improve→enhancement, feat→enhancement)
+# PR 작성자는 --reviewer에서 자동 제외
 GH_TOKEN=$GH_TOKEN gh pr create --repo {github.owner}/{github.repo} \
   --title "{type}: {요약}" --body "..." --head "{branch_name}" \
   --label "{type_label}" \
-  --reviewer "{default_reviewer}"
+  --reviewer "{default_reviewers}" \
+  --assignee "{default_assignees}"
 
-# 5. worktree 정리
+# 5. worktree 제거 전에 새로 추가된 파일 목록 확보
+NEW_FILES=$(git -C "$WORKTREE_DIR" diff --name-only --diff-filter=A main...HEAD 2>/dev/null)
+
+# 6. worktree 정리
 git worktree remove "$WORKTREE_DIR"
 
-# 6. main 작업 디렉토리 복원
-git -C "$PROJECT_DIR" checkout -- {modified_files}
-# 새로 생성한 untracked 파일이 있으면 삭제
+# 7. main 작업 디렉토리 복원
+git -C "$PROJECT_DIR" checkout -- .
+# 새로 생성된 untracked 파일 삭제 (merge 후 pull 시 충돌 방지)
+if [ -n "$NEW_FILES" ]; then
+  echo "$NEW_FILES" | while read -r f; do
+    [[ "$f" == *".."* ]] && continue
+    [ -f "${PROJECT_DIR}/$f" ] && rm "${PROJECT_DIR}/$f"
+  done
+fi
 ```
 
 3. PR 본문은 `.claude/templates/pr-template.md` 템플릿을 사용합니다.
