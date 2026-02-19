@@ -13,10 +13,13 @@ STATUS=""
 # ──────────────────────────────────────
 USER_NAME=""
 if [ -f ".user-identity" ]; then
-  USER_NAME=$(cat .user-identity | tr -d '\n')
-  STATUS="$STATUS\nOK 사용자: $USER_NAME"
+  USER_NAME=$(cat .user-identity | tr -d '
+')
+  STATUS="$STATUS
+OK 사용자: $USER_NAME"
 else
-  STATUS="$STATUS\nWARN 사용자 미설정"
+  STATUS="$STATUS
+WARN 사용자 미설정"
 fi
 
 # ──────────────────────────────────────
@@ -31,21 +34,27 @@ command -v gh &>/dev/null && HAS_GH="true"
 command -v brew &>/dev/null && HAS_BREW="true"
 
 if [ "$HAS_GIT" = "true" ]; then
-  STATUS="$STATUS\nOK git 설치됨"
+  STATUS="$STATUS
+OK git 설치됨"
 else
-  STATUS="$STATUS\nFAIL git 미설치"
+  STATUS="$STATUS
+FAIL git 미설치"
 fi
 
 if [ "$HAS_GH" = "true" ]; then
-  STATUS="$STATUS\nOK gh CLI 설치됨"
+  STATUS="$STATUS
+OK gh CLI 설치됨"
 else
-  STATUS="$STATUS\nFAIL gh CLI 미설치"
+  STATUS="$STATUS
+FAIL gh CLI 미설치"
 fi
 
 if [ "$HAS_BREW" = "true" ]; then
-  STATUS="$STATUS\nOK Homebrew 설치됨"
+  STATUS="$STATUS
+OK Homebrew 설치됨"
 else
-  STATUS="$STATUS\nWARN Homebrew 미설치"
+  STATUS="$STATUS
+WARN Homebrew 미설치"
 fi
 
 # ──────────────────────────────────────
@@ -75,7 +84,8 @@ if [ "$HAS_GIT" = "true" ]; then
       git checkout -b main 2>/dev/null || true
       git branch -u origin/main main 2>/dev/null || true
       GIT_READY="true"
-      STATUS="$STATUS\nOK git 저장소 초기화 + remote 연결 완료 (HTTPS)"
+      STATUS="$STATUS
+OK git 저장소 초기화 + remote 연결 완료 (HTTPS)"
     else
       # HTTPS 실패 → SSH 폴백
       git remote set-url origin "$SSH_URL" 2>/dev/null || true
@@ -84,9 +94,11 @@ if [ "$HAS_GIT" = "true" ]; then
         git checkout -b main 2>/dev/null || true
         git branch -u origin/main main 2>/dev/null || true
         GIT_READY="true"
-        STATUS="$STATUS\nOK git 저장소 초기화 + remote 연결 완료 (SSH)"
+        STATUS="$STATUS
+OK git 저장소 초기화 + remote 연결 완료 (SSH)"
       else
-        STATUS="$STATUS\nWARN git fetch 실패 (네트워크 또는 인증 문제)"
+        STATUS="$STATUS
+WARN git fetch 실패 (네트워크 또는 인증 문제)"
       fi
     fi
   else
@@ -95,13 +107,16 @@ if [ "$HAS_GIT" = "true" ]; then
     CURRENT_REMOTE=$(git remote get-url origin 2>/dev/null || echo "")
     if [ -z "$CURRENT_REMOTE" ]; then
       git remote add origin "$HTTPS_URL" 2>/dev/null || true
-      STATUS="$STATUS\nOK remote origin 추가됨 (HTTPS)"
+      STATUS="$STATUS
+OK remote origin 추가됨 (HTTPS)"
     elif [ "$CURRENT_REMOTE" = "$SSH_URL" ]; then
       git remote set-url origin "$HTTPS_URL" 2>/dev/null || true
-      STATUS="$STATUS\nOK remote URL → HTTPS 전환"
+      STATUS="$STATUS
+OK remote URL → HTTPS 전환"
     elif [ "$CURRENT_REMOTE" != "$HTTPS_URL" ]; then
       git remote set-url origin "$HTTPS_URL" 2>/dev/null || true
-      STATUS="$STATUS\nOK remote URL 업데이트됨"
+      STATUS="$STATUS
+OK remote URL 업데이트됨"
     fi
   fi
 
@@ -110,7 +125,8 @@ if [ "$HAS_GIT" = "true" ]; then
     CURRENT_BRANCH=$(git branch --show-current 2>/dev/null || echo "")
     if [ -n "$CURRENT_BRANCH" ] && [ "$CURRENT_BRANCH" != "main" ]; then
       git checkout main 2>/dev/null || git checkout -f main 2>/dev/null || true
-      STATUS="$STATUS\nWARN $CURRENT_BRANCH → main 자동 전환"
+      STATUS="$STATUS
+WARN $CURRENT_BRANCH → main 자동 전환"
     fi
   fi
 
@@ -133,10 +149,12 @@ if [ "$HAS_GIT" = "true" ]; then
       fi
     done
     if [ "$CLEANED" -gt 0 ]; then
-      STATUS="$STATUS\nWARN 잔여 worktree ${CLEANED}개 정리됨"
+      STATUS="$STATUS
+WARN 잔여 worktree ${CLEANED}개 정리됨"
     fi
     if [ "$FAILED" -gt 0 ]; then
-      STATUS="$STATUS\nWARN worktree ${FAILED}개 정리 실패"
+      STATUS="$STATUS
+WARN worktree ${FAILED}개 정리 실패"
     fi
     # 빈 디렉토리 삭제
     rmdir "$WORKTREE_DIR" 2>/dev/null || true
@@ -160,27 +178,34 @@ if [ "$HAS_GIT" = "true" ]; then
         if [ "$STASHED" = "true" ]; then
           RESTORE_RESULT=$(git stash pop 2>&1 || echo "restore-failed")
           if echo "$RESTORE_RESULT" | grep -q "restore-failed"; then
-            STATUS="$STATUS\nWARN git pull 실패 (stash+rebase 복구 실패, stash 복원도 실패)"
+            STATUS="$STATUS
+WARN git pull 실패 (stash+rebase 복구 실패, stash 복원도 실패)"
           else
-            STATUS="$STATUS\nWARN git pull 실패 (stash+rebase 복구 실패, 로컬 변경 복원됨)"
+            STATUS="$STATUS
+WARN git pull 실패 (stash+rebase 복구 실패, 로컬 변경 복원됨)"
           fi
         else
-          STATUS="$STATUS\nWARN git pull 실패 (stash+rebase 복구 실패)"
+          STATUS="$STATUS
+WARN git pull 실패 (stash+rebase 복구 실패)"
         fi
       else
         if [ "$STASHED" = "true" ]; then
           POP_RESULT=$(git stash pop 2>&1 || echo "pop-failed")
           if echo "$POP_RESULT" | grep -q "pop-failed\|CONFLICT"; then
-            STATUS="$STATUS\nWARN git pull 완료, stash pop 충돌 발생"
+            STATUS="$STATUS
+WARN git pull 완료, stash pop 충돌 발생"
           else
-            STATUS="$STATUS\nOK git pull 완료 (stash+rebase 복구)"
+            STATUS="$STATUS
+OK git pull 완료 (stash+rebase 복구)"
           fi
         else
-          STATUS="$STATUS\nOK git pull 완료 (rebase)"
+          STATUS="$STATUS
+OK git pull 완료 (rebase)"
         fi
       fi
     else
-      STATUS="$STATUS\nOK git pull 완료"
+      STATUS="$STATUS
+OK git pull 완료"
     fi
   fi
 
@@ -202,15 +227,19 @@ if [ -f ".gh-token" ]; then
     chmod 600 .gh-token
     export GH_TOKEN="$TOKEN_CONTENT"
     GH_TOKEN_LOADED="true"
-    STATUS="$STATUS\nOK GitHub 토큰 로드 완료"
+    STATUS="$STATUS
+OK GitHub 토큰 로드 완료"
   else
-    STATUS="$STATUS\nWARN .gh-token 파일이 비어있음"
+    STATUS="$STATUS
+WARN .gh-token 파일이 비어있음"
   fi
 elif [ -n "${GH_TOKEN:-}" ]; then
   GH_TOKEN_LOADED="true"
-  STATUS="$STATUS\nOK GitHub 토큰 (환경변수)"
+  STATUS="$STATUS
+OK GitHub 토큰 (환경변수)"
 else
-  STATUS="$STATUS\nFAIL GitHub 토큰 없음"
+  STATUS="$STATUS
+FAIL GitHub 토큰 없음"
 fi
 
 # ──────────────────────────────────────
@@ -228,6 +257,7 @@ fi
 [ -f ".claude/knowledge/evidence/index/sources.jsonl" ] && HAS_EVIDENCE="true"
 
 # 다중 문서 유형 감지 (prd, tech-spec, design-spec, marketing-brief, business-plan 등)
+shopt -s nullglob
 for dir in .claude/artifacts/*/v*/; do
   if [ -d "$dir" ] && ls "$dir"*.md &>/dev/null 2>&1; then
     HAS_DOCUMENT="true"

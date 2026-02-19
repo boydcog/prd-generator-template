@@ -209,7 +209,7 @@ Task(
   team_name="research-v{N}",
   name="{role}-agent",
   subagent_type="general-purpose",
-  prompt="... (에이전트 프롬프트 + 팀 통신 블록)\n\n🤖 권장 모델: sonnet (Step 0.8에서 결정)"
+  prompt="... (에이전트 프롬프트 + 팀 통신 블록)\n\n권장 모델: sonnet (Step 0.8에서 결정)"
 )
 ```
 
@@ -262,7 +262,7 @@ Task(
   team_name="research-v{N}",
   name="synth-agent",
   subagent_type="general-purpose",
-  prompt="... (synth 프롬프트 + 팀 통신 블록)\n\n🤖 권장 모델: opus (Step 0.8에서 결정)"
+  prompt="... (synth 프롬프트 + 팀 통신 블록)\n\n권장 모델: opus (Step 0.8에서 결정)"
 )
 ```
 
