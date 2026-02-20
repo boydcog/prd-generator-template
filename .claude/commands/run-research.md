@@ -267,10 +267,12 @@ Task(
   team_name="research-v{N}",
   name="critique-agent",
   subagent_type="general-purpose",
-  model="opus",
-  prompt="... (critique 프롬프트 + 팀 통신 블록)"
+  prompt="... (critique 프롬프트 + 팀 통신 블록)\n\n권장 모델: opus (Step 0.8에서 결정)"
 )
 ```
+
+> **주의**: Task tool에서 명시적 모델 지정을 지원하지 않으므로, 프롬프트 내 "권장 모델" 안내는 참고사항입니다.
+> 실제 모델 선택은 에이전트의 기본 동작을 따릅니다.
 
 - 입력: Wave 1의 모든 에이전트 JSON + MD 결과물 전체
 - 역할: 비판적 검토, 논리적 오류/모순/누락 식별
