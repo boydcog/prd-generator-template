@@ -206,6 +206,7 @@ SessionStart hook에서 "GitHub 토큰 없음"이 감지되면 **다른 작업�
 | `github.repo` | 저장소 이름 | `prd-generator-template` |
 | `github.default_reviewers` | PR 기본 리뷰어 (쉼표 구분) | `boydcog` |
 | `github.default_assignees` | Issue/PR 기본 담당자 (쉼표 구분) | `boydcog` |
+| `organization.name` | 조직/팀 이름 (Google Drive 공유 드라이브 등) | `emocog` |
 | `contact.name` | 관리자 연락처 이름 | `Boyd` |
 | `contact.channel` | 연락 채널 | `슬랙` |
 

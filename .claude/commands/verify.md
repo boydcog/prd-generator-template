@@ -17,6 +17,7 @@
 - [ ] `.claude/spec/agent-team-spec.md`
 - [ ] `.claude/spec/citation-spec.md`
 - [ ] `.claude/spec/evidence-spec.md`
+- [ ] `.claude/spec/document-types.yaml`
 
 **증거 파일:**
 - [ ] `.claude/knowledge/evidence/index/sources.jsonl` (비어있지 않음)
@@ -32,9 +33,11 @@
 
 **최종 문서** (문서 유형에 따라 경로/파일명 결정):
 - `document-types.yaml`에서 `output_dir_name`, `output_file_name`을 로드합니다.
-- [ ] `.claude/artifacts/{output_dir_name}/{output_file_name}` 또는 최신 버전 디렉토리 내
-- [ ] `.claude/artifacts/{output_dir_name}/citations.json` 또는 최신 버전 내
-- [ ] `.claude/artifacts/{output_dir_name}/conflicts.json` 또는 최신 버전 내
+- 우선: `.claude/artifacts/{output_dir_name}/v{N}/{output_file_name}` (버전 서브디렉토리)
+  - 필요시 최신 `v{N}`을 자동 감지 (숫자 기반 정렬)
+- 차선: `.claude/artifacts/{output_dir_name}/{output_file_name}` (flat path, 호환성)
+- [ ] `.claude/artifacts/{output_dir_name}/v{N}/citations.json` 또는 flat path
+- [ ] `.claude/artifacts/{output_dir_name}/v{N}/conflicts.json` 또는 flat path
 
 누락된 파일이 있으면 경고를 출력하고 해당 검증을 스킵합니다.
 

@@ -67,8 +67,8 @@ SLUG="{branch_name에서 / → -}"
 WORKTREE_DIR="../.worktrees/${SLUG}"
 git worktree add -b {branch_name} "$WORKTREE_DIR" main
 
-# 2. 변경된 파일을 worktree로 복사 (디렉토리 구조 유지)
-cp --parents {modified_files} "$WORKTREE_DIR/"
+# 2. 변경된 파일을 worktree로 복사 (디렉토리 구조 유지, macOS 호환)
+rsync -aR {modified_files} "$WORKTREE_DIR/"
 
 # 3. worktree 안에서 commit + push (git -C로 디렉토리 이동 없이)
 # env.yml에서 {github.owner}, {github.repo}, {default_reviewers}, {default_assignees} 로드
