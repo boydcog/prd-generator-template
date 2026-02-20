@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-02-20
+
+- improve: 에이전트 팀에 비판적 검토(critique) Wave 1.5 추가 — Wave 1 결과 교차 검토, 논리적 오류/모순/누락 식별, synth 입력 품질 향상 ([`617d0e8`](https://github.com/boydcog/prd-generator-template/commit/617d0e8))
+
 ## 2026-02-19
 
 - improve: 에이전트 모델 선택 사양서 추가 — Wave 1 기본 sonnet, Wave 2 기본 opus, 프로젝트/문서유형별 오버라이드 지원 ([`6cdccb5`](https://github.com/boydcog/prd-generator-template/commit/6cdccb5))

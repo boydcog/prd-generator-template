@@ -185,6 +185,7 @@ Wave 1 에이전트 실행 전에 증거를 한 번만 읽고 역할별로 분�
 2. `document-types.yaml`에서 현재 문서 유형의 `model_overrides` 필드를 확인합니다 (없으면 건너뜀).
 3. 오버라이드가 없으면 기본값을 적용합니다:
    - Wave 1 에이전트 (고정 + 동적): `sonnet`
+   - Wave 1.5 에이전트 (critique): `opus`
    - Wave 2 에이전트 (synth): `opus`
 4. 결정된 모델이 `opus`, `sonnet`, `haiku` 중 하나인지 검증합니다. 유효하지 않으면 해당 wave의 기본값으로 폴백합니다.
 
@@ -196,7 +197,11 @@ Wave 1 에이전트 실행 전에 증거를 한 번만 읽고 역할별로 분�
 2. Wave 1 역할마다 `TaskCreate` 호출:
    - subject: "{role_name} 분석 수행"
    - activeForm: "{role_name} 분석 중"
-3. Synth용 `TaskCreate` + `TaskUpdate(addBlockedBy=[모든 wave1 task ID])`
+3. Critique용 `TaskCreate`:
+   - subject: "비판적 검토 수행"
+   - activeForm: "비판적 검토 중"
+   - `addBlockedBy=[모든 wave1 task ID]`
+4. Synth용 `TaskCreate` + `TaskUpdate(addBlockedBy=[critique task ID])`
 
 ### Wave 1: 팀원 병렬 생성 (동적)
 
@@ -251,7 +256,84 @@ Task(
 - 필수 섹션을 `dynamic_roles[].output_sections`에서 로드
 - 출력 경로: `.claude/artifacts/agents/{role_id}.json` + `{role_id}.md`
 
-### Wave 2: Synth 팀원 생성 (순차, Wave 1 완료 후)
+### Wave 1.5: Critique 팀원 생성 (순차, Wave 1 완료 후)
+
+`TaskList`로 critique 태스크의 `blockedBy` 해소를 확인한 후 critique 팀원을 생성합니다.
+
+```
+Task(
+  team_name="research-v{N}",
+  name="critique-agent",
+  subagent_type="general-purpose",
+  model="opus",
+  prompt="... (critique 프롬프트 + 팀 통신 블록)"
+)
+```
+
+- 입력: Wave 1의 모든 에이전트 JSON + MD 결과물 전체
+- 역할: 비판적 검토, 논리적 오류/모순/누락 식별
+
+##### Critique 팀원 절차:
+
+1. `TaskList` → "비판적 검토 수행" 태스크 클레임
+2. `TaskUpdate(owner="critique-agent", status="in_progress")`
+3. Wave 1 결과 읽기 (모든 역할의 JSON + MD)
+4. **비판적 검토 수행**:
+   - 역할별 비판 요약 (장점, 약점, 신뢰도)
+   - 논리적 오류 또는 근거 없는 주장 식별 (citation 부재)
+   - 역할 간 상충하는 주장 식별
+   - 누락된 관점 또는 갭 식별
+   - synth를 위한 개선 권고사항 제시
+5. `critique.json` + `critique.md` 생성:
+   - JSON: agent-team-spec.md의 공통 Envelope 준수
+   - MD: 역할별 비판 내용을 구조화된 마크다운으로 작성
+6. `TaskUpdate(status="completed")`
+7. `SendMessage(recipient="team-lead", summary="비판적 검토 완료")`
+
+##### Critique 에이전트 프롬프트 템플릿
+
+```
+당신은 비판적 검토 전문가입니다.
+
+## 프로젝트 컨텍스트
+{project.json 내용}
+
+## 당신의 역할
+- 역할명: 비판적 검토
+- 책임 범위: Wave 1 에이전트들(biz, marketing, research, tech, pm 및 동적 역할)의 분석 결과를 교차 검토하여 논리적 오류, 모순, 누락된 관점을 식별합니다.
+
+## 검토 대상
+Wave 1 역할의 JSON 파일들:
+- .claude/artifacts/agents/biz.json
+- .claude/artifacts/agents/marketing.json
+- .claude/artifacts/agents/research.json
+- .claude/artifacts/agents/tech.json
+- .claude/artifacts/agents/pm.json
+- (동적 역할이 있으면) .claude/artifacts/agents/{dynamic_role}.json
+
+## 검토 항목
+1. **논리적 오류**: 추론 과정에서의 논리적 오류 또는 근거 없는 주장 (citation 부재)
+2. **역할 간 모순**: 서로 상충하는 주장 또는 권고사항 (예: biz vs tech 간 타당성 차이)
+3. **누락된 관점**: 중요하지만 어느 역할도 다루지 않은 영역
+4. **지나친 낙관주의**: 현실성 없는 가정 또는 지나치게 낙관적인 평가
+
+## 출력 규칙
+1. agent-team-spec.md의 JSON 계약을 준수하세요.
+2. 각 비판 항목은 하나의 claim으로 표현하세요.
+3. 가능하면 해당 source의 chunk_id로 citation을 포함하세요.
+4. JSON 키는 알파벳순으로 정렬하세요.
+
+## 출력 경로
+- JSON: .claude/artifacts/agents/critique.json
+- Markdown: .claude/artifacts/agents/critique.md
+
+## 팀 통신 (필수)
+당신은 "research-v{N}" 팀의 "critique-agent" 팀원입니다.
+`.claude/spec/agent-team-spec.md`의 "팀원 공통 절차"를 반드시 따르세요.
+태스크명: "비판적 검토 수행"
+```
+
+### Wave 2: Synth 팀원 생성 (순차, Wave 1.5 완료 후)
 
 `TaskList`로 synth 태스크의 `blockedBy` 해소를 확인한 후 synth 팀원을 생성합니다.
 
@@ -265,14 +347,14 @@ Task(
 )
 ```
 
-- 입력: Wave 1의 에이전트 JSON + MD 결과물 전체 (동적 역할 출력 포함)
-- 역할: 통합, 충돌 해결, 최종 문서 작성
+- 입력: Wave 1의 에이전트 JSON + MD 결과물 전체 (동적 역할 출력 포함) + Wave 1.5 critique 결과
+- 역할: 비판 지적을 고려하여 통합, 충돌 해결, 최종 문서 작성
 
 ##### Synth 팀원 절차:
 
 1. `TaskList` → "통합 문서 생성 (synth)" 태스크 클레임
 2. `TaskUpdate(owner="synth-agent", status="in_progress")`
-3. Wave 1 결과 읽기 (모든 역할의 JSON + MD)
+3. Wave 1 + critique 결과 읽기 (모든 역할의 JSON + MD + critique.json/md)
 4. **충돌 식별**: 역할 간 상충하는 주장을 식별합니다.
    - 충돌 항목은 `conflicts.json`에 기록합니다.
 5. **통합 문서 작성**: 모든 역할(고정 + 동적)의 핵심 내용을 통합하여 최종 문서를 작성합니다.
@@ -378,8 +460,10 @@ Step 0.7에서 이 역할의 keywords에 매칭된 증거만 선별하여 전달
 
 | 파일 | 설명 |
 |------|------|
-| `.claude/artifacts/agents/{role}.json` | 각 역할의 구조화된 출력 |
-| `.claude/artifacts/agents/{role}.md` | 각 역할의 서술형 요약 |
+| `.claude/artifacts/agents/{role}.json` | Wave 1 각 역할의 구조화된 출력 |
+| `.claude/artifacts/agents/{role}.md` | Wave 1 각 역할의 서술형 요약 |
+| `.claude/artifacts/agents/critique.json` | Wave 1.5 비판적 검토 구조화된 출력 |
+| `.claude/artifacts/agents/critique.md` | Wave 1.5 비판적 검토 서술형 요약 |
 | `.claude/artifacts/{output_dir}/v{N}/{output_file}` | 최종 통합 문서 (버전별) |
 | `.claude/artifacts/{output_dir}/v{N}/citations.json` | 전체 인용 보고서 |
 | `.claude/artifacts/{output_dir}/v{N}/conflicts.json` | 역할 간 충돌 보고서 |

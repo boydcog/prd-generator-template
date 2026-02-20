@@ -18,6 +18,7 @@
 
 | 기준 | 모델 | 예시 |
 |------|------|------|
+| 여러 역할의 출력을 교차 검토하여 논리적 오류 식별 | `opus` | critique (Wave 1.5) |
 | 여러 역할의 출력을 교차 참조하여 종합 | `opus` | synth (Wave 2) |
 | 사전 필터링된 증거 내 단일 도메인 분석 | `sonnet` | Wave 1 에이전트 (biz, marketing, research, tech, pm, 동적 역할) |
 | 스키마 검증, 형식 확인, 단순 분류 | `haiku` | (현재 미사용, 향후 verify 자동화 등) |
@@ -30,6 +31,7 @@
 |------|------|----------|------|
 | biz, marketing, research, tech, pm | Wave 1 | `sonnet` | 사전 필터링된 증거 내 단일 도메인 구조화 분석 |
 | 동적 역할 (dynamic_roles) | Wave 1 | `sonnet` | 기존 Wave 1 에이전트와 동일 |
+| critique | Wave 1.5 | `opus` | Wave 1 전체 결과 교차 검토, 고도 추론 필요 |
 | synth | Wave 2 | `opus` | 다중 소스 통합, 충돌 해결, 최종 문서 작성 |
 
 ---
@@ -93,6 +95,7 @@ function resolveModel(role_id, wave):
 
   # 4. 기본값
   if wave == "wave1": return "sonnet"
+  if wave == "wave1.5": return "opus"
   if wave == "wave2": return "opus"
 ```
 
