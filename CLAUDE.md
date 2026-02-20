@@ -262,12 +262,13 @@ SessionStart hook에서 "GitHub 토큰 없음"이 감지되면 **다른 작업�
 `/run-research` 실행 시 반드시 TeamCreate Agent Teams를 사용합니다:
 
 1. **팀 생성**: `TeamCreate`로 `research-v{N}` 팀 생성
-2. **태스크 정의**: `TaskCreate`로 Wave 1 + Wave 2 태스크 생성, `blockedBy` 설정
+2. **태스크 정의**: `TaskCreate`로 Wave 1 + Wave 1.5 + Wave 2 태스크 생성, `blockedBy` 설정
 3. **Wave 1**: 팀원 병렬 생성 (model-selection-spec.md 기준, 기본: sonnet), `SendMessage`로 실시간 진행 보고
-4. **Wave 2**: Wave 1 완료 후 synth 팀원 생성
-5. **팀 정리**: 완료 후 `shutdown_request` → `TeamDelete`
-6. 각 에이전트에게 `.claude/spec/agent-team-spec.md`의 역할과 JSON 계약을 전달합니다.
-7. 진행 상황은 팀원의 `SendMessage`를 통해 실시간으로 사용자에게 전달됩니다.
+4. **Wave 1.5**: Wave 1 완료 후 critique 팀원 생성 (모델: opus) — 비판적 검토 수행
+5. **Wave 2**: Wave 1.5 완료 후 synth 팀원 생성
+6. **팀 정리**: 완료 후 `shutdown_request` → `TeamDelete`
+7. 각 에이전트에게 `.claude/spec/agent-team-spec.md`의 역할과 JSON 계약을 전달합니다.
+8. 진행 상황은 팀원의 `SendMessage`를 통해 실시간으로 사용자에게 전달됩니다.
 
 ---
 

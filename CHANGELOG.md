@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-02-20
+
+- improve: 에이전트 팀에 비판적 검토(critique) Wave 1.5 추가 — Wave 1 결과 교차 검토, 논리적 오류/모순/누락 식별, synth 입력 품질 향상 ([`617d0e8`](https://github.com/boydcog/prd-generator-template/commit/617d0e8))
+
 ## 2026-02-19
 
 - improve: 템플릿 구조 감사 — 다중 문서 유형 지원, Windows 호환성 개선, gitignore 보완, 모델 선택 스펙 조정, PR 템플릿 통합 ([`a31ee67`](https://github.com/boydcog/prd-generator-template/commit/a31ee67))
