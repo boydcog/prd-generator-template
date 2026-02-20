@@ -40,10 +40,12 @@
 ```
 
 1. `/run-research` 실행.
+   - **컨텍스트**: `called_from: auto-generate` 표시를 명시하여 중복 업로드 프롬프트 방지.
    - TeamCreate로 리서치 팀 구성.
    - Wave 1: 팀원 병렬 실행 (model-selection-spec.md 기준, 기본: sonnet).
    - Wave 2: synth 팀원 실행.
    - 완료 후 팀 자동 정리.
+   - 완료 시: 업로드 프롬프트 **스킵** (auto-generate가 Phase 4에서 별도 처리).
 2. 완료 확인:
    - 최종 문서 파일이 생성되었는지 확인.
    - 생성되지 않았으면: 재시도 1회.

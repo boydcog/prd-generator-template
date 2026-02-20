@@ -110,39 +110,28 @@ GH_TOKEN=$GH_TOKEN gh pr create --repo {github.owner}/{github.repo} \
 ```
 
 1. push + PR 생성
-2. PR 본문 구성:
+2. PR 본문 구성 (`.claude/templates/pr-template.md` 준수):
 
 **제목**: `project: {project_name} — {document_type} v{version}`
 
-**본문**:
-```markdown
-## 프로젝트 공유
+**본문**: `.claude/templates/pr-template.md`의 모든 필드를 다음과 같이 채웁니다:
 
-| 항목 | 내용 |
-|------|------|
-| 작성자 | {user_name} |
-| 생성 시각 | {timestamp} |
-| 프로젝트 | {project_name} |
-| 문서 유형 | {document_type} |
-| 문서 버전 | v{version} |
-| 브랜치 | project/{branch_slug} |
+| 템플릿 필드 | 값 |
+|-----------|-----|
+| `{user_name}` | `.user-identity`에서 로드 |
+| `{timestamp}` | 현재 시각 (ISO 8601) |
+| `{project_name}` | `project.json`의 `project_name` |
+| `{document_type}` | `project.json`의 `document_type` |
+| `{commit_short}` | 기준 커밋 (main HEAD) |
+| `{branch_name}` | `project/{branch_slug}` |
+| `{change_summary}` | `{document_type} v{version} 생성 및 공유` |
+| `{detailed_changes}` | 생성된 파일 목록 (worktree의 신규/변경 파일) + 프로젝트 설명 (core_problem, target_users, domain) |
+| `{reason}` | `프로젝트 공유 및 협업` |
+| `{file_list}` | `git diff --name-only main...HEAD` 결과 |
 
-## 프로젝트 설명
-{project.json의 core_problem + target_users + domain을 기반으로 2-3문장 요약}
-
-## 포함된 파일
-{git diff --name-only main...HEAD 결과를 마크다운 리스트로}
-
-## 관련 이슈
-{세션 중 생성된 이슈 목록 — gh issue list --state open --json number,title로 조회}
-
----
-⚠️ **이 PR은 프로젝트 공유용입니다. main에 머지하지 마세요.**
-머지하면 gitignore된 파일이 tracked 상태가 되어 템플릿이 오염됩니다.
-
----
-*PRD Generator 프로젝트 공유 | 작성자: {user_name} | {timestamp}*
-```
+**중요 주의사항**:
+- 이 PR은 프로젝트 공유용입니다. **main에 머지하지 마세요.**
+- 머지하면 gitignore된 파일이 tracked 상태가 되어 템플릿이 오염됩니다.
 
 3. `gh pr create` 실행.
 
