@@ -134,15 +134,14 @@ if ($HasGit) {
 
     # git pull (rebase 방식, 실패 시 stash + rebase + pop)
     if ($GitReady) {
-        # 마이그레이션: pull 전 현재 스키마 버전 저장
-        $BeforeSchema = if (Test-Path ".claude/state/_schema_version.txt") { (Get-Content ".claude/state/_schema_version.txt" -Raw).Trim() } else { "v1" }
         $pullResult = git pull --rebase origin main 2>&1
         if ($LASTEXITCODE -eq 0) {
             $Status += "OK git pull 완료"
-            # 마이그레이션: pull 후 템플릿이 요구하는 버전 확인
+            # 마이그레이션: 현재 적용 버전 vs 템플릿 요구 버전 비교
+            $CurrentSchema = if (Test-Path ".claude/state/_schema_version.txt") { (Get-Content ".claude/state/_schema_version.txt" -Raw).Trim() } else { "v1" }
             $TargetSchema = if (Test-Path ".claude/migrations/_target_version.txt") { (Get-Content ".claude/migrations/_target_version.txt" -Raw).Trim() } else { "v1" }
-            if ($BeforeSchema -ne $TargetSchema) {
-                $MigrationNeeded = "${BeforeSchema}_to_${TargetSchema}"
+            if ($CurrentSchema -ne $TargetSchema) {
+                $MigrationNeeded = "${CurrentSchema}_to_${TargetSchema}"
                 $Status += "WARN MIGRATION_NEEDED=$MigrationNeeded"
             }
         } else {
@@ -216,6 +215,11 @@ if (Test-Path ".gh-token") {
 $ActiveProduct = ""
 if (Test-Path ".claude/state/_active_product.txt") {
     $ActiveProduct = (Get-Content ".claude/state/_active_product.txt" -Raw).Trim()
+    # product_id 검증: 영문자, 숫자, 하이픈, 언더스코어만 허용 (경로 순회 방지)
+    if ($ActiveProduct -and $ActiveProduct -notmatch '^[a-zA-Z0-9_-]+$') {
+        $Status += "WARN 활성 제품 ID가 유효하지 않습니다 (허용: 영문자, 숫자, -, _)"
+        $ActiveProduct = ""
+    }
 }
 
 $HasProject = $false

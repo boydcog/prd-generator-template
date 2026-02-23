@@ -14,13 +14,15 @@
 
 ### Step 1: product_id 결정
 
-1. `.claude/state/project.json`을 읽습니다.
-2. `name` 필드를 읽어 product_id를 생성합니다:
+1. `.claude/state/project.json` 파일이 존재하는지 확인합니다.
+   - 파일이 **없으면**: 마이그레이션할 데이터가 없으므로 **Step 5로 바로 이동**하여 스키마 버전만 업데이트하고 절차를 종료합니다.
+2. `.claude/state/project.json`을 읽습니다.
+3. `name` 필드를 읽어 product_id를 생성합니다:
    - 소문자 변환
    - 공백 → 하이픈 (`-`)
    - 특수문자 제거 (영문자, 숫자, 하이픈만 허용)
    - 예: `"Maththera"` → `maththera`, `"My App 2.0"` → `my-app-2-0`
-3. product_id를 사용자에게 표시하고 변경을 원하면 수정 입력받습니다.
+4. product_id를 사용자에게 표시하고 변경을 원하면 수정 입력받습니다.
    - 대부분의 경우 자동 생성된 값으로 진행합니다.
 
 ### Step 2: 디렉토리 생성

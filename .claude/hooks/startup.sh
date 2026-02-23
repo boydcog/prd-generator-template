@@ -162,8 +162,6 @@ WARN worktree ${FAILED}개 정리 실패"
 
   # git pull (rebase 방식, 실패 시 stash + rebase + pop)
   if [ "$GIT_READY" = "true" ]; then
-    # 마이그레이션: pull 전 현재 스키마 버전 저장
-    BEFORE_SCHEMA=$(cat ".claude/state/_schema_version.txt" 2>/dev/null || echo "v1")
     PULL_RESULT=$(git pull --rebase origin main 2>&1 || echo "pull-failed")
     if echo "$PULL_RESULT" | grep -q "pull-failed"; then
       # rebase 진행 중이면 abort
@@ -209,10 +207,11 @@ OK git pull 완료 (rebase)"
       STATUS="$STATUS
 OK git pull 완료"
     fi
-    # 마이그레이션: pull 후 템플릿이 요구하는 버전 확인
+    # 마이그레이션: 현재 적용 버전 vs 템플릿 요구 버전 비교
+    CURRENT_SCHEMA=$(cat ".claude/state/_schema_version.txt" 2>/dev/null || echo "v1")
     TARGET_SCHEMA=$(cat ".claude/migrations/_target_version.txt" 2>/dev/null || echo "v1")
-    if [ "$BEFORE_SCHEMA" != "$TARGET_SCHEMA" ]; then
-      MIGRATION_NEEDED="${BEFORE_SCHEMA}_to_${TARGET_SCHEMA}"
+    if [ "$CURRENT_SCHEMA" != "$TARGET_SCHEMA" ]; then
+      MIGRATION_NEEDED="${CURRENT_SCHEMA}_to_${TARGET_SCHEMA}"
       STATUS="$STATUS
 WARN MIGRATION_NEEDED=$MIGRATION_NEEDED"
     fi
@@ -257,6 +256,12 @@ fi
 ACTIVE_PRODUCT=""
 if [ -f ".claude/state/_active_product.txt" ]; then
   ACTIVE_PRODUCT=$(cat ".claude/state/_active_product.txt" | tr -d '[:space:]')
+  # product_id 검증: 영문자, 숫자, 하이픈, 언더스코어만 허용 (경로 순회 방지)
+  if ! echo "$ACTIVE_PRODUCT" | grep -qE '^[a-zA-Z0-9_-]+$'; then
+    STATUS="$STATUS
+WARN 활성 제품 ID가 유효하지 않습니다 (허용: 영문자, 숫자, -, _)"
+    ACTIVE_PRODUCT=""
+  fi
 fi
 
 HAS_PROJECT="false"
@@ -271,14 +276,10 @@ if [ -n "$ACTIVE_PRODUCT" ]; then
     grep -q "^  - name:" ".claude/manifests/drive-sources-${ACTIVE_PRODUCT}.yaml" 2>/dev/null && HAS_SOURCES="true"
   fi
   [ -f ".claude/knowledge/${ACTIVE_PRODUCT}/evidence/index/sources.jsonl" ] && HAS_EVIDENCE="true"
-  # 다중 문서 유형 감지
-  shopt -s nullglob
-  for dir in ".claude/artifacts/${ACTIVE_PRODUCT}/"/*/v*/; do
-    if [ -d "$dir" ] && ls "$dir"*.md &>/dev/null 2>&1; then
-      HAS_DOCUMENT="true"
-      break
-    fi
-  done
+  # 다중 문서 유형 감지 (find 사용 — bash/sh 모두 호환)
+  if find ".claude/artifacts/${ACTIVE_PRODUCT}/" -path "*/v*/*.md" -maxdepth 4 2>/dev/null | grep -q .; then
+    HAS_DOCUMENT="true"
+  fi
 fi
 
 # 추천 액션 (auto-generate 중심 — 내부에서 상태별 Phase 자동 판단)
