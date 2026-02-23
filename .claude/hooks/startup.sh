@@ -162,6 +162,8 @@ WARN worktree ${FAILED}개 정리 실패"
 
   # git pull (rebase 방식, 실패 시 stash + rebase + pop)
   if [ "$GIT_READY" = "true" ]; then
+    # 마이그레이션: pull 전 현재 스키마 버전 저장
+    BEFORE_SCHEMA=$(cat ".claude/state/_schema_version.txt" 2>/dev/null || echo "v1")
     PULL_RESULT=$(git pull --rebase origin main 2>&1 || echo "pull-failed")
     if echo "$PULL_RESULT" | grep -q "pull-failed"; then
       # rebase 진행 중이면 abort
@@ -207,6 +209,13 @@ OK git pull 완료 (rebase)"
       STATUS="$STATUS
 OK git pull 완료"
     fi
+    # 마이그레이션: pull 후 템플릿이 요구하는 버전 확인
+    TARGET_SCHEMA=$(cat ".claude/migrations/_target_version.txt" 2>/dev/null || echo "v1")
+    if [ "$BEFORE_SCHEMA" != "$TARGET_SCHEMA" ]; then
+      MIGRATION_NEEDED="${BEFORE_SCHEMA}_to_${TARGET_SCHEMA}"
+      STATUS="$STATUS
+WARN MIGRATION_NEEDED=$MIGRATION_NEEDED"
+    fi
   fi
 
   # manifests 보호
@@ -243,31 +252,40 @@ FAIL GitHub 토큰 없음"
 fi
 
 # ──────────────────────────────────────
-# 4. 프로젝트 상태 확인
+# 4. 활성 제품 + 프로젝트 상태 확인
 # ──────────────────────────────────────
+ACTIVE_PRODUCT=""
+if [ -f ".claude/state/_active_product.txt" ]; then
+  ACTIVE_PRODUCT=$(cat ".claude/state/_active_product.txt" | tr -d '[:space:]')
+fi
+
 HAS_PROJECT="false"
 HAS_SOURCES="false"
 HAS_EVIDENCE="false"
 HAS_DOCUMENT="false"
+MIGRATION_NEEDED="${MIGRATION_NEEDED:-}"
 
-[ -f ".claude/state/project.json" ] && HAS_PROJECT="true"
-if [ -f ".claude/manifests/drive-sources.yaml" ]; then
-  grep -q "^  - name:" ".claude/manifests/drive-sources.yaml" 2>/dev/null && HAS_SOURCES="true"
-fi
-[ -f ".claude/knowledge/evidence/index/sources.jsonl" ] && HAS_EVIDENCE="true"
-
-# 다중 문서 유형 감지 (prd, tech-spec, design-spec, marketing-brief, business-plan 등)
-shopt -s nullglob
-for dir in .claude/artifacts/*/v*/; do
-  if [ -d "$dir" ] && ls "$dir"*.md &>/dev/null 2>&1; then
-    HAS_DOCUMENT="true"
-    break
+if [ -n "$ACTIVE_PRODUCT" ]; then
+  [ -f ".claude/state/${ACTIVE_PRODUCT}/project.json" ] && HAS_PROJECT="true"
+  if [ -f ".claude/manifests/drive-sources-${ACTIVE_PRODUCT}.yaml" ]; then
+    grep -q "^  - name:" ".claude/manifests/drive-sources-${ACTIVE_PRODUCT}.yaml" 2>/dev/null && HAS_SOURCES="true"
   fi
-done
+  [ -f ".claude/knowledge/${ACTIVE_PRODUCT}/evidence/index/sources.jsonl" ] && HAS_EVIDENCE="true"
+  # 다중 문서 유형 감지
+  shopt -s nullglob
+  for dir in ".claude/artifacts/${ACTIVE_PRODUCT}/"/*/v*/; do
+    if [ -d "$dir" ] && ls "$dir"*.md &>/dev/null 2>&1; then
+      HAS_DOCUMENT="true"
+      break
+    fi
+  done
+fi
 
 # 추천 액션 (auto-generate 중심 — 내부에서 상태별 Phase 자동 판단)
 NEXT_ACTION=""
-if [ "$HAS_PROJECT" = "false" ]; then
+if [ -z "$ACTIVE_PRODUCT" ]; then
+  NEXT_ACTION="select-product"
+elif [ "$HAS_PROJECT" = "false" ]; then
   NEXT_ACTION="auto-generate"
 elif [ "$HAS_DOCUMENT" = "true" ]; then
   NEXT_ACTION="sync-drive-or-update"
@@ -288,14 +306,20 @@ echo "  gh: $HAS_GH"
 echo "  brew: $HAS_BREW"
 echo ""
 echo "프로젝트 상태:"
+echo "  활성 제품: ${ACTIVE_PRODUCT:-미설정}"
 echo "  project.json: $HAS_PROJECT"
 echo "  Drive 소스: $HAS_SOURCES"
 echo "  증거(evidence): $HAS_EVIDENCE"
-echo "  PRD 생성됨: $HAS_PRD"
+echo "  문서 생성됨: $HAS_DOCUMENT"
 echo "  GH 토큰: $GH_TOKEN_LOADED"
 echo "  git 연결: $GIT_READY"
 echo "  사용자: ${USER_NAME:-미설정}"
-echo "  추천 액션: $NEXT_ACTION"
+if [ -n "${MIGRATION_NEEDED:-}" ]; then
+  echo "  RECOMMENDED_ACTION=migration"
+  echo "  MIGRATION_NEEDED=$MIGRATION_NEEDED"
+else
+  echo "  추천 액션: $NEXT_ACTION"
+fi
 echo "==========================="
 
 exit 0

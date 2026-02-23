@@ -2,7 +2,9 @@
 
 ## 2026-02-23
 
-- improve: Live Meeting Mode 도입 — Wave 넘버링 폐지, 회의/판정/비평/통합 4단계 구조로 전환, Peer Messaging Protocol 추가, judge 역할 신설, peer_discussions JSON 계약 추가, 전문가 토론 요약 섹션 추가, Qodo 리뷰 반영(Synth 역할 분리, Judge 빈 결과 처리, limit_reached outcome, verify.md 검증 항목 확장)
+- fix: Qodo 리뷰 반영 — product_id 검증(경로 순회 방지), `shopt` 제거(sh 호환), 마이그레이션 로직 단순화(BEFORE/AFTER 비교 → 현재 vs 타겟 비교), v1_to_v2 신규 워크스페이스 처리, switch-product 인자 검증 추가 ([`cbf59c9`](https://github.com/boydcog/prd-generator-template/commit/cbf59c9))
+- improve: 멀티 제품 지원 — `product_id` 네임스페이스로 하나의 워크스페이스에서 여러 제품 관리, `/switch-product` 커맨드 신규 추가, 스키마 v2 마이그레이션 시스템 도입 (MIGRATION_NEEDED 감지 → Claude가 `.claude/migrations/` 지침 실행) ([`e31bba9`](https://github.com/boydcog/prd-generator-template/commit/e31bba9))
+- improve: Live Meeting Mode 도입 — Wave 넘버링 폐지, 회의/판정/비평/통합 4단계 구조로 전환, Peer Messaging Protocol 추가, judge 역할 신설, peer_discussions JSON 계약 추가, 전문가 토론 요약 섹션 추가 ([`099d5dd`](https://github.com/boydcog/prd-generator-template/commit/099d5dd))
 
 ## 2026-02-20
 

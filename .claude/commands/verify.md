@@ -5,6 +5,15 @@
 
 ---
 
+## 사전 조건
+
+### Step -1: 활성 제품 로드
+
+`.claude/state/_active_product.txt`에서 활성 제품 ID를 읽어 `{active_product}` 변수에 저장합니다.
+- 파일이 없거나 비어있으면: "활성 제품이 설정되지 않았습니다. /init-project 또는 /switch-product를 실행하세요." 안내 후 중단.
+
+---
+
 ## 검증 항목
 
 ### 1. 구조 검사 (Structure Check)
@@ -12,22 +21,22 @@
 다음 파일/디렉토리가 존재하는지 확인합니다:
 
 **필수 설정 파일:**
-- [ ] `.claude/state/project.json`
-- [ ] `.claude/manifests/drive-sources.yaml`
+- [ ] `.claude/state/{active_product}/project.json`
+- [ ] `.claude/manifests/drive-sources-{active_product}.yaml`
 - [ ] `.claude/spec/agent-team-spec.md`
 - [ ] `.claude/spec/citation-spec.md`
 - [ ] `.claude/spec/evidence-spec.md`
 - [ ] `.claude/spec/document-types.yaml`
 
 **증거 파일:**
-- [ ] `.claude/knowledge/evidence/index/sources.jsonl` (비어있지 않음)
-- [ ] `.claude/knowledge/evidence/chunks/` (최소 1개 청크 파일)
+- [ ] `.claude/knowledge/{active_product}/evidence/index/sources.jsonl` (비어있지 않음)
+- [ ] `.claude/knowledge/{active_product}/evidence/chunks/` (최소 1개 청크 파일)
 
 **에이전트 출력** (문서 유형의 `agent_roles.wave1`에 정의된 에이전트만 검사):
 - `project.json`에서 `document_type`을 읽습니다 (없으면 기본값 `prd`).
 - `document-types.yaml`에서 해당 유형의 `agent_roles.wave1` 목록을 로드합니다.
 - 각 에이전트에 대해:
-  - [ ] `.claude/artifacts/agents/{role}.json`
+  - [ ] `.claude/artifacts/{active_product}/agents/{role}.json`
 - 예시 (prd): biz.json, marketing.json, research.json, tech.json, pm.json
 - 예시 (tech-spec): tech.json, research.json, pm.json
 
@@ -42,11 +51,11 @@
 
 **최종 문서** (문서 유형에 따라 경로/파일명 결정):
 - `document-types.yaml`에서 `output_dir_name`, `output_file_name`을 로드합니다.
-- 우선: `.claude/artifacts/{output_dir_name}/v{N}/{output_file_name}` (버전 서브디렉토리)
+- 우선: `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/{output_file_name}` (버전 서브디렉토리)
   - 필요시 최신 `v{N}`을 자동 감지 (숫자 기반 정렬)
-- 차선: `.claude/artifacts/{output_dir_name}/{output_file_name}` (flat path, 호환성)
-- [ ] `.claude/artifacts/{output_dir_name}/v{N}/citations.json` 또는 flat path
-- [ ] `.claude/artifacts/{output_dir_name}/v{N}/conflicts.json` 또는 flat path
+- 차선: `.claude/artifacts/{active_product}/{output_dir_name}/{output_file_name}` (flat path, 호환성)
+- [ ] `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/citations.json` 또는 flat path
+- [ ] `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/conflicts.json` 또는 flat path
 
 누락된 파일이 있으면 경고를 출력하고 해당 검증을 스킵합니다.
 
@@ -101,8 +110,8 @@
 
 PRD 생성 시 기록된 증거 인덱스 해시와 현재 인덱스를 비교합니다:
 
-1. `.claude/state/sync-ledger.json`의 `evidence_index_sha256`을 읽습니다.
-2. 현재 `.claude/knowledge/evidence/index/sources.jsonl`의 SHA-256을 계산합니다.
+1. `.claude/state/{active_product}/sync-ledger.json`의 `evidence_index_sha256`을 읽습니다.
+2. 현재 `.claude/knowledge/{active_product}/evidence/index/sources.jsonl`의 SHA-256을 계산합니다.
 3. 불일치하면: "증거가 PRD 생성 이후 변경되었습니다. `/run-research`를 다시 실행하세요."
 
 ---
