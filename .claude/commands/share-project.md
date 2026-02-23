@@ -6,9 +6,14 @@
 
 ## 실행 절차
 
+### Step 0: 활성 제품 로드
+
+`.claude/state/_active_product.txt`에서 활성 제품 ID를 읽어 `{active_product}` 변수에 저장합니다.
+- 파일이 없거나 비어있으면: "활성 제품이 설정되지 않았습니다. /init-project 또는 /switch-product를 실행하세요." 안내 후 중단.
+
 ### Step 1: 프로젝트 정보 로드
 
-1. `.claude/state/project.json`에서 로드:
+1. `.claude/state/{active_product}/project.json`에서 로드:
    - `name` → `{project_name}`
    - `document_type` → `{document_type}` (없으면 `prd`)
    - `current_version` → `{version}`
@@ -25,15 +30,14 @@
 ### Step 3: Worktree 생성
 
 1. `git pull origin main`
-2. 프로젝트 이름을 kebab-case로 변환: `{project_name}` → `{branch_slug}`
-   - 예: "Maththera" → `maththera`, "My App 2.0" → `my-app-2-0`
+2. `{active_product}`를 브랜치 슬러그로 사용합니다 (이미 케밥케이스 형식).
 3. Worktree로 브랜치 생성:
    ```bash
-   SLUG="project-{branch_slug}"
+   SLUG="project-{active_product}"
    WORKTREE_DIR="../.worktrees/${SLUG}"
-   git worktree add -b "project/{branch_slug}" "$WORKTREE_DIR" main
+   git worktree add -b "project/{active_product}" "$WORKTREE_DIR" main
    ```
-   - 이미 존재하면: `project/{branch_slug}-v{version}`
+   - 이미 존재하면: `project/{active_product}-v{version}`
    - worktree 생성 실패 시 기존 worktree를 제거 후 재시도
 
 ### Step 4: 공유 대상 파일 추가
@@ -45,21 +49,22 @@ PROJECT_DIR="$(pwd)"
 WORKTREE_DIR="../.worktrees/${SLUG}"
 
 # 필요한 디렉토리 생성
-mkdir -p "$WORKTREE_DIR/.claude/state"
+mkdir -p "$WORKTREE_DIR/.claude/state/{active_product}"
 
-# 프로젝트 메타데이터를 worktree로 복사
-cp .claude/state/project.json "$WORKTREE_DIR/.claude/state/"
-cp .claude/state/sync-ledger.json "$WORKTREE_DIR/.claude/state/" 2>/dev/null || true
+# 프로젝트 메타데이터를 worktree로 복사 (product 네임스페이스 유지)
+cp ".claude/state/{active_product}/project.json" "$WORKTREE_DIR/.claude/state/{active_product}/"
+cp ".claude/state/{active_product}/sync-ledger.json" "$WORKTREE_DIR/.claude/state/{active_product}/" 2>/dev/null || true
 cp .user-identity "$WORKTREE_DIR/"
 
-# artifacts를 worktree로 복사
-cp -r .claude/artifacts/ "$WORKTREE_DIR/.claude/artifacts/"
+# artifacts를 worktree로 복사 (product 네임스페이스 유지)
+mkdir -p "$WORKTREE_DIR/.claude/artifacts"
+cp -r ".claude/artifacts/{active_product}/" "$WORKTREE_DIR/.claude/artifacts/{active_product}/"
 
 # worktree 안에서 git add (git -C로 디렉토리 이동 없이 실행)
-git -C "$WORKTREE_DIR" add -f .claude/state/project.json
-git -C "$WORKTREE_DIR" add -f .claude/state/sync-ledger.json
+git -C "$WORKTREE_DIR" add -f ".claude/state/{active_product}/project.json"
+git -C "$WORKTREE_DIR" add -f ".claude/state/{active_product}/sync-ledger.json"
 git -C "$WORKTREE_DIR" add -f .user-identity
-git -C "$WORKTREE_DIR" add -f .claude/artifacts/
+git -C "$WORKTREE_DIR" add -f ".claude/artifacts/{active_product}/"
 git -C "$WORKTREE_DIR" add CLAUDE.md README.md
 git -C "$WORKTREE_DIR" add .claude/commands/ .claude/templates/ .claude/spec/ .claude/manifests/
 ```
@@ -98,11 +103,11 @@ git -C "$WORKTREE_DIR" commit -m "project: {project_name} — {document_type} v{
 GH_TOKEN=$(cat "${PROJECT_DIR}/.gh-token" | tr -d '[:space:]')
 git -C "$WORKTREE_DIR" push \
   "https://user:${GH_TOKEN}@github.com/{github.owner}/{github.repo}.git" \
-  "HEAD:refs/heads/project/{branch_slug}"
+  "HEAD:refs/heads/project/{active_product}"
 
 # PR 생성 (PR 작성자는 --reviewer에서 자동 제외)
 GH_TOKEN=$GH_TOKEN gh pr create --repo {github.owner}/{github.repo} \
-  --head "project/{branch_slug}" \
+  --head "project/{active_product}" \
   --label documentation \
   --reviewer "{default_reviewers}" \
   --assignee "{default_assignees}" \
@@ -123,7 +128,7 @@ GH_TOKEN=$GH_TOKEN gh pr create --repo {github.owner}/{github.repo} \
 | `{project_name}` | `project.json`의 `project_name` |
 | `{document_type}` | `project.json`의 `document_type` |
 | `{commit_short}` | 기준 커밋 (main HEAD) |
-| `{branch_name}` | `project/{branch_slug}` |
+| `{branch_name}` | `project/{active_product}` |
 | `{change_summary}` | `{document_type} v{version} 생성 및 공유` |
 | `{detailed_changes}` | 생성된 파일 목록 (worktree의 신규/변경 파일) + 프로젝트 설명 (core_problem, target_users, domain) |
 | `{reason}` | `프로젝트 공유 및 협업` |
@@ -169,7 +174,7 @@ fi
 
 ```
 프로젝트를 공유했습니다:
-  - 브랜치: project/{branch_slug}
+  - 브랜치: project/{active_product}
   - PR: {pr_url}
   - 포함된 파일: {file_count}개
 ```

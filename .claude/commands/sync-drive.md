@@ -15,19 +15,24 @@ Playwright 브라우저를 통해 Google Drive 문서를 수집하고 로컬 kno
 ## 입력
 
 - `$ARGUMENTS`: (선택) 수집할 Drive URL을 직접 전달. 없으면 manifest에서 읽음.
-- manifest: `.claude/manifests/drive-sources.yaml`
+- manifest: `.claude/manifests/drive-sources-{active_product}.yaml`
 
 ---
 
 ## 실행 절차
 
+### Step -1: 활성 제품 로드
+
+`.claude/state/_active_product.txt`에서 활성 제품 ID를 읽어 `{active_product}` 변수에 저장합니다.
+- 파일이 없거나 비어있으면: "활성 제품이 설정되지 않았습니다. /init-project 또는 /switch-product를 실행하세요." 안내 후 중단.
+
 ### Step 0: 소스 확인
 
-1. `.claude/manifests/drive-sources.yaml`의 `sources[]`를 읽습니다.
+1. `.claude/manifests/drive-sources-{active_product}.yaml`의 `sources[]`를 읽습니다.
 2. `$ARGUMENTS`로 URL이 전달되었으면 해당 URL을 대상 목록에 추가합니다.
 3. 대상이 없으면:
    - 사용자에게 Drive URL을 입력받습니다.
-   - 입력받은 URL을 manifest에도 추가할지 물어봅니다.
+   - 입력받은 URL을 `drive-sources-{active_product}.yaml`에도 추가할지 물어봅니다.
 4. 대상이 있으면:
    - 현재 등록된 소스 목록을 보여주고, 추가할 소스가 있는지 물어봅니다.
 
@@ -121,7 +126,7 @@ URL 및 slug에서 파생되는 값의 안전성을 보장합니다.
 3. Bash tool로 다운로드된 파일 읽기:
    cat "{filePath}"
    또는 대용량이면:
-   cp "{filePath}" ".claude/knowledge/evidence/raw/{source_slug}.md"
+   cp "{filePath}" ".claude/knowledge/{active_product}/evidence/raw/{source_slug}.md"
 
 4. 내용을 Markdown으로 저장
 ```
@@ -182,8 +187,8 @@ URL 및 slug에서 파생되는 값의 안전성을 보장합니다.
       - 30KB 이하: 정상 저장
       - 30KB 초과: Step 2-4 대용량 처리로 전환
 4. CSV 저장:
-   - 단일 시트: .claude/knowledge/evidence/raw/{source_slug}.csv
-   - 여러 시트: .claude/knowledge/evidence/raw/{source_slug}/{tab_slug}.csv
+   - 단일 시트: .claude/knowledge/{active_product}/evidence/raw/{source_slug}.csv
+   - 여러 시트: .claude/knowledge/{active_product}/evidence/raw/{source_slug}/{tab_slug}.csv
 ```
 
 **gviz/tq API 장점**: same-origin이므로 CORS 차단 없음. CSV 형식으로 직접 반환. 인증 쿠키 자동 전달.
@@ -246,7 +251,7 @@ browser_run_code:
 
 수집 과정의 감사 추적을 위해 구조화된 로그를 기록합니다.
 
-**저장 경로**: `.claude/state/sync-log.jsonl`
+**저장 경로**: `.claude/state/{active_product}/sync-log.jsonl`
 
 **형식**: JSONL (소스별 1줄)
 
@@ -276,10 +281,10 @@ browser_run_code:
 
 #### 2-6. 저장
 
-1. Docs 텍스트 → Markdown 변환 후 저장: `.claude/knowledge/evidence/raw/{source_slug}.md`
+1. Docs 텍스트 → Markdown 변환 후 저장: `.claude/knowledge/{active_product}/evidence/raw/{source_slug}.md`
 2. Sheets CSV → 저장:
-   - 단일 시트: `.claude/knowledge/evidence/raw/{source_slug}.csv`
-   - 여러 시트: `.claude/knowledge/evidence/raw/{source_slug}/{tab_slug}.csv`
+   - 단일 시트: `.claude/knowledge/{active_product}/evidence/raw/{source_slug}.csv`
+   - 여러 시트: `.claude/knowledge/{active_product}/evidence/raw/{source_slug}/{tab_slug}.csv`
 
 ### Step 3: 정규화 & 청킹
 
@@ -287,19 +292,19 @@ browser_run_code:
 
 1. 텍스트 정규화 (NFC, 줄바꿈 통일, 후행 공백 제거 등)
 2. Heading 기반 청킹 (Docs) 또는 줄 기반 청킹 (Sheets/CSV)
-3. 청크 파일 생성: `.claude/knowledge/evidence/chunks/{source_slug}/chunk-{NNNN}.md`
+3. 청크 파일 생성: `.claude/knowledge/{active_product}/evidence/chunks/{source_slug}/chunk-{NNNN}.md`
 4. 각 청크 파일에 메타데이터 헤더 포함
 
 ### Step 4: 인덱스 빌드
 
-`.claude/knowledge/evidence/index/sources.jsonl` 생성:
+`.claude/knowledge/{active_product}/evidence/index/sources.jsonl` 생성:
 - 기존 인덱스가 있으면 삭제 후 재생성
 - 각 청크에 대해 chunk_id, source_name, content_sha256, line_count, path 기록
 - JSONL 항목은 chunk_id 기준 알파벳순 정렬
 
 ### Step 5: 동기화 원장 업데이트
 
-`.claude/state/sync-ledger.json` 업데이트:
+`.claude/state/{active_product}/sync-ledger.json` 업데이트:
 - `last_sync_time`: 현재 ISO 타임스탬프
 - `evidence_index_sha256`: sources.jsonl의 SHA-256
 - 소스별 `scraped_at`, `content_sha256`, `chunk_count`, `materialized_paths`
@@ -316,7 +321,7 @@ browser_run_code:
 
 ## 변경 감지
 
-- 새로 가져온 내용의 SHA-256과 동기화 원장의 `content_sha256` 비교
+- 새로 가져온 내용의 SHA-256과 `.claude/state/{active_product}/sync-ledger.json`의 `content_sha256` 비교
 - 불일치하면 해당 소스를 재처리 (raw 저장 → 청킹 → 인덱스 갱신)
 - 일치하면 "변경 없음" 출력 후 스킵
 
@@ -324,8 +329,8 @@ browser_run_code:
 
 ## 출력
 
-- `.claude/knowledge/evidence/raw/` — 내보내기 원본 (md, csv)
-- `.claude/knowledge/evidence/chunks/` — 정규화된 청크
-- `.claude/knowledge/evidence/index/sources.jsonl` — 청크 인덱스
-- `.claude/state/sync-ledger.json` — 동기화 원장
-- `.claude/state/sync-log.jsonl` — 수집 감사 로그
+- `.claude/knowledge/{active_product}/evidence/raw/` — 내보내기 원본 (md, csv)
+- `.claude/knowledge/{active_product}/evidence/chunks/` — 정규화된 청크
+- `.claude/knowledge/{active_product}/evidence/index/sources.jsonl` — 청크 인덱스
+- `.claude/state/{active_product}/sync-ledger.json` — 동기화 원장
+- `.claude/state/{active_product}/sync-log.jsonl` — 수집 감사 로그

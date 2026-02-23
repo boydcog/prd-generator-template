@@ -2,7 +2,11 @@
 
 ## 2026-02-23
 
-- improve: Live Meeting Mode 도입 — Wave 넘버링 폐지, 회의/판정/비평/통합 4단계 구조로 전환, Peer Messaging Protocol 추가, judge 역할 신설, peer_discussions JSON 계약 추가, 전문가 토론 요약 섹션 추가, Qodo 리뷰 반영(Synth 역할 분리, Judge 빈 결과 처리, limit_reached outcome, verify.md 검증 항목 확장)
+- improve: 템플릿/인스턴스 아키텍처 도입 — drive-sources.yaml을 템플릿(tracked)으로 유지하고 제품별 인스턴스(gitignored)로 분리, skip-worktree 제거로 git pull 템플릿 업데이트 수신 가능, 마이그레이션 v1→v2에서 mv→cp 전환 및 템플릿 복원, 마이그레이션 후 상태 재평가 규칙 추가
+- improve: v1_to_v2 마이그레이션 개선 — 기존/신규 워크스페이스 시나리오 분기, product_id 충돌 검사 및 해결 옵션(다른 이름/자동 접미사/덮어쓰기) 추가, 사용자 확인 루프 강화 ([`8e8402f`](https://github.com/boydcog/prd-generator-template/commit/8e8402f))
+- fix: Qodo 리뷰 반영 — product_id 검증(경로 순회 방지), `shopt` 제거(sh 호환), 마이그레이션 로직 단순화(BEFORE/AFTER 비교 → 현재 vs 타겟 비교), v1_to_v2 신규 워크스페이스 처리, switch-product 인자 검증 추가 ([`cbf59c9`](https://github.com/boydcog/prd-generator-template/commit/cbf59c9))
+- improve: 멀티 제품 지원 — `product_id` 네임스페이스로 하나의 워크스페이스에서 여러 제품 관리, `/switch-product` 커맨드 신규 추가, 스키마 v2 마이그레이션 시스템 도입 (MIGRATION_NEEDED 감지 → Claude가 `.claude/migrations/` 지침 실행) ([`e31bba9`](https://github.com/boydcog/prd-generator-template/commit/e31bba9))
+- improve: Live Meeting Mode 도입 — Wave 넘버링 폐지, 회의/판정/비평/통합 4단계 구조로 전환, Peer Messaging Protocol 추가, judge 역할 신설, peer_discussions JSON 계약 추가, 전문가 토론 요약 섹션 추가 ([`099d5dd`](https://github.com/boydcog/prd-generator-template/commit/099d5dd))
 
 ## 2026-02-20
 

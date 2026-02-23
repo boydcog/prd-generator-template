@@ -21,16 +21,18 @@ Google Drive 문서를 기반으로 6역할 에이전트 팀이 PRD, 디자인 �
 ## 핵심 기능
 
 1. **자동 파이프라인 (`/auto-generate`)** — Drive 동기화 → 에이전트 리서치 → 검증 → 완료 보고를 사용자 개입 없이 자동 실행
-2. **범용 문서 유형 (6종)** — PRD, 디자인 사양서, 마케팅 브리프, 사업 계획서, 기술 사양서, 사용자 정의
-3. **6역할 에이전트 팀** — biz, marketing, research, tech, pm, synth가 병렬/순차로 협업
-4. **GitHub Issue 자동 생성 (`/create-issue`)** — 사용자 피드백을 즉시 Issue로 기록
-5. **사용자 아이덴티티** — `.user-identity`로 작성자 추적, PR/Issue에 자동 반영
-6. **브랜치 워크플로우** — main 기반 작업 + feature 브랜치 PR 생성 후 자동 복귀
-7. **PR/Issue 템플릿** — `.claude/templates/`의 표준 템플릿으로 일관된 형식 보장
-8. **프로젝트 공유 (`/share-project`)** — 생성된 문서와 메타데이터를 PR로 팀에 공유
-9. **Drive 업로드 (`/upload-drive`)** — 생성된 문서를 Google Drive에 HTML 서식 유지하여 업로드
-10. **관리자 모드 (`/admin`)** — 템플릿 maintainer 전용. 요구사항 → 플랜 → 구현 → 검증 → PR 자동 생성
-11. **Worktree 기반 브랜치 격리** — 여러 세션이 동시 작업해도 브랜치 충돌 없음
+2. **멀티 제품 지원 (`/switch-product`)** — 하나의 워크스페이스에서 여러 제품을 `product_id`로 분리 관리, 즉시 전환 가능
+3. **범용 문서 유형 (6종)** — PRD, 디자인 사양서, 마케팅 브리프, 사업 계획서, 기술 사양서, 사용자 정의
+4. **6역할 에이전트 팀** — biz, marketing, research, tech, pm, synth가 병렬/순차로 협업
+5. **GitHub Issue 자동 생성 (`/create-issue`)** — 사용자 피드백을 즉시 Issue로 기록
+6. **사용자 아이덴티티** — `.user-identity`로 작성자 추적, PR/Issue에 자동 반영
+7. **브랜치 워크플로우** — main 기반 작업 + feature 브랜치 PR 생성 후 자동 복귀
+8. **PR/Issue 템플릿** — `.claude/templates/`의 표준 템플릿으로 일관된 형식 보장
+9. **프로젝트 공유 (`/share-project`)** — 생성된 문서와 메타데이터를 PR로 팀에 공유
+10. **Drive 업로드 (`/upload-drive`)** — 생성된 문서를 Google Drive에 HTML 서식 유지하여 업로드
+11. **관리자 모드 (`/admin`)** — 템플릿 maintainer 전용. 요구사항 → 플랜 → 구현 → 검증 → PR 자동 생성
+12. **자동 마이그레이션** — 템플릿 업데이트 시 세션 시작 시 자동으로 스키마 마이그레이션 실행
+13. **Worktree 기반 브랜치 격리** — 여러 세션이 동시 작업해도 브랜치 충돌 없음
 
 ---
 
@@ -126,14 +128,20 @@ Claude Code 세션을 시작하면 SessionStart hook이 상태를 자동 감지�
 ├── .gh-token                    ← GitHub 토큰 (gitignored)
 ├── .user-identity               ← 사용자 이름 (gitignored)
 ├── .claude/
-│   ├── commands/                ← 슬래시 명령어 (9개)
+│   ├── commands/                ← 슬래시 명령어 (10개, switch-product 포함)
+│   ├── migrations/              ← 스키마 마이그레이션 지침 (tracked)
 │   ├── templates/               ← PR/Issue 템플릿
-│   ├── manifests/               ← 설정 (drive-sources, project-defaults, admins)
+│   ├── manifests/               ← 설정 (drive-sources-{product_id}.yaml, admins 등)
 │   ├── spec/                    ← 사양서 (agent-team, document-types 등)
-│   ├── hooks/                   ← SessionStart hook
+│   ├── hooks/                   ← SessionStart hook (migration 감지 포함)
 │   ├── state/                   ← 상태 (generated, gitignored)
+│   │   ├── _active_product.txt  ← 현재 활성 제품 포인터
+│   │   ├── _schema_version.txt  ← 현재 적용된 스키마 버전
+│   │   └── {product_id}/        ← 제품별 상태
 │   ├── knowledge/               ← 증거 (generated, gitignored)
+│   │   └── {product_id}/        ← 제품별 증거 데이터
 │   └── artifacts/               ← 출력물 (generated, gitignored)
+│       └── {product_id}/        ← 제품별 출력물
 ```
 
 ## 지원 문서 유형

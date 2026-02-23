@@ -8,10 +8,15 @@
 
 ## 사전 조건 확인
 
+### Step -1: 활성 제품 로드
+
+`.claude/state/_active_product.txt`에서 활성 제품 ID를 읽어 `{active_product}` 변수에 저장합니다.
+- 파일이 없거나 비어있으면 → `/init-project`를 실행하여 신규 제품을 초기화합니다.
+
 실행 전 다음을 확인합니다:
 
-1. **project.json 존재**: `.claude/state/project.json`이 있는지 확인. 없으면 `/init-project`를 먼저 실행하라고 안내.
-2. **증거 인덱스 존재**: `.claude/knowledge/evidence/index/sources.jsonl`이 있는지 확인. 없으면 `/sync-drive`를 먼저 실행하라고 안내.
+1. **project.json 존재**: `.claude/state/{active_product}/project.json`이 있는지 확인. 없으면 `/init-project`를 먼저 실행하라고 안내.
+2. **증거 인덱스 존재**: `.claude/knowledge/{active_product}/evidence/index/sources.jsonl`이 있는지 확인. 없으면 `/sync-drive`를 먼저 실행하라고 안내.
 3. **증거 비어있지 않음**: sources.jsonl에 최소 1개 항목이 있는지 확인.
 
 ### Step 0.5: 문서 유형 설정 로드
@@ -127,7 +132,7 @@ AskUserQuestion으로 사용자 승인을 받습니다:
 
 ### 버전 번호 결정
 
-1. `.claude/artifacts/{output_dir_name}/` 디렉토리에서 기존 버전 폴더를 확인합니다 (`v1/`, `v2/`, ...).
+1. `.claude/artifacts/{active_product}/{output_dir_name}/` 디렉토리에서 기존 버전 폴더를 확인합니다 (`v1/`, `v2/`, ...).
    - `{output_dir_name}`은 `document-types.yaml`에서 로드한 값입니다.
 2. 가장 높은 번호 + 1을 새 버전으로 사용합니다.
 3. 첫 실행이면 `v1`입니다.
@@ -135,7 +140,7 @@ AskUserQuestion으로 사용자 승인을 받습니다:
 ### 출력 경로 구조
 
 ```
-.claude/artifacts/{output_dir_name}/
+.claude/artifacts/{active_product}/{output_dir_name}/
 ├── v1/
 │   ├── {output_file_name}
 │   ├── citations.json
@@ -230,9 +235,9 @@ Task(
 > 실제 모델 선택은 에이전트의 기본 동작을 따릅니다.
 
 각 에이전트에게 전달할 컨텍스트:
-- `.claude/state/project.json` (프로젝트 설정)
-- `.claude/knowledge/evidence/index/sources.jsonl` (증거 인덱스)
-- `.claude/knowledge/evidence/chunks/` (증거 청크 파일들)
+- `.claude/state/{active_product}/project.json` (프로젝트 설정)
+- `.claude/knowledge/{active_product}/evidence/index/sources.jsonl` (증거 인덱스)
+- `.claude/knowledge/{active_product}/evidence/chunks/` (증거 청크 파일들)
 - `.claude/spec/agent-team-spec.md` (역할 정의 + JSON 계약 + Peer Messaging Protocol)
 - `.claude/spec/citation-spec.md` (인용 규칙)
 - `.claude/spec/document-types.yaml` (문서 유형 정의)
@@ -255,7 +260,7 @@ Task(
 동적 역할 에이전트의 프롬프트는 기존 템플릿과 동일하되:
 - 역할 정의를 `agent-team-spec.md` 대신 `dynamic_roles[]`에서 로드
 - 필수 섹션을 `dynamic_roles[].output_sections`에서 로드
-- 출력 경로: `.claude/artifacts/agents/{role_id}.json` + `{role_id}.md`
+- 출력 경로: `.claude/artifacts/{active_product}/agents/{role_id}.json` + `{role_id}.md`
 - 회의 참석자 목록 + Peer Messaging Protocol을 동일하게 포함
 
 ### 회의 완료 → 토론 기록 수집
@@ -263,7 +268,7 @@ Task(
 모든 도메인 에이전트가 완료되면 팀 리더가 다음을 수행합니다:
 
 1. 각 에이전트의 JSON 출력에서 `peer_discussions` 배열을 수집
-2. 모든 `peer_discussions`를 통합하여 `.claude/artifacts/agents/debate/discussions.json`에 저장
+2. 모든 `peer_discussions`를 통합하여 `.claude/artifacts/{active_product}/agents/debate/discussions.json`에 저장
 3. 미해결 충돌 (`outcome: "unresolved"`) 건수를 확인
 
 ### 판정 (Judge): 토론 판정 에이전트 생성 (순차, 회의 완료 후)
@@ -364,7 +369,7 @@ Task(
    - 동적 역할의 관점은 관련 섹션에 자연스럽게 통합 (별도 섹션 불필요)
 8. **인용 보고서**: 모든 인용을 `citations.json`에 기록
 9. **출력**: 버전 디렉토리에 `{output_file_name}` 저장
-   - 경로: `.claude/artifacts/{output_dir_name}/v{N}/{output_file_name}`
+   - 경로: `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/{output_file_name}`
 10. `TaskUpdate(status="completed")`
 11. `SendMessage(recipient="team-lead", summary="통합 문서 생성 완료")`
 
@@ -425,8 +430,8 @@ Step 0.7에서 이 역할에 관련된 증거만 선별하여 전달합니다.
 6. JSON 키는 알파벳순으로 정렬하세요.
 
 ## 출력 경로
-- JSON: .claude/artifacts/agents/{role}.json
-- Markdown: .claude/artifacts/agents/{role}.md
+- JSON: .claude/artifacts/{active_product}/agents/{role}.json
+- Markdown: .claude/artifacts/{active_product}/agents/{role}.md
 
 ## 팀 통신 (필수)
 당신은 "research-v{N}" 팀의 "{role}-agent" 팀원입니다.
@@ -479,8 +484,8 @@ Step 0.7에서 이 역할의 keywords에 매칭된 증거만 선별하여 전달
 6. JSON 키는 알파벳순으로 정렬하세요.
 
 ## 출력 경로
-- JSON: .claude/artifacts/agents/{role_id}.json
-- Markdown: .claude/artifacts/agents/{role_id}.md
+- JSON: .claude/artifacts/{active_product}/agents/{role_id}.json
+- Markdown: .claude/artifacts/{active_product}/agents/{role_id}.md
 
 ## 팀 통신 (필수)
 당신은 "research-v{N}" 팀의 "{role}-agent" 팀원입니다.
@@ -503,7 +508,7 @@ Step 0.7에서 이 역할의 keywords에 매칭된 증거만 선별하여 전달
 ## 검토 대상
 회의 에이전트들의 JSON 파일 (peer_discussions 포함):
 {활성 에이전트 목록의 JSON 경로}
-토론 기록: .claude/artifacts/agents/debate/discussions.json
+토론 기록: .claude/artifacts/{active_product}/agents/debate/discussions.json
 
 ## 판정 규칙
 1. peer_discussions에서 outcome: "unresolved" 또는 "limit_reached" 항목을 모두 수집하세요.
@@ -520,8 +525,8 @@ Step 0.7에서 이 역할의 keywords에 매칭된 증거만 선별하여 전달
 agent-team-spec.md의 "Judge 출력 계약"을 준수하세요.
 
 ## 출력 경로
-- JSON: .claude/artifacts/agents/debate/judgment.json
-- Markdown: .claude/artifacts/agents/debate/summary.md
+- JSON: .claude/artifacts/{active_product}/agents/debate/judgment.json
+- Markdown: .claude/artifacts/{active_product}/agents/debate/summary.md
 
 ## 팀 통신 (필수)
 당신은 "research-v{N}" 팀의 "judge-agent" 팀원입니다.
@@ -545,9 +550,9 @@ agent-team-spec.md의 "Judge 출력 계약"을 준수하세요.
 도메인 에이전트들의 JSON 파일:
 {활성 에이전트 목록의 JSON 경로}
 토론 기록 및 판정:
-- .claude/artifacts/agents/debate/discussions.json
-- .claude/artifacts/agents/debate/judgment.json
-- .claude/artifacts/agents/debate/summary.md
+- .claude/artifacts/{active_product}/agents/debate/discussions.json
+- .claude/artifacts/{active_product}/agents/debate/judgment.json
+- .claude/artifacts/{active_product}/agents/debate/summary.md
 
 ## 검토 항목
 1. **논리적 오류**: 추론 과정에서의 논리적 오류 또는 근거 없는 주장 (citation 부재)
@@ -563,8 +568,8 @@ agent-team-spec.md의 "Judge 출력 계약"을 준수하세요.
 4. JSON 키는 알파벳순으로 정렬하세요.
 
 ## 출력 경로
-- JSON: .claude/artifacts/agents/critique.json
-- Markdown: .claude/artifacts/agents/critique.md
+- JSON: .claude/artifacts/{active_product}/agents/critique.json
+- Markdown: .claude/artifacts/{active_product}/agents/critique.md
 
 ## 팀 통신 (필수)
 당신은 "research-v{N}" 팀의 "critique-agent" 팀원입니다.
@@ -588,12 +593,12 @@ agent-team-spec.md의 "Judge 출력 계약"을 준수하세요.
 도메인 에이전트 결과:
 {활성 에이전트 목록의 JSON/MD 경로}
 토론 기록 및 판정:
-- .claude/artifacts/agents/debate/discussions.json
-- .claude/artifacts/agents/debate/judgment.json
-- .claude/artifacts/agents/debate/summary.md
+- .claude/artifacts/{active_product}/agents/debate/discussions.json
+- .claude/artifacts/{active_product}/agents/debate/judgment.json
+- .claude/artifacts/{active_product}/agents/debate/summary.md
 비판적 검토:
-- .claude/artifacts/agents/critique.json
-- .claude/artifacts/agents/critique.md
+- .claude/artifacts/{active_product}/agents/critique.json
+- .claude/artifacts/{active_product}/agents/critique.md
 
 ## 통합 규칙
 1. **Judge 판정 우선 반영**: judgment.json의 adopted_for_synth 필드를 요구사항 결정 시 우선 반영하세요.
@@ -605,10 +610,10 @@ agent-team-spec.md의 "Judge 출력 계약"을 준수하세요.
 7. **인용 보고서**: 모든 인용을 citations.json에 기록하세요.
 
 ## 출력 경로
-- 최종 문서: .claude/artifacts/{output_dir_name}/v{N}/{output_file_name}
-- 인용 보고서: .claude/artifacts/{output_dir_name}/v{N}/citations.json
-- 충돌 보고서: .claude/artifacts/{output_dir_name}/v{N}/conflicts.json
-- 메타데이터: .claude/artifacts/{output_dir_name}/v{N}/metadata.json
+- 최종 문서: .claude/artifacts/{active_product}/{output_dir_name}/v{N}/{output_file_name}
+- 인용 보고서: .claude/artifacts/{active_product}/{output_dir_name}/v{N}/citations.json
+- 충돌 보고서: .claude/artifacts/{active_product}/{output_dir_name}/v{N}/conflicts.json
+- 메타데이터: .claude/artifacts/{active_product}/{output_dir_name}/v{N}/metadata.json
 
 ## 팀 통신 (필수)
 당신은 "research-v{N}" 팀의 "synth-agent" 팀원입니다.
@@ -641,17 +646,17 @@ agent-team-spec.md의 "Judge 출력 계약"을 준수하세요.
 
 | 파일 | 설명 |
 |------|------|
-| `.claude/artifacts/agents/{role}.json` | 회의(Discussion) 각 역할의 구조화된 출력 (peer_discussions 포함) |
-| `.claude/artifacts/agents/{role}.md` | 회의(Discussion) 각 역할의 서술형 요약 |
-| `.claude/artifacts/agents/debate/discussions.json` | 팀 리더가 취합한 전체 peer_discussions |
-| `.claude/artifacts/agents/debate/judgment.json` | Judge 판정 결과 (미해결 충돌 승/패/무승부) |
-| `.claude/artifacts/agents/debate/summary.md` | 인간 읽기용 전체 토론 요약 |
-| `.claude/artifacts/agents/critique.json` | 비평(Critique) 비판적 검토 구조화된 출력 |
-| `.claude/artifacts/agents/critique.md` | 비평(Critique) 비판적 검토 서술형 요약 |
-| `.claude/artifacts/{output_dir}/v{N}/{output_file}` | 최종 통합 문서 (버전별) |
-| `.claude/artifacts/{output_dir}/v{N}/citations.json` | 전체 인용 보고서 |
-| `.claude/artifacts/{output_dir}/v{N}/conflicts.json` | 역할 간 충돌 보고서 |
-| `.claude/artifacts/{output_dir}/v{N}/metadata.json` | 버전 메타데이터 |
+| `.claude/artifacts/{active_product}/agents/{role}.json` | 회의(Discussion) 각 역할의 구조화된 출력 (peer_discussions 포함) |
+| `.claude/artifacts/{active_product}/agents/{role}.md` | 회의(Discussion) 각 역할의 서술형 요약 |
+| `.claude/artifacts/{active_product}/agents/debate/discussions.json` | 팀 리더가 취합한 전체 peer_discussions |
+| `.claude/artifacts/{active_product}/agents/debate/judgment.json` | Judge 판정 결과 (미해결 충돌 승/패/무승부) |
+| `.claude/artifacts/{active_product}/agents/debate/summary.md` | 인간 읽기용 전체 토론 요약 |
+| `.claude/artifacts/{active_product}/agents/critique.json` | 비평(Critique) 비판적 검토 구조화된 출력 |
+| `.claude/artifacts/{active_product}/agents/critique.md` | 비평(Critique) 비판적 검토 서술형 요약 |
+| `.claude/artifacts/{active_product}/{output_dir}/v{N}/{output_file}` | 최종 통합 문서 (버전별) |
+| `.claude/artifacts/{active_product}/{output_dir}/v{N}/citations.json` | 전체 인용 보고서 |
+| `.claude/artifacts/{active_product}/{output_dir}/v{N}/conflicts.json` | 역할 간 충돌 보고서 |
+| `.claude/artifacts/{active_product}/{output_dir}/v{N}/metadata.json` | 버전 메타데이터 |
 
 ---
 

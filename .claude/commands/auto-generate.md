@@ -7,10 +7,15 @@
 
 ## 사전 조건 확인
 
+### Step -1: 활성 제품 로드
+
+`.claude/state/_active_product.txt`에서 활성 제품 ID를 읽어 `{active_product}` 변수에 저장합니다.
+- 파일이 없거나 비어있으면 → `/init-project`를 실행하여 신규 제품을 초기화합니다.
+
 실행 전 다음을 확인합니다:
 
-1. **project.json 존재**: `.claude/state/project.json`이 없으면 → `/init-project` 실행.
-2. **Drive 소스 존재**: `.claude/manifests/drive-sources.yaml`에 `sources[]`가 비어있으면 → `/init-project` 실행.
+1. **project.json 존재**: `.claude/state/{active_product}/project.json`이 없으면 → `/init-project` 실행.
+2. **Drive 소스 존재**: `.claude/manifests/drive-sources-{active_product}.yaml`에 `sources[]`가 비어있으면 → `/init-project` 실행.
 3. **사용자 아이덴티티**: `.user-identity` 확인. 없으면 이름 입력받아 저장.
 
 사전 조건이 충족되면 자동 파이프라인을 시작합니다.
@@ -30,7 +35,7 @@
    - 사용자에게 로그인 안내 → 로그인 완료 후 자동 재개.
    - 이것이 유일한 사용자 개입 지점입니다.
 3. 동기화 완료 확인:
-   - `.claude/knowledge/evidence/index/sources.jsonl`이 비어있지 않은지 확인.
+   - `.claude/knowledge/{active_product}/evidence/index/sources.jsonl`이 비어있지 않은지 확인.
    - 비어있으면: 오류 보고 후 중단.
 
 ### Phase 2: 에이전트 리서치
@@ -129,7 +134,7 @@ Phase 3/4: 검증
 
 Phase 4/4: 완료
   📄 {document_type_name} v{N} 생성
-  📁 경로: .claude/artifacts/{output_dir}/v{N}/{output_file}
+  📁 경로: .claude/artifacts/{active_product}/{output_dir}/v{N}/{output_file}
   📊 섹션: {N}개 | 인용: {N}건
 
 === 파이프라인 완료 ===

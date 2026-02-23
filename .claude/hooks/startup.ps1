@@ -137,6 +137,13 @@ if ($HasGit) {
         $pullResult = git pull --rebase origin main 2>&1
         if ($LASTEXITCODE -eq 0) {
             $Status += "OK git pull 완료"
+            # 마이그레이션: 현재 적용 버전 vs 템플릿 요구 버전 비교
+            $CurrentSchema = if (Test-Path ".claude/state/_schema_version.txt") { (Get-Content ".claude/state/_schema_version.txt" -Raw).Trim() } else { "v1" }
+            $TargetSchema = if (Test-Path ".claude/migrations/_target_version.txt") { (Get-Content ".claude/migrations/_target_version.txt" -Raw).Trim() } else { "v1" }
+            if ($CurrentSchema -ne $TargetSchema) {
+                $MigrationNeeded = "${CurrentSchema}_to_${TargetSchema}"
+                $Status += "WARN MIGRATION_NEEDED=$MigrationNeeded"
+            }
         } else {
             # rebase 진행 중이면 abort
             git rebase --abort 2>$null
@@ -170,16 +177,6 @@ if ($HasGit) {
             }
         }
     }
-
-    # manifests 보호
-    if ($GitReady) {
-        Get-ChildItem ".claude/manifests/*.yaml" -ErrorAction SilentlyContinue | ForEach-Object {
-            $relPath = Resolve-Path -Relative $_.FullName -ErrorAction SilentlyContinue
-            if ($relPath) {
-                git update-index --skip-worktree "$relPath" 2>$null
-            }
-        }
-    }
 }
 
 # ──────────────────────────────────────
@@ -203,22 +200,42 @@ if (Test-Path ".gh-token") {
 }
 
 # ──────────────────────────────────────
-# 4. 프로젝트 상태 확인
+# 4. 활성 제품 + 프로젝트 상태 확인
 # ──────────────────────────────────────
-$HasProject = Test-Path ".claude/state/project.json"
-$HasSources = $false
-if (Test-Path ".claude/manifests/drive-sources.yaml") {
-    $content = Get-Content ".claude/manifests/drive-sources.yaml" -Raw
-    if ($content -match "^\s+- name:") { $HasSources = $true }
+$ActiveProduct = ""
+if (Test-Path ".claude/state/_active_product.txt") {
+    $ActiveProduct = (Get-Content ".claude/state/_active_product.txt" -Raw).Trim()
+    # product_id 검증: 영문자, 숫자, 하이픈, 언더스코어만 허용 (경로 순회 방지)
+    if ($ActiveProduct -and $ActiveProduct -notmatch '^[a-zA-Z0-9_-]+$') {
+        $Status += "WARN 활성 제품 ID가 유효하지 않습니다 (허용: 영문자, 숫자, -, _)"
+        $ActiveProduct = ""
+    }
 }
-$HasEvidence = Test-Path ".claude/knowledge/evidence/index/sources.jsonl"
-$HasPrd = (Get-ChildItem ".claude/artifacts/prd/v*/PRD.md" -ErrorAction SilentlyContinue).Count -gt 0
+
+$HasProject = $false
+$HasSources = $false
+$HasEvidence = $false
+$HasDocument = $false
+if (-not (Get-Variable -Name "MigrationNeeded" -ErrorAction SilentlyContinue)) { $MigrationNeeded = "" }
+
+if ($ActiveProduct) {
+    $HasProject = Test-Path ".claude/state/${ActiveProduct}/project.json"
+    if (Test-Path ".claude/manifests/drive-sources-${ActiveProduct}.yaml") {
+        $content = Get-Content ".claude/manifests/drive-sources-${ActiveProduct}.yaml" -Raw
+        if ($content -match "^\s+- name:") { $HasSources = $true }
+    }
+    $HasEvidence = Test-Path ".claude/knowledge/${ActiveProduct}/evidence/index/sources.jsonl"
+    $docFiles = Get-ChildItem ".claude/artifacts/${ActiveProduct}/*/v*/*.md" -ErrorAction SilentlyContinue
+    $HasDocument = $docFiles.Count -gt 0
+}
 
 # 추천 액션 (auto-generate 중심 — 내부에서 상태별 Phase 자동 판단)
 $NextAction = "auto-generate"
-if (-not $HasProject) {
+if (-not $ActiveProduct) {
+    $NextAction = "select-product"
+} elseif (-not $HasProject) {
     $NextAction = "auto-generate"
-} elseif ($HasPrd) {
+} elseif ($HasDocument) {
     $NextAction = "sync-drive-or-update"
 } else {
     $NextAction = "auto-generate"
@@ -237,14 +254,20 @@ Write-Output "  gh: $HasGh"
 Write-Output "  winget: $HasWinget"
 Write-Output ""
 Write-Output "프로젝트 상태:"
+Write-Output "  활성 제품: $(if ($ActiveProduct) { $ActiveProduct } else { '미설정' })"
 Write-Output "  project.json: $HasProject"
 Write-Output "  Drive 소스: $HasSources"
 Write-Output "  증거(evidence): $HasEvidence"
-Write-Output "  PRD 생성됨: $HasPrd"
+Write-Output "  문서 생성됨: $HasDocument"
 Write-Output "  GH 토큰: $GhTokenLoaded"
 Write-Output "  git 연결: $GitReady"
 Write-Output "  사용자: $(if ($UserName) { $UserName } else { '미설정' })"
-Write-Output "  추천 액션: $NextAction"
+if ($MigrationNeeded) {
+    Write-Output "  RECOMMENDED_ACTION=migration"
+    Write-Output "  MIGRATION_NEEDED=$MigrationNeeded"
+} else {
+    Write-Output "  추천 액션: $NextAction"
+}
 Write-Output "==========================="
 
 exit 0

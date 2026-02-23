@@ -3,6 +3,10 @@
 .claude/knowledge/
 .claude/artifacts/
 
+# Per-product manifest instances (copied from templates)
+# Templates (drive-sources.yaml, project-defaults.yaml) remain tracked.
+.claude/manifests/drive-sources-*.yaml
+
 # Secrets (슬랙으로 공유, 절대 커밋 금지)
 .gh-token
 .user-identity
