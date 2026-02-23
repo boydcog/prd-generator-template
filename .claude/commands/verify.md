@@ -31,6 +31,15 @@
 - 예시 (prd): biz.json, marketing.json, research.json, tech.json, pm.json
 - 예시 (tech-spec): tech.json, research.json, pm.json
 
+**토론 기록 및 판정** (Live Meeting Mode):
+- [ ] `.claude/artifacts/agents/debate/discussions.json` (전체 peer_discussions 취합)
+- [ ] `.claude/artifacts/agents/debate/judgment.json` (Judge 판정 결과)
+- [ ] `.claude/artifacts/agents/debate/summary.md` (토론 요약)
+
+**비평 출력:**
+- [ ] `.claude/artifacts/agents/critique.json`
+- [ ] `.claude/artifacts/agents/critique.md`
+
 **최종 문서** (문서 유형에 따라 경로/파일명 결정):
 - `document-types.yaml`에서 `output_dir_name`, `output_file_name`을 로드합니다.
 - 우선: `.claude/artifacts/{output_dir_name}/v{N}/{output_file_name}` (버전 서브디렉토리)
@@ -48,10 +57,19 @@
 각 에이전트 JSON 출력이 `agent-team-spec.md`의 계약을 준수하는지 확인합니다:
 
 - [ ] `role` 필드가 유효한 역할 ID인지
+- [ ] `critical_issue` 객체가 존재하는지 (도메인 에이전트만, `id`, `statement`, `impact` 필수)
+- [ ] `peer_discussions[]` 배열이 존재하는지 (도메인 에이전트만, 빈 배열 허용)
+  - 각 항목에 `partner`, `topic`, `outcome` 필드가 있는지
+  - `outcome`이 `resolved|unresolved|partial|limit_reached` 중 하나인지
 - [ ] `claims[]` 배열이 존재하는지
 - [ ] `open_questions[]` 배열이 존재하는지
 - [ ] `risks[]` 배열이 존재하는지
 - [ ] 각 claim에 `id`, `statement`, `citations[]`가 있는지
+
+**Judge 출력 스키마** (`debate/judgment.json`):
+- [ ] `resolved_clashes[]` 배열이 존재하는지 (빈 배열 허용)
+- [ ] 각 항목에 `clash_id`, `agents`, `topic`, `judgment`, `adopted_for_synth`가 있는지
+- [ ] `overall_summary` 문자열이 존재하는지
 
 ---
 
@@ -127,8 +145,8 @@ PRD 생성 시 기록된 증거 인덱스 해시와 현재 인덱스를 비교�
 ```
 === 검증 결과 ===
 
-1. 구조 검사: ✅ PASS (12/12 파일 확인)
-2. 스키마 검증: ✅ PASS (5/5 에이전트 출력 유효)
+1. 구조 검사: ✅ PASS (15/15 파일 확인)
+2. 스키마 검증: ✅ PASS (5/5 에이전트 + debate + critique 출력 유효)
 3. 인용 유효성: ⚠️ WARN (2건 경고)
    - CLM-003 (biz): chunk_id SRC-xxx 미존재
    - CLM-007 (tech): quote_sha256 불일치

@@ -288,10 +288,12 @@ Task(
 2. `TaskUpdate(owner="judge-agent", status="in_progress")`
 3. 회의 결과 읽기 (모든 역할의 JSON + `debate/discussions.json`)
 4. **미해결 충돌 판정**:
-   - `peer_discussions`에서 `outcome: "unresolved"` 항목을 수집
-   - 각 충돌에 대해: 양측 주장, 근거, 증거를 비교 분석
-   - 승/패/무승부 판정 + 판정 근거 서술
-   - `adopted_for_synth`: synth가 최종 문서에 반영할 구체적 내용
+   - `peer_discussions`에서 `outcome: "unresolved"` 또는 `outcome: "limit_reached"` 항목을 수집
+   - **(미해결 충돌 없음)**: `resolved_clashes`를 빈 배열로, `overall_summary`에 "모든 토론이 자체적으로 합의에 도달함" 기록 후 절차 종료
+   - **(미해결 충돌 있음)**:
+     - 각 충돌에 대해: 양측 주장, 근거, 증거를 비교 분석
+     - 승/패/무승부 판정 + 판정 근거 서술
+     - `adopted_for_synth`: synth가 최종 문서에 반영할 구체적 내용
 5. **이미 해결된 합의 확인**: `outcome: "resolved"` 항목을 승인
 6. **전체 토론 요약**: 인간 읽기용 `summary.md` 작성
 7. `judgment.json` + `summary.md` 생성 → `debate/` 디렉토리에 저장
@@ -354,8 +356,8 @@ Task(
 2. `TaskUpdate(owner="synth-agent", status="in_progress")`
 3. 전체 결과 읽기 (회의 결과 + debate/ + critique)
 4. **Judge 판정 반영**: `judgment.json`의 `adopted_for_synth` 필드를 요구사항 결정 시 우선 반영
-5. **충돌 식별 및 해결**: 역할 간 상충하는 주장 중 Judge가 판정하지 않은 잔여 충돌을 해결
-   - 충돌 항목은 `conflicts.json`에 기록
+5. **미판정 충돌 기록**: 역할 간 상충하는 주장 중 Judge가 판정하지 않은 잔여 충돌을 식별
+   - 해당 충돌은 해결하려 시도하지 말고, `conflicts.json`에 상세히 기록 (Judge가 유일한 판정자)
 6. **전문가 토론 요약 섹션 작성**: `debate/summary.md` 기반으로 토론 핵심 내용 요약
 7. **통합 문서 작성**: 모든 역할(고정 + 동적)의 핵심 내용을 통합하여 최종 문서 작성
    - 문서 구조는 `document-types.yaml`의 `output_sections`를 따름
@@ -402,6 +404,7 @@ Task(
 → 응답을 받으면 자신의 분석에 반영하세요.
 → 같은 상대, 같은 주제로 최대 3회 왕복 교환 후에도 합의 안 되면 peer_discussions에 outcome: "unresolved"로 기록하세요.
 → 에이전트당 총 발신 메시지: 최대 10개.
+→ 10개 제한으로 논의하지 못한 중요 주제가 있으면 peer_discussions에 outcome: "limit_reached"로 기록하세요.
 
 다른 에이전트로부터 질문/의견을 받으면:
 → 반드시 자신의 관점에서 응답하세요.
@@ -456,6 +459,7 @@ Step 0.7에서 이 역할에 관련된 증거만 선별하여 전달합니다.
 → 응답을 받으면 자신의 분석에 반영하세요.
 → 같은 상대, 같은 주제로 최대 3회 왕복 교환 후에도 합의 안 되면 peer_discussions에 outcome: "unresolved"로 기록하세요.
 → 에이전트당 총 발신 메시지: 최대 10개.
+→ 10개 제한으로 논의하지 못한 중요 주제가 있으면 peer_discussions에 outcome: "limit_reached"로 기록하세요.
 
 다른 에이전트로부터 질문/의견을 받으면:
 → 반드시 자신의 관점에서 응답하세요.
@@ -502,7 +506,8 @@ Step 0.7에서 이 역할의 keywords에 매칭된 증거만 선별하여 전달
 토론 기록: .claude/artifacts/agents/debate/discussions.json
 
 ## 판정 규칙
-1. peer_discussions에서 outcome: "unresolved" 항목을 모두 수집하세요.
+1. peer_discussions에서 outcome: "unresolved" 또는 "limit_reached" 항목을 모두 수집하세요.
+1a. 미해결 충돌이 0건이면: resolved_clashes를 빈 배열로, overall_summary에 "모든 토론이 자체 합의에 도달함"을 기록하고 절차를 종료하세요.
 2. 각 충돌에 대해: 양측 주장, 근거, 증거를 비교 분석하세요.
 3. 판정: tech_wins | pm_wins | biz_wins | ... | draw 형식으로 결정하세요.
 4. reasoning: 왜 해당 판정이 타당한지 서술하세요.
@@ -596,7 +601,7 @@ agent-team-spec.md의 "Judge 출력 계약"을 준수하세요.
 3. **전문가 토론 요약 섹션**: debate/summary.md 기반으로 토론 핵심 내용을 요약하는 섹션을 포함하세요.
 4. **문서 구조**: document-types.yaml의 output_sections에 정의된 섹션을 순서대로 작성하세요.
 5. **동적 역할 통합**: 동적 역할의 관점은 관련 섹션에 자연스럽게 통합하세요 (별도 섹션 불필요).
-6. **충돌 기록**: 잔여 충돌은 conflicts.json에 기록하세요.
+6. **미판정 충돌 기록**: Judge가 판정하지 않은 잔여 충돌은 해결하지 말고 conflicts.json에 상세 기록하세요 (Judge가 유일한 판정자).
 7. **인용 보고서**: 모든 인용을 citations.json에 기록하세요.
 
 ## 출력 경로

@@ -2,7 +2,7 @@
 
 ## 2026-02-23
 
-- improve: Live Meeting Mode 도입 — Wave 넘버링 폐지, 회의/판정/비평/통합 4단계 구조로 전환, Peer Messaging Protocol 추가, judge 역할 신설, peer_discussions JSON 계약 추가, 전문가 토론 요약 섹션 추가
+- improve: Live Meeting Mode 도입 — Wave 넘버링 폐지, 회의/판정/비평/통합 4단계 구조로 전환, Peer Messaging Protocol 추가, judge 역할 신설, peer_discussions JSON 계약 추가, 전문가 토론 요약 섹션 추가, Qodo 리뷰 반영(Synth 역할 분리, Judge 빈 결과 처리, limit_reached outcome, verify.md 검증 항목 확장)
 
 ## 2026-02-20
 
