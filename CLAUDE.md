@@ -63,7 +63,10 @@ RECOMMENDED_ACTION=migration 감지 시 (최우선):
   → {from}~{to} 사이 모든 단계를 .claude/migrations/ 에서 순차 로드 + 실행
     예: v1_to_v2 하나면 v1_to_v2.md만, 향후 v1→v3이면 v1_to_v2.md → v2_to_v3.md 순
   → 각 단계 완료 후 .claude/state/_schema_version.txt 업데이트 (단계별로)
-  → "스키마 {from} → {to} 마이그레이션이 완료되었습니다." 보고 후 이후 액션 이어서 실행
+  → "스키마 {from} → {to} 마이그레이션이 완료되었습니다." 보고
+  → 마이그레이션 완료 후 상태 재평가 (startup hook 재실행 없이 직접 판단):
+    - _active_product.txt가 존재하면 → 해당 제품 상태 확인 (문서 유무) → sync-drive-or-update 또는 auto-generate
+    - _active_product.txt가 없으면 → select-product 플로우 실행
 
 추천 액션이 "select-product"일 때 (MIGRATION 다음 우선):
   → .claude/state/ 하위 디렉토리를 열거해 기존 제품 목록 표시
@@ -259,6 +262,37 @@ SessionStart hook에서 "GitHub 토큰 없음"이 감지되면 **다른 작업�
 
 - `project.json`에 `document_type` 필드가 없으면 기본값 `prd` 적용 (하위호환).
 - 문서 유형에 따라 활성 에이전트, 출력 섹션, 저장 경로가 자동 결정됩니다.
+
+---
+
+## 템플릿 / 인스턴스 아키텍처
+
+이 프로젝트는 **템플릿(tracked) + 인스턴스(gitignored)** 패턴으로 동작합니다.
+
+### 원칙
+
+- **템플릿** = `/admin`이 관리하는 파일. tracked 상태로 `git pull`을 통해 모든 사용자에게 배포됩니다.
+- **인스턴스** = 제품 생성 시 템플릿에서 복사된 파일. gitignored로 사용자 데이터가 커밋되지 않습니다.
+- 사용자는 인스턴스만 수정합니다. 템플릿을 직접 수정하지 않습니다.
+
+### 파일 매핑
+
+| 템플릿 (tracked) | 인스턴스 (gitignored) | 생성 시점 |
+|-----------------|---------------------|----------|
+| `.claude/manifests/drive-sources.yaml` | `.claude/manifests/drive-sources-{product_id}.yaml` | init-project 또는 v1→v2 마이그레이션 |
+| `.claude/manifests/project-defaults.yaml` | `.claude/state/{product_id}/project.json` | init-project (인터뷰 결과로 생성) |
+
+### 업데이트 전파
+
+| 변경 유형 | 새 제품 | 기존 제품 |
+|----------|---------|----------|
+| 템플릿 포맷 변경 (필드 추가 등) | 즉시 적용 (최신 템플릿에서 복사) | 마이그레이션 스크립트로 적용 |
+| spec/command 변경 | 즉시 적용 (런타임 읽기) | 즉시 적용 (런타임 읽기) |
+| 디렉토리 구조 변경 | 즉시 적용 | 마이그레이션 스크립트로 적용 |
+
+### skip-worktree 정책 (v2)
+
+v1에서는 `drive-sources.yaml` 등을 `--skip-worktree`로 보호했으나, v2에서는 사용자가 템플릿을 직접 수정하지 않으므로 **skip-worktree를 사용하지 않습니다**. 이를 통해 `git pull`로 admin이 배포하는 템플릿 업데이트가 정상 수신됩니다.
 
 ---
 
@@ -569,8 +603,9 @@ GH 토큰이 없으면 `.claude/state/pending-issues/`에 로컬 저장 후 토�
 │   ├── templates/                     ← PR/Issue 템플릿
 │   │   ├── pr-template.md
 │   │   └── issue-template.md
-│   ├── manifests/                     ← 설정 (tracked)
-│   │   ├── drive-sources-{product_id}.yaml  ← 제품별 Drive 소스 (gitignored)
+│   ├── manifests/                     ← 설정 템플릿 (tracked)
+│   │   ├── drive-sources.yaml              ← Drive 소스 템플릿 (tracked, admin 관리)
+│   │   ├── drive-sources-{product_id}.yaml ← 제품별 인스턴스 (gitignored)
 │   │   ├── project-defaults.yaml
 │   │   └── admins.yaml                ← 관리자 목록
 │   ├── spec/                          ← 사양서 (tracked)

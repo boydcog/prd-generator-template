@@ -216,13 +216,6 @@ OK git pull 완료"
 WARN MIGRATION_NEEDED=$MIGRATION_NEEDED"
     fi
   fi
-
-  # manifests 보호
-  if [ "$GIT_READY" = "true" ]; then
-    for f in .claude/manifests/*.yaml; do
-      [ -f "$f" ] && git update-index --skip-worktree "$f" 2>/dev/null || true
-    done
-  fi
 fi
 
 # ──────────────────────────────────────

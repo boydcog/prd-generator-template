@@ -23,7 +23,7 @@
 1. `.claude/state/project.json`의 `name` 필드를 읽어 product_id 후보를 생성합니다:
    - 소문자 변환
    - 공백 → 하이픈 (`-`)
-   - 특수문자 제거 (영문자, 숫자, 하이픈만 허용)
+   - 특수문자 제거 (영문자, 숫자, 하이픈, 언더스코어만 허용)
    - 예: `"Maththera"` → `maththera`, `"My App 2.0"` → `my-app-2-0`
 2. 생성된 product_id 후보를 사용자에게 표시합니다:
    ```
@@ -32,7 +32,7 @@
    ```
 3. 다른 이름을 원하면 직접 입력받습니다.
    - 대부분의 경우 자동 생성된 값으로 진행합니다.
-   - 빈 문자열이거나 유효하지 않은 입력(영문자/숫자/하이픈 외)이면 다시 요청합니다.
+   - 빈 문자열이거나 유효하지 않은 입력(영문자/숫자/하이픈/언더스코어 외)이면 다시 요청합니다.
 
 ### Step 3: 충돌 검사
 
@@ -65,31 +65,48 @@
    .claude/knowledge/{product_id}/
    ```
 
-2. 아래 파일들을 이동합니다 (원본은 이동 후 삭제):
+2. **skip-worktree 해제** (v1에서 manifests 보호용으로 설정되어 있음):
+   ```bash
+   git update-index --no-skip-worktree .claude/manifests/drive-sources.yaml 2>/dev/null || true
+   git update-index --no-skip-worktree .claude/manifests/project-defaults.yaml 2>/dev/null || true
+   git update-index --no-skip-worktree .claude/manifests/admins.yaml 2>/dev/null || true
+   ```
+   > v2에서는 템플릿 파일을 직접 수정하지 않으므로 skip-worktree가 불필요합니다.
 
-   | 원본 경로 | 새 경로 |
-   |----------|--------|
-   | `.claude/state/project.json` | `.claude/state/{product_id}/project.json` |
-   | `.claude/state/sync-ledger.json` | `.claude/state/{product_id}/sync-ledger.json` |
-   | `.claude/state/sync-log.jsonl` | `.claude/state/{product_id}/sync-log.jsonl` |
-   | `.claude/state/evidence-distribution.json` | `.claude/state/{product_id}/evidence-distribution.json` |
-   | `.claude/manifests/drive-sources.yaml` | `.claude/manifests/drive-sources-{product_id}.yaml` |
-   | `.claude/artifacts/agents/` (전체) | `.claude/artifacts/{product_id}/agents/` |
-   | `.claude/artifacts/prd/` (있으면) | `.claude/artifacts/{product_id}/prd/` |
-   | `.claude/artifacts/tech-spec/` (있으면) | `.claude/artifacts/{product_id}/tech-spec/` |
-   | `.claude/artifacts/design-spec/` (있으면) | `.claude/artifacts/{product_id}/design-spec/` |
-   | `.claude/artifacts/marketing-brief/` (있으면) | `.claude/artifacts/{product_id}/marketing-brief/` |
-   | `.claude/artifacts/business-plan/` (있으면) | `.claude/artifacts/{product_id}/business-plan/` |
-   | `.claude/artifacts/training-content-rulebook/` (있으면) | `.claude/artifacts/{product_id}/training-content-rulebook/` |
-   | `.claude/artifacts/reports/` (있으면) | `.claude/artifacts/{product_id}/reports/` |
-   | `.claude/artifacts/tutor-prompt/` (있으면) | `.claude/artifacts/{product_id}/tutor-prompt/` |
-   | `.claude/knowledge/evidence/` (전체) | `.claude/knowledge/{product_id}/evidence/` |
+3. 아래 파일들을 이동합니다 (원본은 이동 후 삭제):
+
+   | 원본 경로 | 새 경로 | 방식 |
+   |----------|--------|------|
+   | `.claude/state/project.json` | `.claude/state/{product_id}/project.json` | mv |
+   | `.claude/state/sync-ledger.json` | `.claude/state/{product_id}/sync-ledger.json` | mv |
+   | `.claude/state/sync-log.jsonl` | `.claude/state/{product_id}/sync-log.jsonl` | mv |
+   | `.claude/state/evidence-distribution.json` | `.claude/state/{product_id}/evidence-distribution.json` | mv |
+   | `.claude/manifests/drive-sources.yaml` | `.claude/manifests/drive-sources-{product_id}.yaml` | **cp** (원본 유지) |
+   | `.claude/artifacts/agents/` (전체) | `.claude/artifacts/{product_id}/agents/` | mv |
+   | `.claude/artifacts/prd/` (있으면) | `.claude/artifacts/{product_id}/prd/` | mv |
+   | `.claude/artifacts/tech-spec/` (있으면) | `.claude/artifacts/{product_id}/tech-spec/` | mv |
+   | `.claude/artifacts/design-spec/` (있으면) | `.claude/artifacts/{product_id}/design-spec/` | mv |
+   | `.claude/artifacts/marketing-brief/` (있으면) | `.claude/artifacts/{product_id}/marketing-brief/` | mv |
+   | `.claude/artifacts/business-plan/` (있으면) | `.claude/artifacts/{product_id}/business-plan/` | mv |
+   | `.claude/artifacts/training-content-rulebook/` (있으면) | `.claude/artifacts/{product_id}/training-content-rulebook/` | mv |
+   | `.claude/artifacts/reports/` (있으면) | `.claude/artifacts/{product_id}/reports/` | mv |
+   | `.claude/artifacts/tutor-prompt/` (있으면) | `.claude/artifacts/{product_id}/tutor-prompt/` | mv |
+   | `.claude/knowledge/evidence/` (전체) | `.claude/knowledge/{product_id}/evidence/` | mv |
 
    **주의**: 위 목록에 없는 `.claude/artifacts/` 또는 `.claude/knowledge/` 하위 디렉토리가 있으면 모두 `{product_id}/` 하위로 이동합니다.
 
-3. 이동이 완료되면 원본 빈 디렉토리를 삭제합니다.
+4. **`drive-sources.yaml` 템플릿 복원**:
+   - 위 테이블에서 `drive-sources.yaml`은 **cp(복사)** 입니다. 원본(템플릿)은 그대로 유지됩니다.
+   - 사용자가 v1에서 직접 수정한 내용은 `drive-sources-{product_id}.yaml` 인스턴스에 보존됩니다.
+   - 원본 `drive-sources.yaml`을 git의 tracked 버전(깨끗한 템플릿)으로 복원합니다:
+     ```bash
+     git checkout .claude/manifests/drive-sources.yaml
+     ```
+   - 이후 git pull로 admin이 배포하는 템플릿 업데이트를 정상적으로 수신합니다.
 
-### Step 5: 활성 제품 포인터 및 스키마 버전 기록
+5. 이동이 완료되면 원본 빈 디렉토리를 삭제합니다.
+
+### Step 6: 활성 제품 포인터 및 스키마 버전 기록
 
 1. 활성 제품 포인터를 생성합니다:
    ```
@@ -103,7 +120,7 @@
    ```
    내용: `v2`
 
-### Step 6: 마이그레이션 완료 보고
+### Step 7: 마이그레이션 완료 보고
 
 **기존 데이터가 있었던 경우:**
 ```
@@ -128,11 +145,13 @@
 마이그레이션을 되돌리려면:
 
 1. `.claude/state/{product_id}/` 하위 파일들을 `.claude/state/`로 복원
-2. `.claude/manifests/drive-sources-{product_id}.yaml` → `.claude/manifests/drive-sources.yaml`로 복원
-3. `.claude/artifacts/{product_id}/` 하위를 `.claude/artifacts/`로 복원
-4. `.claude/knowledge/{product_id}/` 하위를 `.claude/knowledge/`로 복원
-5. `.claude/state/_active_product.txt` 삭제
-6. `.claude/state/_schema_version.txt` 삭제 또는 `v1`으로 변경
+2. `.claude/manifests/drive-sources-{product_id}.yaml` 내용을 `.claude/manifests/drive-sources.yaml`에 덮어씀
+3. `.claude/manifests/drive-sources-{product_id}.yaml` 삭제
+4. `.claude/artifacts/{product_id}/` 하위를 `.claude/artifacts/`로 복원
+5. `.claude/knowledge/{product_id}/` 하위를 `.claude/knowledge/`로 복원
+6. `.claude/state/_active_product.txt` 삭제
+7. `.claude/state/_schema_version.txt` 삭제 또는 `v1`으로 변경
+8. manifests에 skip-worktree 재적용: `git update-index --skip-worktree .claude/manifests/*.yaml`
 
 ---
 

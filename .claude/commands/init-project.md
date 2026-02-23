@@ -61,6 +61,15 @@
 - 프로젝트 이름을 소문자 + 하이픈 형식으로 변환 (예: `"Maththera"` → `maththera`, `"My App"` → `my-app`).
 - 생성된 product_id를 표시하고, 변경을 원하면 수정 입력받습니다.
 
+### Step 1-C: 제품 매니페스트 초기화
+
+새 제품(Step 1-B)의 경우, 템플릿에서 제품별 매니페스트를 생성합니다:
+
+1. `.claude/manifests/drive-sources.yaml`(템플릿)을 `.claude/manifests/drive-sources-{product_id}.yaml`로 복사합니다.
+   - 템플릿에는 빈 `sources: []`와 사용법 주석이 포함되어 있습니다.
+   - 이 인스턴스 파일은 gitignored이므로 사용자 데이터가 커밋되지 않습니다.
+2. 기존 제품(Step 1-A)의 경우: `drive-sources-{active_product}.yaml`이 이미 존재하므로 이 단계를 건너뜁니다.
+
 ### Step 2: Drive 링크 처리
 
 질문 7 또는 Step 1-A에서 Drive 링크를 제공한 경우:
