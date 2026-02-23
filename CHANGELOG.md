@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-02-23
+
+- improve: Live Meeting Mode 도입 — Wave 넘버링 폐지, 회의/판정/비평/통합 4단계 구조로 전환, Peer Messaging Protocol 추가, judge 역할 신설, peer_discussions JSON 계약 추가, 전문가 토론 요약 섹션 추가, Qodo 리뷰 반영(Synth 역할 분리, Judge 빈 결과 처리, limit_reached outcome, verify.md 검증 항목 확장)
+
 ## 2026-02-20
 
 - improve: 에이전트 팀에 비판적 검토(critique) Wave 1.5 추가 — Wave 1 결과 교차 검토, 논리적 오류/모순/누락 식별, synth 입력 품질 향상 ([`617d0e8`](https://github.com/boydcog/prd-generator-template/commit/617d0e8))

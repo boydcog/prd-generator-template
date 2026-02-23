@@ -47,7 +47,7 @@ Google Drive 문서를 기반으로 6역할 에이전트 팀이 PRD, 디자인 �
 └─────────┬───────────┘
           ▼
 ┌─────────────────────┐
-│Phase 2: run-research│  Wave 1 (병렬) → Wave 2 (통합)
+│Phase 2: run-research│  회의(병렬 토론) → 판정 → 비평 → 통합
 └─────────┬───────────┘
           ▼
 ┌─────────────────────┐
@@ -61,16 +61,16 @@ Google Drive 문서를 기반으로 6역할 에이전트 팀이 PRD, 디자인 �
 
 ### 문서 유형별 에이전트 매핑
 
-| 문서 유형 | biz | marketing | research | tech | pm | synth |
-|----------|:---:|:---------:|:--------:|:----:|:--:|:-----:|
-| 제품 요구사항 문서 (prd) | O | O | O | O | O | O |
-| 디자인 사양서 (design-spec) | - | - | O | O | O | O |
-| 마케팅 브리프 (marketing-brief) | O | O | O | - | - | O |
-| 사업 계획서 (business-plan) | O | O | O | O | - | O |
-| 기술 사양서 (tech-spec) | - | - | O | O | O | O |
-| 사용자 정의 (custom) | 선택 | 선택 | 선택 | 선택 | 선택 | O |
+| 문서 유형 | biz | marketing | research | tech | pm | judge | critique | synth |
+|----------|:---:|:---------:|:--------:|:----:|:--:|:-----:|:--------:|:-----:|
+| 제품 요구사항 문서 (prd) | O | O | O | O | O | O | O | O |
+| 디자인 사양서 (design-spec) | - | - | O | O | O | O | O | O |
+| 마케팅 브리프 (marketing-brief) | O | O | O | - | - | O | O | O |
+| 사업 계획서 (business-plan) | O | O | O | O | - | O | O | O |
+| 기술 사양서 (tech-spec) | - | - | O | O | O | O | O | O |
+| 사용자 정의 (custom) | 선택 | 선택 | 선택 | 선택 | 선택 | O | O | O |
 
-> **모델 선택**: Wave 1 에이전트는 `sonnet`, synth(Wave 2)는 `opus`가 기본값입니다. 문서 유형별/프로젝트별 오버라이드가 가능합니다. 상세: `.claude/spec/model-selection-spec.md`
+> **모델 선택**: 회의(Discussion) 에이전트는 `sonnet`, 판정/비평/통합은 `opus`가 기본값입니다. 문서 유형별/프로젝트별 오버라이드가 가능합니다. 상세: `.claude/spec/model-selection-spec.md`
 
 ---
 

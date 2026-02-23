@@ -29,6 +29,7 @@ document_types:
       - GTM 전략
       - 리스크
       - 마일스톤
+      - 전문가 토론 요약
       - 미해결 질문
 
   design-spec:
@@ -51,6 +52,7 @@ document_types:
       - 인터랙션 패턴
       - 접근성 요구사항
       - 기술 제약사항
+      - 전문가 토론 요약
       - 미해결 질문
 
   marketing-brief:
@@ -74,6 +76,7 @@ document_types:
       - 런칭 계획
       - KPI / 성공 지표
       - 예산 계획
+      - 전문가 토론 요약
       - 미해결 질문
 
   business-plan:
@@ -100,6 +103,7 @@ document_types:
       - 재무 계획
       - 리스크 분석
       - 실행 로드맵
+      - 전문가 토론 요약
       - 미해결 질문
 
   tech-spec:
@@ -124,6 +128,7 @@ document_types:
       - 인프라 / 배포
       - 테스트 전략
       - 마이그레이션 계획
+      - 전문가 토론 요약
       - 미해결 질문
 
   custom:
