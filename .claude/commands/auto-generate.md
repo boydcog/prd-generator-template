@@ -42,8 +42,8 @@
 1. `/run-research` 실행.
    - **컨텍스트**: `called_from: auto-generate` 표시를 명시하여 중복 업로드 프롬프트 방지.
    - TeamCreate로 리서치 팀 구성.
-   - Wave 1: 팀원 병렬 실행 (model-selection-spec.md 기준, 기본: sonnet).
-   - Wave 2: synth 팀원 실행.
+   - 회의(Discussion): 도메인 에이전트 병렬 실행 + peer-to-peer 실시간 토론.
+   - 판정(Judge) → 비평(Critique) → 통합(Synth): 순차 실행.
    - 완료 후 팀 자동 정리.
    - 완료 시: 업로드 프롬프트 **스킵** (auto-generate가 Phase 4에서 별도 처리).
 2. 완료 확인:

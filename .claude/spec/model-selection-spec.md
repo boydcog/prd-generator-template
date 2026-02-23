@@ -18,21 +18,23 @@
 
 | 기준 | 모델 | 예시 |
 |------|------|------|
-| 여러 역할의 출력을 교차 검토하여 논리적 오류 식별 | `opus` | critique (Wave 1.5) |
-| 여러 역할의 출력을 교차 참조하여 종합 | `opus` | synth (Wave 2) |
-| 사전 필터링된 증거 내 단일 도메인 분석 | `sonnet` | Wave 1 에이전트 (biz, marketing, research, tech, pm, 동적 역할) |
+| 미해결 충돌에 대한 서술형 판정, 합의점 도출 | `opus` | judge (판정) |
+| 여러 역할의 출력을 교차 검토하여 논리적 오류 식별 | `opus` | critique (비평) |
+| 여러 역할의 출력을 교차 참조하여 종합 | `opus` | synth (통합) |
+| 사전 필터링된 증거 내 단일 도메인 분석 | `sonnet` | 회의(Discussion) 에이전트 (biz, marketing, research, tech, pm, 동적 역할) |
 | 스키마 검증, 형식 확인, 단순 분류 | `haiku` | (현재 미사용, 향후 verify 자동화 등) |
 
 ---
 
 ## 기본 모델 매핑
 
-| 역할 | Wave | 기본 모델 | 근거 |
+| 역할 | 단계 | 기본 모델 | 근거 |
 |------|------|----------|------|
-| biz, marketing, research, tech, pm | Wave 1 | `sonnet` | 사전 필터링된 증거 내 단일 도메인 구조화 분석 |
-| 동적 역할 (dynamic_roles) | Wave 1 | `sonnet` | 기존 Wave 1 에이전트와 동일 |
-| critique | Wave 1.5 | `opus` | Wave 1 전체 결과 교차 검토, 고도 추론 필요 |
-| synth | Wave 2 | `opus` | 다중 소스 통합, 충돌 해결, 최종 문서 작성 |
+| biz, marketing, research, tech, pm | 회의 (Discussion) | `sonnet` | 사전 필터링된 증거 내 단일 도메인 구조화 분석 |
+| 동적 역할 (dynamic_roles) | 회의 (Discussion) | `sonnet` | 기존 회의 에이전트와 동일 |
+| judge | 판정 (Judge) | `opus` | 토론 기록 전체 분석, 미해결 충돌 판정, 고도 추론 필요 |
+| critique | 비평 (Critique) | `opus` | 회의 + 판정 결과 교차 검토, 고도 추론 필요 |
+| synth | 통합 (Synth) | `opus` | 다중 소스 통합, 충돌 해결, 최종 문서 작성 |
 
 ---
 
@@ -56,8 +58,8 @@
 ```
 
 - `model_overrides.roles.{role_id}` — 특정 역할의 모델 지정
-- `model_overrides.wave1` — Wave 1 전체 기본 모델 변경
-- `model_overrides.wave2` — Wave 2 전체 기본 모델 변경
+- `model_overrides.wave1` — 회의(Discussion) 전체 기본 모델 변경
+- `model_overrides.wave2` — 판정/비평/통합 전체 기본 모델 변경
 
 ### 2. document-types.yaml (문서 유형별)
 
@@ -72,31 +74,36 @@ prd:
 
 ### 3. 기본값 (이 사양서)
 
-- Wave 1: `sonnet`
-- Wave 2: `opus`
+- 회의(Discussion): `sonnet`
+- 판정/비평/통합: `opus`
 
 ---
 
 ## 모델 결정 알고리즘
 
 ```
-function resolveModel(role_id, wave):
+function resolveModel(role_id, stage):
   # 1. project.json 역할별 오버라이드
   if project.model_overrides.roles[role_id] exists:
     return project.model_overrides.roles[role_id]
 
-  # 2. project.json wave별 오버라이드
-  if project.model_overrides[wave] exists:
-    return project.model_overrides[wave]
+  # 2. project.json 단계별 오버라이드 (wave1/wave2 키 하위호환 유지)
+  if stage == "discussion" and project.model_overrides["wave1"] exists:
+    return project.model_overrides["wave1"]
+  if stage in ["judge","critique","synth"] and project.model_overrides["wave2"] exists:
+    return project.model_overrides["wave2"]
 
   # 3. document-types.yaml 오버라이드
-  if doc_type.model_overrides[wave] exists:
-    return doc_type.model_overrides[wave]
+  if stage == "discussion" and doc_type.model_overrides["wave1"] exists:
+    return doc_type.model_overrides["wave1"]
+  if stage in ["judge","critique","synth"] and doc_type.model_overrides["wave2"] exists:
+    return doc_type.model_overrides["wave2"]
 
   # 4. 기본값
-  if wave == "wave1": return "sonnet"
-  if wave == "wave1.5": return "opus"
-  if wave == "wave2": return "opus"
+  if stage == "discussion": return "sonnet"
+  if stage == "judge": return "opus"
+  if stage == "critique": return "opus"
+  if stage == "synth": return "opus"
 ```
 
 ---
@@ -104,7 +111,7 @@ function resolveModel(role_id, wave):
 ## 유효성 검증
 
 - `resolveModel`이 반환하는 값은 반드시 `opus`, `sonnet`, `haiku` 중 하나여야 합니다.
-- 유효하지 않은 모델명이 지정되면 해당 wave의 기본값으로 폴백합니다.
+- 유효하지 않은 모델명이 지정되면 해당 단계의 기본값으로 폴백합니다.
 - 폴백 시 "모델 '{invalid}' 는 유효하지 않습니다. 기본값 '{default}'를 사용합니다." 로그를 남깁니다.
 
 ---
