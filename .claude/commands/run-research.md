@@ -195,15 +195,20 @@ Wave 1 에이전트 실행 전에 증거를 한 번만 읽고 역할별로 분�
 
 1. `TeamCreate(team_name="research-v{N}")`로 팀을 생성합니다.
 2. Wave 1 역할마다 `TaskCreate` 호출:
-   - subject: "{role_name} 분석 수행"
-   - activeForm: "{role_name} 분석 중"
-3. Critique용 `TaskCreate`:
+   - subject: "{role_name} Phase 1 분석 수행"
+   - activeForm: "{role_name} Phase 1 분석 중"
+3. Judge용 `TaskCreate`:
+   - subject: "토론 판정 수행"
+   - activeForm: "토론 판정 중"
+   - `addBlockedBy=[모든 wave1 task ID]`
+   - (Wave 1.5 Step A/B는 팀 리더가 직접 수행하므로 별도 태스크 없음)
+4. Critique용 `TaskCreate`:
    - subject: "비판적 검토 수행"
    - activeForm: "비판적 검토 중"
-   - `addBlockedBy=[모든 wave1 task ID]`
-4. Synth용 `TaskCreate` + `TaskUpdate(addBlockedBy=[critique task ID])`
+   - `addBlockedBy=[judge task ID]`
+5. Synth용 `TaskCreate` + `TaskUpdate(addBlockedBy=[critique task ID])`
 
-### Wave 1: 팀원 병렬 생성 (동적)
+### Wave 1: Phase 1 — 팀원 병렬 생성 (동적)
 
 `document-types.yaml`의 `agent_roles.wave1`에 정의된 에이전트 + `project.json`의 `dynamic_roles`에 정의된 동적 에이전트를 합산하여 TeamCreate 팀원으로 **병렬** 생성합니다.
 
@@ -229,14 +234,16 @@ Task(
 - `.claude/spec/citation-spec.md` (인용 규칙)
 - `.claude/spec/document-types.yaml` (문서 유형 정의)
 
-#### 팀원 실행 절차
+#### Phase 1 팀원 실행 절차 (Debate Mode)
 
-1. `TaskList` → 자기 태스크 찾기
+1. `TaskList` → 자기 Phase 1 태스크 찾기
 2. `TaskUpdate(owner, status=in_progress)`
-3. 증거 분석 + JSON/MD 파일 생성
-4. `TaskUpdate(status=completed)`
-5. `SendMessage(recipient="team-lead", summary="{role} 분석 완료")`
-6. `shutdown_request` 대기 → 승인
+3. 증거 분석 + **`critical_issue` 필드 포함** JSON/MD 파일 생성
+4. `TaskUpdate(status=completed)` — Phase 1 태스크 완료
+5. `SendMessage(recipient="team-lead", summary="[Phase 1 완료] {role} 분석 완료, Phase 2 대기")`
+6. **Phase 2 메시지 또는 shutdown_request 대기**
+   - Phase 2 메시지 수신 시: 아래 Wave 1.5 Step B 절차 수행
+   - shutdown_request 수신 시: 즉시 승인 (Phase 2 할당 없음)
 
 #### 에이전트 목록 (문서 유형에 따라 활성화)
 
@@ -258,7 +265,187 @@ Task(
 - 필수 섹션을 `dynamic_roles[].output_sections`에서 로드
 - 출력 경로: `.claude/artifacts/agents/{role_id}.json` + `{role_id}.md`
 
-### Wave 1.5: Critique 팀원 생성 (순차, Wave 1 완료 후)
+### Wave 1.5 Step A: 동적 Clash Pair 분석 (팀 리더 직접 수행, Wave 1 완료 후)
+
+모든 Wave 1 에이전트가 Phase 1 완료 메시지를 보낸 후, 팀 리더가 직접 수행합니다.
+
+#### 절차
+
+1. 모든 Wave 1 에이전트의 JSON 파일에서 `critical_issue` 필드를 읽습니다:
+   - `.claude/artifacts/agents/biz.json`
+   - `.claude/artifacts/agents/marketing.json`
+   - `.claude/artifacts/agents/research.json`
+   - `.claude/artifacts/agents/tech.json`
+   - `.claude/artifacts/agents/pm.json`
+   - (동적 역할 포함 시) `.claude/artifacts/agents/{dynamic_role}.json`
+
+2. 각 `critical_issue`의 내용을 분석하여 **충돌 가능성이 높은 쌍 3-5개**를 선정합니다:
+   - 한 에이전트의 `critical_issue`가 다른 에이전트의 주요 관심사에 정면 도전하는 경우
+   - 예: tech가 "3개월 개발 불가"를 지적했고, pm이 "3개월 마일스톤 필수"를 주장하는 경우 → 강한 충돌
+   - 같은 방향의 문제 제기(complementary)는 선정하지 않음
+
+3. 각 Clash Pair에 대해 "공격자(attacker)"와 "공격 방향(attack_angle)"을 결정합니다:
+   - 공격자: 상대방의 주장이 자신의 관점과 충돌하는 에이전트
+   - attack_angle: 공격자가 상대방의 주장을 어떤 각도에서 반박할지
+
+4. `debate/clashes.json`을 생성합니다:
+
+```
+mkdir -p .claude/artifacts/agents/debate/phase2
+```
+
+```json
+{
+  "generated_at": "<ISO 8601 타임스탬프>",
+  "clashes": [
+    {
+      "clash_id": "CLASH-001",
+      "attacker": "<role_id>",
+      "target": "<role_id>",
+      "attacker_critical_issue_summary": "<공격자의 critical_issue 핵심 요약>",
+      "target_critical_issue_summary": "<방어자의 critical_issue 핵심 요약>",
+      "attack_angle": "<공격자가 방어자의 주장을 어떤 각도에서 반박할지>"
+    }
+  ],
+  "skipped_reason": null
+}
+```
+
+> **충돌이 없는 경우**: `clashes: []`, `skipped_reason: "에이전트 간 주요 충돌점 없음"` 저장 후 Wave 1.5 Step B를 건너뜁니다.
+
+---
+
+### Wave 1.5 Step B: Cross-Examination (Clash Protocol, Wave 1.5A 완료 후)
+
+각 Clash Pair에 대해 팀 리더가 공격자 에이전트에게 `SendMessage`로 Phase 2 할당합니다.
+
+#### Phase 2 SendMessage 형식
+
+```
+recipient: "{attacker}-agent"
+content: """
+Phase 2 시작 — 교차 반박을 수행하세요.
+
+[당신의 역할]
+당신은 {attacker} 에이전트입니다. 당신의 Phase 1 critical_issue는 이미 제출되었습니다.
+
+[이번 임무: clash_id = {CLASH-XXX}]
+아래 {target} 에이전트의 critical_issue를 {attacker} 관점에서 교차 검토하고 반박하세요.
+
+[공격 대상 — {target}의 critical_issue]
+{target_critical_issue 전체 내용}
+
+[공격 방향]
+{attack_angle}
+
+[출력 경로]
+- JSON: .claude/artifacts/agents/debate/phase2/{attacker}-attacks-{target}.json
+- MD: .claude/artifacts/agents/debate/phase2/{attacker}-attacks-{target}.md
+
+[출력 형식] agent-team-spec.md의 "Phase 2 출력 계약"을 따르세요.
+
+Phase 2 완료 후 SendMessage(recipient="team-lead", summary="[Phase 2 완료] {attacker} → {target} 교차 반박 완료")를 전송하세요.
+"""
+```
+
+#### 에이전트가 Phase 2 메시지를 받았을 때 수행할 절차
+
+1. 자신의 Phase 1 출력 파일 재확인: `.claude/artifacts/agents/{attacker}.json`
+2. 공격 대상의 `critical_issue` 분석
+3. `{attack_angle}`에 따라 교차 반박 작성:
+   - 상대방의 주장이 왜 자신의 관점에서 문제인지
+   - 자신의 관점에서 더 타당한 이유 + 증거
+   - 제안하는 해결 방향
+4. Phase 2 출력 파일 저장
+5. `SendMessage(recipient="team-lead", "[Phase 2 완료] {attacker} → {target} 교차 반박 완료")`
+
+#### 팀 리더의 Phase 2 완료 수집
+
+- 모든 Clash Pair에 대해 Phase 2 완료 메시지를 수집합니다.
+- 5분 이내에 완료 메시지가 오지 않는 Clash는 `undecided`로 처리합니다.
+- 모든 Phase 2 수집 완료(또는 timeout) 후 Wave 1.75로 진행합니다.
+
+---
+
+### Wave 1.75: Judge 팀원 생성 (순차, Wave 1.5B 완료 후)
+
+모든 Phase 2 완료 후 Judge 에이전트를 spawn합니다.
+
+```
+Task(
+  team_name="research-v{N}",
+  name="judge-agent",
+  subagent_type="general-purpose",
+  prompt="... (judge 프롬프트)\n\n권장 모델: opus (Step 0.8에서 결정)"
+)
+```
+
+##### Judge 팀원 절차:
+
+1. `TaskList` → "판정 수행" 태스크 클레임
+2. `TaskUpdate(owner="judge-agent", status="in_progress")`
+3. 다음 파일 전체 읽기:
+   - `agents/debate/clashes.json` (Clash Pair 목록)
+   - Phase 1 JSON 파일 전체 (`agents/biz.json`, `agents/tech.json`, ...)
+   - Phase 2 교차 반박 전체 (`agents/debate/phase2/*.json`)
+4. **각 Clash에 대해 판정 수행**:
+   - 어느 논거가 더 논리적이고 증거 기반인지 평가
+   - `attacker_wins` / `target_wins` / `draw` 결정
+   - 판정 근거 서술
+   - 양측의 타당한 부분을 통합한 합의점 도출
+   - synth에게 반영할 구체적 내용(`adopted_for_synth`) 작성
+5. `debate/judgment.json` + `debate/summary.md` 생성 (agent-team-spec.md의 "Judge 출력 계약" 준수)
+6. `TaskUpdate(status="completed")`
+7. `SendMessage(recipient="team-lead", summary="판정 완료 — {N}개 충돌 판정됨")`
+
+##### Judge 에이전트 프롬프트 템플릿
+
+```
+당신은 공정한 토론 판정관입니다.
+
+## 프로젝트 컨텍스트
+{project.json 내용}
+
+## 당신의 역할
+- 역할명: 판정관
+- 책임 범위: Phase 1과 Phase 2 교차 반박 결과를 종합하여, 각 충돌에 대해
+  어느 주장이 더 타당한지 서술형으로 판정합니다.
+
+## 판정 대상
+1. .claude/artifacts/agents/debate/clashes.json — 충돌 쌍 목록
+2. Phase 1 에이전트 출력 (critical_issue 포함):
+   {wave1_file_paths}
+3. Phase 2 교차 반박:
+   {phase2_file_paths}
+
+## 판정 기준
+1. **논리적 타당성**: 어느 주장이 더 논리적으로 일관되는가?
+2. **증거 기반**: 어느 주장이 실제 데이터/증거로 뒷받침되는가?
+3. **실용적 영향**: 어느 주장을 따랐을 때 프로젝트 성공 가능성이 높아지는가?
+4. **합의 가능성**: 양측의 타당한 부분을 통합할 수 있는가?
+
+## 판정 형식
+각 Clash에 대해:
+- attacker_wins: 공격자의 반박이 더 타당
+- target_wins: 방어자(원래 주장)가 더 타당
+- draw: 양측 모두 타당하며 통합이 필요
+
+## 출력 규칙
+agent-team-spec.md의 "Judge 출력 계약"을 준수하세요.
+
+## 출력 경로
+- JSON: .claude/artifacts/agents/debate/judgment.json
+- MD: .claude/artifacts/agents/debate/summary.md
+
+## 팀 통신 (필수)
+당신은 "research-v{N}" 팀의 "judge-agent" 팀원입니다.
+`.claude/spec/agent-team-spec.md`의 "팀원 공통 절차"를 따르세요.
+태스크명: "판정 수행"
+```
+
+---
+
+### Wave 1.5: Critique 팀원 생성 (순차, Wave 1.75 완료 후)
 
 `TaskList`로 critique 태스크의 `blockedBy` 해소를 확인한 후 critique 팀원을 생성합니다.
 
@@ -274,8 +461,8 @@ Task(
 > **주의**: Task tool에서 명시적 모델 지정을 지원하지 않으므로, 프롬프트 내 "권장 모델" 안내는 참고사항입니다.
 > 실제 모델 선택은 에이전트의 기본 동작을 따릅니다.
 
-- 입력: Wave 1의 모든 에이전트 JSON + MD 결과물 전체
-- 역할: 비판적 검토, 논리적 오류/모순/누락 식별
+- 입력: Wave 1의 모든 에이전트 JSON + MD 결과물 전체 + debate 결과 (clashes.json, phase2/*.json, judgment.json)
+- 역할: 비판적 검토, 논리적 오류/모순/누락 식별 (Judge 판정 결과 참조하여 이미 해결된 충돌은 제외)
 
 ##### Critique 팀원 절차:
 
@@ -353,8 +540,8 @@ Task(
 > **주의**: Task tool에서 명시적 모델 지정을 지원하지 않으므로, 프롬프트 내 "권장 모델" 안내는 참고사항입니다.
 > 실제 모델 선택은 에이전트의 기본 동작을 따릅니다.
 
-- 입력: Wave 1의 에이전트 JSON + MD 결과물 전체 (동적 역할 출력 포함) + Wave 1.5 critique 결과
-- 역할: 비판 지적을 고려하여 통합, 충돌 해결, 최종 문서 작성
+- 입력: Wave 1의 에이전트 JSON + MD 결과물 전체 (동적 역할 출력 포함) + debate 결과 (judgment.json, summary.md) + critique 결과
+- 역할: Judge의 `adopted_for_synth` 우선 반영, 비판 지적 고려하여 통합, 충돌 해결, 최종 문서 작성
 
 ##### Synth 팀원 절차:
 
@@ -398,8 +585,20 @@ Step 0.7에서 이 역할에 관련된 증거만 선별하여 전달합니다.
 전체 인덱스가 아닌, 역할별로 분배된 청크 텍스트를 포함합니다:
 {역할별 사전 조합된 증거 텍스트}
 
+## Phase 1 핵심 임무: critical_issue 도출
+
+일반 분석 외에, 반드시 다음을 수행하세요:
+당신의 관점({role_name})에서 이 프로젝트의 **가장 치명적인 문제 1개**를 찾아 `critical_issue` 필드에 명확하게 기술하세요.
+
+- 가장 치명적이란: 이 문제가 해결되지 않으면 프로젝트 성공이 불가능하거나 심각하게 위협받는 것
+- 1개만 선정하세요. 가장 확신하는 것 1개.
+- 최대한 구체적으로: "무엇이 왜 문제인지" + "어떤 영향이 있는지"
+- 가능하면 증거(citation)로 뒷받침하세요.
+
+이 `critical_issue`는 이후 Phase 2에서 다른 에이전트와 직접 토론하는 기반이 됩니다.
+
 ## 출력 규칙
-1. agent-team-spec.md의 JSON 계약을 준수하세요.
+1. agent-team-spec.md의 JSON 계약을 준수하세요 (critical_issue 필드 포함 필수).
 2. 모든 주장(claim)에는 반드시 citation을 포함하세요 (citation-spec.md 참조).
 3. JSON 파일과 Markdown 파일을 모두 생성하세요.
 4. JSON 키는 알파벳순으로 정렬하세요.
@@ -408,10 +607,17 @@ Step 0.7에서 이 역할에 관련된 증거만 선별하여 전달합니다.
 - JSON: .claude/artifacts/agents/{role}.json
 - Markdown: .claude/artifacts/agents/{role}.md
 
-## 팀 통신 (필수)
+## 팀 통신 (Debate Mode — 필수)
 당신은 "research-v{N}" 팀의 "{role}-agent" 팀원입니다.
-`.claude/spec/agent-team-spec.md`의 "팀원 공통 절차"를 반드시 따르세요.
-태스크명: "{role_name} 분석 수행"
+`.claude/spec/agent-team-spec.md`의 "팀원 공통 절차 (Debate Mode)"를 반드시 따르세요.
+
+**중요**: Phase 1 완료 후 즉시 종료하지 마세요.
+Phase 1 완료 후 팀 리더에게 "Phase 1 완료, Phase 2 대기 중" 메시지를 보내고,
+다음 두 가지 중 하나를 기다리세요:
+1. 팀 리더로부터 Phase 2 교차 반박 할당 메시지 → Phase 2 수행 후 종료
+2. shutdown_request → 즉시 승인 후 종료
+
+태스크명: "{role_name} Phase 1 분석 수행"
 ```
 
 ### 동적 역할 에이전트 프롬프트
@@ -474,11 +680,16 @@ Step 0.7에서 이 역할의 keywords에 매칭된 증거만 선별하여 전달
 
 | 파일 | 설명 |
 |------|------|
-| `.claude/artifacts/agents/{role}.json` | Wave 1 각 역할의 구조화된 출력 |
-| `.claude/artifacts/agents/{role}.md` | Wave 1 각 역할의 서술형 요약 |
-| `.claude/artifacts/agents/critique.json` | Wave 1.5 비판적 검토 구조화된 출력 |
-| `.claude/artifacts/agents/critique.md` | Wave 1.5 비판적 검토 서술형 요약 |
-| `.claude/artifacts/{output_dir}/v{N}/{output_file}` | 최종 통합 문서 (버전별) |
+| `.claude/artifacts/agents/{role}.json` | Wave 1 Phase 1 각 역할의 구조화된 출력 (critical_issue 포함) |
+| `.claude/artifacts/agents/{role}.md` | Wave 1 Phase 1 각 역할의 서술형 요약 |
+| `.claude/artifacts/agents/debate/clashes.json` | 동적 Clash Pair 목록 (팀 리더 생성) |
+| `.claude/artifacts/agents/debate/phase2/{attacker}-attacks-{target}.json` | Phase 2 교차 반박 JSON |
+| `.claude/artifacts/agents/debate/phase2/{attacker}-attacks-{target}.md` | Phase 2 교차 반박 서술형 |
+| `.claude/artifacts/agents/debate/judgment.json` | Judge 판정 결과 (승/패/무승부 + 합의점) |
+| `.claude/artifacts/agents/debate/summary.md` | 전체 토론 요약 (인간 읽기용) |
+| `.claude/artifacts/agents/critique.json` | 비판적 검토 구조화된 출력 |
+| `.claude/artifacts/agents/critique.md` | 비판적 검토 서술형 요약 |
+| `.claude/artifacts/{output_dir}/v{N}/{output_file}` | 최종 통합 문서 (버전별, 전문가 토론 요약 섹션 포함) |
 | `.claude/artifacts/{output_dir}/v{N}/citations.json` | 전체 인용 보고서 |
 | `.claude/artifacts/{output_dir}/v{N}/conflicts.json` | 역할 간 충돌 보고서 |
 | `.claude/artifacts/{output_dir}/v{N}/metadata.json` | 버전 메타데이터 |

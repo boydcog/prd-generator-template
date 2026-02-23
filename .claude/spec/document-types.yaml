@@ -22,6 +22,7 @@ document_types:
       - 문제 정의
       - 목표 / 비목표
       - 대상 사용자 / 페르소나
+      - 전문가 토론 요약
       - 기능 요구사항
       - 비기능 요구사항
       - UX 노트
@@ -44,6 +45,7 @@ document_types:
         - pm
     output_sections:
       - 개요
+      - 전문가 토론 요약
       - 디자인 원칙
       - 사용자 흐름
       - 화면별 상세 사양
@@ -66,6 +68,7 @@ document_types:
         - research
     output_sections:
       - 개요
+      - 전문가 토론 요약
       - 시장 분석
       - 타겟 고객
       - 포지셔닝 전략
@@ -90,6 +93,7 @@ document_types:
         - tech
     output_sections:
       - 개요 (Executive Summary)
+      - 전문가 토론 요약
       - 문제 정의 / 기회
       - 솔루션
       - 시장 분석
@@ -115,6 +119,7 @@ document_types:
         - pm
     output_sections:
       - 개요
+      - 전문가 토론 요약
       - 기술 배경
       - 아키텍처 설계
       - API 설계

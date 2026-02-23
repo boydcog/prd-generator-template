@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-02-23
+
+- improve: 진정한 토론형 에이전트 구조(Debate Mode) 도입 — Wave 1 에이전트 Phase 1 완료 후 대기, 팀 리더가 동적 Clash Pair 분석 후 SendMessage로 교차 반박 할당, Wave 1.75 Judge 에이전트 신규 추가, 모든 문서 유형에 "전문가 토론 요약" 섹션 추가
+
 ## 2026-02-20
 
 - improve: 에이전트 팀에 비판적 검토(critique) Wave 1.5 추가 — Wave 1 결과 교차 검토, 논리적 오류/모순/누락 식별, synth 입력 품질 향상 ([`617d0e8`](https://github.com/boydcog/prd-generator-template/commit/617d0e8))
