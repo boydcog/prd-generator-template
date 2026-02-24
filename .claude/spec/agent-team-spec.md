@@ -25,6 +25,47 @@
 
 ## 실행 패턴
 
+```mermaid
+flowchart TB
+    classDef leader fill:#1f2937,stroke:#111827,color:#fff,font-weight:bold
+    classDef domain fill:#f3f4f6,stroke:#6b7280,color:#111827
+    classDef agent  fill:#374151,stroke:#1f2937,color:#fff,font-weight:bold
+    classDef store  fill:#e5e7eb,stroke:#374151,color:#111827
+    classDef comm   fill:#fff,stroke:#9ca3af,stroke-dasharray:4 4,color:#6b7280,font-size:12px
+
+    TL1([Team Leader]):::leader
+    TL1 -->|spawn 병렬| biz & mktg & rsrch & tech & pm
+
+    subgraph Phase1["Phase 1 — 병렬 실행"]
+        direction LR
+        biz([biz]):::domain
+        mktg([mktg]):::domain
+        rsrch([rsrch]):::domain
+        COMM(("SendMessage<br/>전원 상호 통신")):::comm
+        tech([tech]):::domain
+        pm([pm]):::domain
+
+        biz <--> COMM
+        mktg <--> COMM
+        rsrch <--> COMM
+        tech <--> COMM
+        pm <--> COMM
+    end
+
+    biz & mktg & rsrch & tech & pm --> DISC["discussions.json 취합"]:::store
+    DISC -->|입력| JUDGE
+
+    subgraph Seq["Phase 2–4 — 순차 실행"]
+        direction LR
+        JUDGE(["judge ← opus"]):::agent --> CRIT(["critique ← opus"]):::agent --> SYNTH(["synth ← opus"]):::agent
+    end
+
+    SYNTH -->|출력| FINAL["최종 문서 / citations.json / conflicts.json"]:::store
+    FINAL -->|완료 보고| TL2([Team Leader]):::leader
+```
+
+---
+
 ### 회의 (Discussion) — 전원 동시, peer-to-peer 실시간 소통
 
 모든 도메인 에이전트(biz, marketing, research, tech, pm + 동적 역할)가 동시에 실행됩니다.
