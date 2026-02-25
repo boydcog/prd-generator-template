@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-02-25
+
+- improve: Google Docs 원본으로 4개 템플릿 전면 교체 — product-brief/business-spec/pretotype-spec/product-spec TEMPLATE.md를 Google Docs export 원본(.firecrawl/templates/*-raw.txt)에서 markdown으로 변환, 작성 가이드+섹션별 예시(Maththera)+AI 인터페이스 참조 포함, 기존 AI 생성 템플릿 대체
+
 ## 2026-02-23
 
 - improve: 템플릿/인스턴스 아키텍처 도입 — drive-sources.yaml을 템플릿(tracked)으로 유지하고 제품별 인스턴스(gitignored)로 분리, skip-worktree 제거로 git pull 템플릿 업데이트 수신 가능, 마이그레이션 v1→v2에서 mv→cp 전환 및 템플릿 복원, 마이그레이션 후 상태 재평가 규칙 추가
