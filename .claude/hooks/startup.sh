@@ -282,17 +282,18 @@ MVP_STAGE=""
 STAGE_STATUS=""
 if [ "$HAS_PROJECT" = "true" ]; then
   PROJECT_JSON=".claude/state/${ACTIVE_PRODUCT}/project.json"
-  MVP_STAGE=$(python3 -c "
-import json,sys
+  # 경로를 환경변수로 전달하여 Python 코드 인젝션 방지
+  MVP_STAGE=$(PROJECT_JSON="$PROJECT_JSON" python3 -c "
+import json,os
 try:
-  d=json.load(open('$PROJECT_JSON'))
+  d=json.load(open(os.environ['PROJECT_JSON']))
   print(d.get('mvp_stage',''))
 except: pass
 " 2>/dev/null || true)
-  STAGE_STATUS=$(python3 -c "
-import json,sys
+  STAGE_STATUS=$(PROJECT_JSON="$PROJECT_JSON" python3 -c "
+import json,os
 try:
-  d=json.load(open('$PROJECT_JSON'))
+  d=json.load(open(os.environ['PROJECT_JSON']))
   print(d.get('stage_status',''))
 except: pass
 " 2>/dev/null || true)

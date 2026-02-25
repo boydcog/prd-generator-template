@@ -96,22 +96,19 @@
 ```
 
 project.json 업데이트:
+1. 기존 `stage_history` 배열을 로드합니다.
+2. 다음 항목을 배열 끝에 **append** 합니다 (기존 이력 보존):
 ```json
 {
-  "mvp_stage": "S{N+1}",          // S4 이후는 "S5"
-  "stage_status": "in_progress",
-  "stage_history": [
-    {
-      "stage": "S{N}",
-      "entered_at": "{이전 또는 created_at}",
-      "documents_generated": ["{document_type}"],
-      "gate_decision": "go",
-      "gate_decided_at": "{현재 ISO 타임스탬프}",
-      "gate_notes": "전원 go"
-    }
-  ]
+  "stage": "S{N}",
+  "entered_at": "{이전 또는 created_at}",
+  "documents_generated": ["{document_type}"],
+  "gate_decision": "go",
+  "gate_decided_at": "{현재 ISO 타임스탬프}",
+  "gate_notes": "전원 go"
 }
 ```
+3. `mvp_stage: "S{N+1}"`, `stage_status: "in_progress"`, 수정된 `stage_history` 배열을 project.json에 저장합니다.
 
 S4 이후 통과 시:
 ```
@@ -131,21 +128,19 @@ MVP 개발 준비가 완료되었습니다!
 ```
 
 project.json 업데이트:
+1. 기존 `stage_history` 배열을 로드합니다.
+2. 다음 항목을 배열 끝에 **append** 합니다 (기존 이력 보존):
 ```json
 {
-  "stage_status": "gate_stopped",
-  "stage_history": [
-    {
-      "stage": "S{N}",
-      "entered_at": "...",
-      "documents_generated": ["{document_type}"],
-      "gate_decision": "stop",
-      "gate_decided_at": "{현재 ISO 타임스탬프}",
-      "gate_notes": "{stop 기준과 사유 요약}"
-    }
-  ]
+  "stage": "S{N}",
+  "entered_at": "...",
+  "documents_generated": ["{document_type}"],
+  "gate_decision": "stop",
+  "gate_decided_at": "{현재 ISO 타임스탬프}",
+  "gate_notes": "{stop 기준과 사유 요약}"
 }
 ```
+3. `stage_status: "gate_stopped"`, 수정된 `stage_history` 배열을 project.json에 저장합니다.
 
 #### 보류 포함 (stop 없음) → 미완료
 
