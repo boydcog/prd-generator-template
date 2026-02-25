@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-02-25
+
+- improve: Design Spec, Tech Spec 템플릿 신규 추가 — Zero-Design-Handoff 철학 기반 Design Spec(작성 가이드 + 빈 템플릿), AI Rules 가드레일 기반 Tech Spec(작성 가이드 + 빈 템플릿) 4개 파일 생성; 이모코그 AI MVP 개발 프로세스 v1.0의 Stage 4 Freeze 인계 패키지 4종 완성
+
 ## 2026-02-23
 
 - improve: 템플릿/인스턴스 아키텍처 도입 — drive-sources.yaml을 템플릿(tracked)으로 유지하고 제품별 인스턴스(gitignored)로 분리, skip-worktree 제거로 git pull 템플릿 업데이트 수신 가능, 마이그레이션 v1→v2에서 mv→cp 전환 및 템플릿 복원, 마이그레이션 후 상태 재평가 규칙 추가
