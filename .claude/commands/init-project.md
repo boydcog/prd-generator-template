@@ -48,7 +48,11 @@
 | # | 질문 | 기본값 | 필수 |
 |---|------|--------|------|
 | 1 | 프로젝트 이름은 무엇인가요? | — | Y |
-| 1-1 | 어떤 문서를 만들까요? (PRD / 디자인 사양서 / 마케팅 브리프 / 사업 계획서 / 기술 사양서 / 직접 정의) | PRD | Y |
+| 1-1 | 어떤 문서를 만들까요? | 제품 브리프(S1) | Y |
+|     | **MVP 프로세스**: S1 제품 브리프 / S1 비즈니스 사양서 / S2 프리토타입 사양서 / S3 제품 사양서 / S4 디자인 사양서 / S4 기술 사양서 / 직접 정의 | | |
+| 1-2 | 현재 어느 단계부터 시작하시나요? | S1 (자동) | Y |
+|     | S1 Brief / S2 Pretotype / S3 Prototype / S4 Freeze / 해당 없음(custom) | | |
+|     | ※ 1-1에서 MVP 문서 선택 시 단계가 자동 결정되므로 확인만 함. "직접 정의" 선택 시 이 질문 필수. | | |
 | 2 | 대상 사용자(고객)는 누구인가요? | — | Y |
 | 3 | 프로젝트의 도메인/산업 분야는? | — | N |
 | 4 | 핵심 문제 또는 기회는 무엇인가요? | — | Y |
@@ -56,6 +60,13 @@
 | 6 | 답을 찾고 싶은 핵심 연구 질문은? (복수 가능) | — | Y |
 | 7 | 참고할 Google Drive 문서 링크가 있나요? (복수 가능) | 없음 | N |
 | 8 | 출력 언어 선호는? | ko | N |
+
+**문서 유형 → 단계 자동 결정 규칙**:
+- `product-brief`, `business-spec` → `mvp_stage: "S1"`
+- `pretotype-spec` → `mvp_stage: "S2"`
+- `product-spec` → `mvp_stage: "S3"`
+- `design-spec`, `tech-spec` → `mvp_stage: "S4"`
+- `custom` (직접 정의 또는 "해당 없음") → `mvp_stage: null`
 
 질문 1 이후, **product_id를 생성**합니다:
 - 프로젝트 이름을 소문자 + 하이픈 형식으로 변환 (예: `"Maththera"` → `maththera`, `"My App"` → `my-app`).
@@ -91,7 +102,10 @@
 {
   "product_id": "<product_id>",
   "name": "<프로젝트명>",
-  "document_type": "<문서유형 ID: prd|design-spec|marketing-brief|business-plan|tech-spec|custom>",
+  "document_type": "<문서유형 ID: product-brief|business-spec|pretotype-spec|product-spec|design-spec|tech-spec|custom>",
+  "mvp_stage": "<S1|S2|S3|S4|null>",
+  "stage_status": "in_progress",
+  "stage_history": [],
   "target_users": "<대상 사용자>",
   "domain": "<도메인>",
   "core_problem": "<핵심 문제>",

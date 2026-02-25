@@ -22,3 +22,8 @@ node_modules/
 .qodo/
 docs/
 *.png
+
+# IDE / Tool directories
+.cursor/
+.orchestra/
+.firecrawl/

@@ -4,7 +4,15 @@
 
 # 기본 문서 유형 (document-types.yaml 참조)
 # project.json에 document_type이 없으면 이 값을 사용합니다 (하위호환)
-default_document_type: prd
+default_document_type: product-brief
+
+# MVP 프로세스 단계 추적 기본값
+# mvp_stage: 현재 단계 (S1~S5, null=MVP 프로세스 미사용)
+# stage_status: in_progress | gate_passed | gate_stopped
+# stage_history: 각 단계의 게이트 결정 이력 (배열)
+mvp_stage: S1
+stage_status: in_progress
+stage_history: []
 
 # 출력 언어
 language: ko
