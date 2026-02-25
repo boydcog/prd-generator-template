@@ -3,6 +3,7 @@
 ## 2026-02-25
 
 - improve: MVP 프로세스 단계 추적 + Kill Gate 시스템 도입 — `mvp_stage`/`stage_status`/`stage_history` 필드 추가, document-types.yaml을 S1~S4 5종+custom으로 전면 교체, `/gate-review` 신규 커맨드(기준별 Go/Stop 판정), startup.sh에 MVP 단계 상태 출력 + gate-review 추천 로직, v2→v3 마이그레이션(legacy 타입→custom 변환)
+- improve: S1~S4 전 단계 작성 가이드 + 빈 템플릿 신규 추가 — Business Spec, Pretotype Spec, Product Brief(예시 포함), Product Spec, Design Spec, Tech Spec 총 6종. Zero-Design-Handoff 철학 기반 Design Spec, AI Rules 가드레일 기반 Tech Spec 포함. 이모코그 AI MVP 개발 프로세스 v1.0 인계 패키지 완성
 
 ## 2026-02-23
 
