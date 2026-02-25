@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-02-25
+
+- improve: MVP 프로세스 단계 추적 + Kill Gate 시스템 도입 — `mvp_stage`/`stage_status`/`stage_history` 필드 추가, document-types.yaml을 S1~S4 5종+custom으로 전면 교체, `/gate-review` 신규 커맨드(기준별 Go/Stop 판정), startup.sh에 MVP 단계 상태 출력 + gate-review 추천 로직, v2→v3 마이그레이션(legacy 타입→custom 변환)
+
 ## 2026-02-23
 
 - improve: 템플릿/인스턴스 아키텍처 도입 — drive-sources.yaml을 템플릿(tracked)으로 유지하고 제품별 인스턴스(gitignored)로 분리, skip-worktree 제거로 git pull 템플릿 업데이트 수신 가능, 마이그레이션 v1→v2에서 mv→cp 전환 및 템플릿 복원, 마이그레이션 후 상태 재평가 규칙 추가
