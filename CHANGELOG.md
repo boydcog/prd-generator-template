@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-02-26
+
+- improve: Google Docs 탭 기반 문서 통합 — 프로젝트 내 모든 문서를 하나의 마스터 문서(`{project}-docs`) 탭으로 관리, `drive-sources.yaml`에 `shared_drive_folder`·`docs_url` 필드 추가, `/upload-drive` Step 5를 최초/추가 분기 로직으로 재작성, 탭 UI 가이드 섹션 신설
+
 ## 2026-02-25
 
 - improve: MVP 프로세스 단계 추적 + Kill Gate 시스템 도입 — `mvp_stage`/`stage_status`/`stage_history` 필드 추가, document-types.yaml을 S1~S4 5종+custom으로 전면 교체, `/gate-review` 신규 커맨드(기준별 Go/Stop 판정), startup.sh에 MVP 단계 상태 출력 + gate-review 추천 로직, v2→v3 마이그레이션(legacy 타입→custom 변환)

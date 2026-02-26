@@ -38,3 +38,12 @@ sources: []
 # PRD 생성물을 업로드할 Drive 폴더 (선택)
 upload_folder: ""
   # 예: "https://drive.google.com/drive/folders/FOLDER_ID"
+
+# 공유 드라이브 폴더 URL (선택)
+shared_drive_folder: ""
+  # 예: "https://drive.google.com/drive/folders/SHARED_FOLDER_ID"
+
+# 프로젝트 마스터 문서 URL (최초 업로드 시 자동 저장)
+# 같은 프로젝트의 모든 문서가 이 Google Docs 문서의 탭으로 관리됩니다.
+docs_url: ""
+  # 예: "https://docs.google.com/document/d/DOCUMENT_ID/edit"
