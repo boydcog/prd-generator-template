@@ -359,19 +359,24 @@ Task(
 
 1. `TaskList` → "통합 문서 생성" 태스크 클레임
 2. `TaskUpdate(owner="synth-agent", status="in_progress")`
-3. 전체 결과 읽기 (회의 결과 + debate/ + critique)
-4. **Judge 판정 반영**: `judgment.json`의 `adopted_for_synth` 필드를 요구사항 결정 시 우선 반영
-5. **미판정 충돌 기록**: 역할 간 상충하는 주장 중 Judge가 판정하지 않은 잔여 충돌을 식별
+3. **템플릿 구조 로드**:
+   - `document-types.yaml`에서 현재 문서 유형의 `output_dir_name`과 `template_doc_url`을 읽습니다.
+   - 로컬 템플릿 파일 경로: `.claude/templates/{output_dir_name}/` 디렉토리에서 `[프로젝트명]`으로 시작하는 `.md` 파일을 읽습니다.
+   - 로컬 템플릿에서 섹션 헤더(H1/H2/H3) 구조를 추출하여 최종 문서의 뼈대로 사용합니다.
+   - 로컬 템플릿 파일이 없으면: 작성 가이드(`{DocType} 작성 가이드.md`)를 대신 읽고, 섹션 맵(섹션명 목록)을 추출합니다.
+4. 전체 결과 읽기 (회의 결과 + debate/ + critique)
+5. **Judge 판정 반영**: `judgment.json`의 `adopted_for_synth` 필드를 요구사항 결정 시 우선 반영
+6. **미판정 충돌 기록**: 역할 간 상충하는 주장 중 Judge가 판정하지 않은 잔여 충돌을 식별
    - 해당 충돌은 해결하려 시도하지 말고, `conflicts.json`에 상세히 기록 (Judge가 유일한 판정자)
-6. **전문가 토론 요약 섹션 작성**: `debate/summary.md` 기반으로 토론 핵심 내용 요약
-7. **통합 문서 작성**: 모든 역할(고정 + 동적)의 핵심 내용을 통합하여 최종 문서 작성
-   - 문서 구조는 `document-types.yaml`의 `output_sections`를 따름
+7. **전문가 토론 요약 섹션 작성**: `debate/summary.md` 기반으로 토론 핵심 내용 요약
+8. **통합 문서 작성**: 모든 역할(고정 + 동적)의 핵심 내용을 통합하여 최종 문서 작성
+   - Step 3에서 로드한 로컬 템플릿의 H2/H3 섹션 구조를 뼈대로 사용합니다.
    - 동적 역할의 관점은 관련 섹션에 자연스럽게 통합 (별도 섹션 불필요)
-8. **인용 보고서**: 모든 인용을 `citations.json`에 기록
-9. **출력**: 버전 디렉토리에 `{output_file_name}` 저장
-   - 경로: `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/{output_file_name}`
-10. `TaskUpdate(status="completed")`
-11. `SendMessage(recipient="team-lead", summary="통합 문서 생성 완료")`
+9. **인용 보고서**: 모든 인용을 `citations.json`에 기록
+10. **출력**: 버전 디렉토리에 `{output_file_name}` 저장
+    - 경로: `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/{output_file_name}`
+11. `TaskUpdate(status="completed")`
+12. `SendMessage(recipient="team-lead", summary="통합 문서 생성 완료")`
 
 ### 팀 정리
 
@@ -599,12 +604,15 @@ agent-team-spec.md의 "Judge 출력 계약"을 준수하세요.
 비판적 검토:
 - .claude/artifacts/{active_product}/agents/critique.json
 - .claude/artifacts/{active_product}/agents/critique.md
+로컬 문서 템플릿:
+- .claude/templates/{output_dir_name}/[프로젝트명] {DocName}.md  ← 섹션 구조 참조
+- .claude/templates/{output_dir_name}/{DocName} 작성 가이드.md   ← 폴백
 
 ## 통합 규칙
 1. **Judge 판정 우선 반영**: judgment.json의 adopted_for_synth 필드를 요구사항 결정 시 우선 반영하세요.
 2. **critique 지적 고려**: critique의 권고사항을 최종 문서에 반영하세요.
 3. **전문가 토론 요약 섹션**: debate/summary.md 기반으로 토론 핵심 내용을 요약하는 섹션을 포함하세요.
-4. **문서 구조**: document-types.yaml의 output_sections에 정의된 섹션을 순서대로 작성하세요.
+4. **문서 구조**: `.claude/templates/{output_dir_name}/[프로젝트명]*.md` 로컬 템플릿의 섹션 구조를 따릅니다. 로컬 템플릿을 먼저 읽고 H2/H3 헤더를 문서 구조로 사용하세요. 템플릿 파일이 없으면 document-types.yaml의 output_sections를 사용하세요.
 5. **동적 역할 통합**: 동적 역할의 관점은 관련 섹션에 자연스럽게 통합하세요 (별도 섹션 불필요).
 6. **미판정 충돌 기록**: Judge가 판정하지 않은 잔여 충돌은 해결하지 말고 conflicts.json에 상세 기록하세요 (Judge가 유일한 판정자).
 7. **인용 보고서**: 모든 인용을 citations.json에 기록하세요.
