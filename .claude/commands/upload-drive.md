@@ -2,6 +2,9 @@
 
 Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, `/run-research` 및 `/auto-generate` 완료 후 자동 호출됩니다.
 
+같은 프로젝트의 모든 문서(다른 형식 + 다른 버전)는 **하나의 Google Docs 문서** 내 탭으로 관리됩니다.
+최초 업로드 시 마스터 문서(`{project}-docs`)를 생성하고, 이후 업로드는 동일 문서에 탭을 추가합니다.
+
 ## 입력
 
 - `$ARGUMENTS`: (선택) 업로드할 파일 경로. 없으면 최신 생성 문서를 자동 탐지.
@@ -37,7 +40,7 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
 
 ### Step 2: 저장 위치 결정
 
-1. `drive-sources.yaml`의 `upload_folder`가 이미 설정되어 있으면:
+1. `drive-sources-{product_id}.yaml`의 `upload_folder`가 이미 설정되어 있으면:
    - 저장된 폴더를 재사용합니다 (사용자에게 확인만).
 2. 설정되어 있지 않으면:
    - `browser_navigate`로 `https://drive.google.com`을 엽니다.
@@ -49,7 +52,7 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
      const match = window.location.href.match(/drive\/folders\/([^/?]+)/);
      return match ? match[1] : "";
      ```
-   - 추출한 폴더 URL을 `drive-sources.yaml`의 `upload_folder`에 저장합니다 (다음부터 재사용).
+   - 추출한 폴더 URL을 `drive-sources-{product_id}.yaml`의 `upload_folder`에 저장합니다 (다음부터 재사용).
 
 ### Step 3: Google 로그인 확인
 
@@ -85,48 +88,104 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
    # 래핑된 HTML을 ${SERVE_DIR}/index.html에 저장
    ```
 
-### Step 5: Google Docs 생성 + 내용 삽입
+### Step 5: Google Docs 마스터 문서에 탭 삽입
 
-1. 사용자가 지정한 Drive 폴더에서 `browser_click`으로 "새로 만들기" → "Google Docs" → "빈 문서"를 클릭합니다.
-   - 또는 `browser_navigate`로 `https://docs.google.com/document/create` 접속 후, 생성된 문서를 해당 폴더로 이동.
-2. `browser_evaluate`로 문서 제목을 `{type}-{project}-v{N}`으로 설정합니다.
-   - 제목 형식은 `project-defaults.yaml`의 `upload.naming_pattern`을 따릅니다.
-3. **로컬 서빙 → 브라우저 복사 → Google Docs 붙여넣기**로 삽입합니다:
+`drive-sources-{product_id}.yaml`의 `docs_url` 값을 확인하여 분기합니다.
+
+---
+
+#### Step 5-A: 최초 업로드 (`docs_url`이 비어 있음)
+
+1. `browser_navigate`로 `https://docs.google.com/document/create`에 접속하여 새 빈 문서를 만듭니다.
+2. `browser_evaluate`로 문서 제목을 `{project}-docs`로 설정합니다.
+   - `{project}`는 `project.json`의 `project_name` 값을 사용합니다 (예: `maththera-docs`).
+3. `browser_evaluate`로 현재 문서 URL을 읽어 `drive-sources-{product_id}.yaml`의 `docs_url`에 저장합니다:
+   ```javascript
+   return window.location.href;
    ```
-   // a. 로컬 HTTP 서버로 래핑된 HTML 서빙 + PID 기록
-   PORT={사용 가능한 포트}
-   python3 -m http.server $PORT -d $SERVE_DIR &
-   HTTP_PID=$!
-
-   // b. 새 탭에서 로컬 HTML 열기
-   browser_navigate → http://localhost:$PORT/index.html
-
-   // c. 전체 선택 + 복사 (서식 포함 클립보드)
-   // macOS: Meta, Windows/Linux: Control
-   browser_press_key → "Meta+a" 또는 "Control+a"  (전체 선택)
-   browser_press_key → "Meta+c" 또는 "Control+c"  (복사)
-
-   // d. Google Docs 탭으로 전환
-   browser_tabs → select (Docs 탭)
-
-   // e. 문서 본문에 붙여넣기
-   browser_click → 문서 본문 영역 클릭 (포커스)
-   browser_press_key → "Meta+v" 또는 "Control+v"  (붙여넣기)
-
-   // f. 로컬 서버 정리
-   kill $HTTP_PID
-   rm -rf $SERVE_DIR
+4. 기본 탭 "Tab 1"을 `{doc_type}-v{N}`으로 이름 변경합니다:
    ```
-   - 브라우저가 렌더링한 HTML을 복사하므로 heading, bold, table, list 서식이 보존됩니다.
-   - `<meta charset="UTF-8">` 덕분에 한글이 정확히 인코딩됩니다.
-   - `execCommand('insertHTML')`은 사용하지 않습니다 (deprecated + Google Docs Canvas 렌더링과 비호환).
-   - `navigator.clipboard.write()`도 사용하지 않습니다 (CORS 제약으로 Google Docs에서 실패할 수 있음).
-4. 삽입 완료 확인 (스크린샷 1회).
-5. **(Fallback) 자동 붙여넣기 실패 시:**
-   - "자동 붙여넣기에 실패했습니다." 메시지 표시.
-   - 사용자에게 안내:
-     > "브라우저에서 `http://localhost:{port}` 탭으로 이동하여 내용을 수동으로 복사(Cmd+A, Cmd+C)한 후, Google Docs 탭에 붙여넣어(Cmd+V) 주세요."
-   - 사용자가 확인하면 절차를 계속 진행합니다.
+   browser_snapshot → 왼쪽 사이드바 "문서 탭" 패널에서 "Tab 1" 확인
+   (패널이 닫혀 있으면: View > Show tabs 클릭 후 재시도)
+   탭 우클릭 → "탭 이름 바꾸기" 클릭
+   새 이름 입력: {doc_type}-v{N}  (예: business-spec-v1)
+   Enter 키 눌러 확정
+   ```
+   - `{doc_type}-v{N}`은 `project-defaults.yaml`의 `upload.naming_pattern` 규칙에서 타입 + 버전 부분만 사용합니다.
+5. **로컬 서빙 → 브라우저 복사 → Google Docs 붙여넣기**로 탭 내용을 삽입합니다 (아래 공통 삽입 절차 참조).
+6. 삽입 완료 확인 (스크린샷 1회).
+7. 문서가 `upload_folder`에 없으면 Drive로 이동:
+   - 파일 메뉴 → "이동" 클릭 → `upload_folder`로 이동.
+
+---
+
+#### Step 5-B: 탭 추가 (`docs_url`이 설정되어 있음)
+
+1. `browser_navigate`로 저장된 `docs_url`을 엽니다.
+2. `browser_snapshot`으로 탭 패널을 스캔하여 현재 탭 목록을 확인합니다.
+   - 탭 패널이 보이지 않으면: View > Show tabs 클릭.
+3. 중복 탭 확인: `{doc_type}-v{N}` 이름의 탭이 이미 존재하면 사용자에게 질문합니다:
+   > "`{doc_type}-v{N}` 탭이 이미 있습니다. 덮어쓸까요, 아니면 새 버전 번호로 추가할까요?"
+   - 덮어쓰기 선택 시: 해당 탭으로 이동 → 전체 선택(Ctrl+A) → 아래의 '공통 삽입 절차'에 따라 붙여넣기 실행 (선택된 내용이 새 내용으로 교체됨).
+   - 새 버전 추가 선택 시: 현재 탭 목록에서 같은 `{doc_type}`의 가장 높은 버전 번호(M)를 스캔하고, 새 탭 버전을 M+1로 설정하여 추가.
+4. 새 탭을 추가합니다:
+   ```
+   탭 패널 하단 "+" 아이콘 클릭
+   → 새 "제목 없는 탭" 생성됨
+   ```
+5. 새 탭 이름을 `{doc_type}-v{N}`으로 변경합니다:
+   ```
+   새 탭 우클릭 → "탭 이름 바꾸기"
+   새 이름 입력 후 Enter
+   ```
+6. **로컬 서빙 → 브라우저 복사 → Google Docs 붙여넣기**로 탭 내용을 삽입합니다 (아래 공통 삽입 절차 참조).
+7. 삽입 완료 확인 (스크린샷 1회).
+
+---
+
+#### 공통 삽입 절차 (Step 5-A / 5-B 공유)
+
+```
+// a. 로컬 HTTP 서버로 래핑된 HTML 서빙 + PID 기록 (loopback 전용 바인딩)
+PORT={사용 가능한 포트}
+python3 -m http.server $PORT --bind 127.0.0.1 -d $SERVE_DIR &
+HTTP_PID=$!
+sleep 1  # 서버가 시작될 때까지 대기 (race condition 방지)
+
+// b. 새 브라우저 탭에서 로컬 HTML 열기
+browser_tabs → new
+browser_navigate → http://localhost:$PORT/index.html
+
+// c. 전체 선택 + 복사 (서식 포함 클립보드)
+// macOS: Meta, Windows/Linux: Control
+browser_press_key → "Meta+a" 또는 "Control+a"  (전체 선택)
+browser_press_key → "Meta+c" 또는 "Control+c"  (복사)
+
+// d. Google Docs 탭으로 전환
+browser_tabs → select (Docs 탭)
+
+// e. 탭 내 콘텐츠 영역 클릭 후 붙여넣기
+browser_click → 문서 본문 영역 클릭 (포커스)
+browser_press_key → "Meta+v" 또는 "Control+v"  (붙여넣기)
+
+// f. 로컬 서버 정리 + 임시 탭 닫기
+kill $HTTP_PID
+rm -rf $SERVE_DIR
+browser_tabs → close (로컬 HTML 탭)
+```
+
+- 브라우저가 렌더링한 HTML을 복사하므로 heading, bold, table, list 서식이 보존됩니다.
+- `<meta charset="UTF-8">` 덕분에 한글이 정확히 인코딩됩니다.
+- `execCommand('insertHTML')`은 사용하지 않습니다 (deprecated + Google Docs Canvas 렌더링과 비호환).
+- `navigator.clipboard.write()`도 사용하지 않습니다 (CORS 제약으로 Google Docs에서 실패할 수 있음).
+
+**(Fallback) 자동 붙여넣기 실패 시:**
+- "자동 붙여넣기에 실패했습니다." 메시지 표시.
+- 사용자에게 안내:
+  > "브라우저에서 `http://localhost:{port}` 탭으로 이동하여 내용을 수동으로 복사(Cmd+A, Cmd+C)한 후, Google Docs 탭에 붙여넣어(Cmd+V) 주세요."
+- 사용자가 확인하면 절차를 계속 진행합니다.
+
+---
 
 ### Step 6: 공유 드라이브 이동 (선택)
 
@@ -135,10 +194,10 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
 > "{organization.name} 공유 드라이브로 이동하시겠습니까?"
 
 - **수락 시**:
-  1. `drive-sources.yaml`의 `shared_drive_folder` 확인.
+  1. `drive-sources-{product_id}.yaml`의 `shared_drive_folder` 확인.
   2. **없으면**: 공유 드라이브 폴더 URL 입력 안내 → 입력받은 URL을 `shared_drive_folder`에 저장 (재사용).
   3. **있으면**: 저장된 폴더로 문서 이동.
-  4. Playwright `browser_navigate`로 업로드된 문서 페이지 이동 → `browser_snapshot` → 파일 메뉴 또는 우클릭 → "이동" 클릭 → 공유 드라이브 폴더로 이동 실행.
+  4. Playwright `browser_navigate`로 마스터 문서 페이지 이동 → `browser_snapshot` → 파일 메뉴 또는 우클릭 → "이동" 클릭 → 공유 드라이브 폴더로 이동 실행.
 - **거부 시**: 개인 Drive에 보관.
 
 ### Step 7: 결과 보고 + 브라우저 종료
@@ -146,8 +205,34 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
 1. 업로드 파일:
    - `{output_file_name}` (문서 본문 — HTML 서식 유지)
    - `citations.json` (인용 보고서, `project-defaults.yaml`의 `upload.include_citations`이 true일 때)
-2. 업로드 완료 후 Drive 링크를 사용자에게 공유합니다.
+2. 업로드 완료 후 결과를 사용자에게 공유합니다:
+   ```
+   업로드 완료: {project}-docs
+   탭 추가됨: {doc_type}-v{N}
+   링크: {docs_url}
+   ```
 3. `browser_close`를 호출하여 브라우저를 종료합니다.
+
+---
+
+## Google Docs 탭 UI 가이드
+
+```
+# 탭 목록 확인
+browser_snapshot → 왼쪽 사이드바 "문서 탭" 패널 확인
+(패널이 닫혀 있으면: View > Show tabs 클릭)
+
+# 탭 추가
+탭 패널 하단 "+" 아이콘 클릭
+→ 새 "제목 없는 탭" 생성됨
+
+# 탭 이름 변경
+신규 탭 우클릭 → "탭 이름 바꾸기"
+→ 이름 입력 후 Enter
+
+# 탭 내 콘텐츠 작업
+탭 클릭으로 전환 → 해당 탭 내용 편집 가능
+```
 
 ---
 
@@ -158,9 +243,10 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
 | `project-defaults.yaml` | `upload.ask_after_generation` | 생성 후 업로드 여부 확인 |
 | `project-defaults.yaml` | `upload.auto_upload` | true면 확인 없이 자동 업로드 |
 | `project-defaults.yaml` | `upload.include_citations` | 인용 보고서 함께 업로드 여부 |
-| `project-defaults.yaml` | `upload.naming_pattern` | Drive 문서 제목 패턴 |
-| `drive-sources.yaml` | `upload_folder` | 개인 Drive 업로드 폴더 URL |
-| `drive-sources.yaml` | `shared_drive_folder` | 공유 드라이브 폴더 URL |
+| `project-defaults.yaml` | `upload.naming_pattern` | 탭 이름 패턴 (마스터 문서 제목은 `{project}-docs`) |
+| `drive-sources-{product_id}.yaml` | `upload_folder` | 개인 Drive 업로드 폴더 URL |
+| `drive-sources-{product_id}.yaml` | `shared_drive_folder` | 공유 드라이브 폴더 URL |
+| `drive-sources-{product_id}.yaml` | `docs_url` | 프로젝트 마스터 문서 URL (최초 업로드 시 자동 저장) |
 
 ---
 
@@ -170,3 +256,4 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
 - plain text 붙여넣기 (서식 사라짐)
 - 섹션별 분할 삽입 (중간에 끊기고 사용자 입력 대기 발생)
 - 삽입 중 사용자에게 "계속하시겠습니까?" 같은 질문 (위치 확인은 Step 2에서만)
+- 업로드마다 새 Google Docs 문서 생성 (같은 프로젝트는 반드시 마스터 문서에 탭으로 추가)
