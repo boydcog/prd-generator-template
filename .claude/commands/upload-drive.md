@@ -5,10 +5,10 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
 같은 프로젝트의 모든 문서(다른 형식 + 다른 버전)는 **하나의 Google Docs 문서** 내 탭으로 관리됩니다.
 최초 업로드 시 마스터 문서(`{project_name}`)를 생성하고, 이후 업로드는 동일 문서에 탭을 추가합니다.
 
-**탭 구조**: `{document_title}` (상위 탭) > `v{N}` (하위 탭)
+**탭 구조**: `{document_title}` (상위 탭) > `{parent_tab_name} - v{N}` (하위 탭)
 - 파일명 = `project.json`의 `name` 필드 (예: `Maththera`)
 - 상위 탭 = 마크다운 H1에서 프로젝트명 제거 (예: `# Maththera Business Spec` → `Business Spec`)
-- 하위 탭 = 버전 번호만 (예: `v1`, `v2`, `v3`)
+- 하위 탭 = `{상위탭 이름} - v{N}` 형식 (예: `Business Spec - v1`, `Business Spec - v2`)
 
 ## 입력
 
@@ -121,16 +121,16 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
    새 이름 입력: {parent_tab_name}  (예: Business Spec)
    Enter 키 눌러 확정
    ```
-6. 상위 탭 아래 "v1" 하위 탭을 생성합니다:
+6. 상위 탭 아래 `{parent_tab_name} - v1` 하위 탭을 생성합니다:
    ```
    상위 탭("{parent_tab_name}")의 "탭 옵션" 버튼 클릭
    → 드롭다운 메뉴에서 "하위 탭 추가" 클릭
    → "제목 없는 탭"이 상위 탭 아래 들여쓰기로 생성됨
    새 하위 탭의 "탭 옵션" 버튼 클릭 → "탭 이름 바꾸기"
-   이름 입력: v1
+   이름 입력: {parent_tab_name} - v1
    Enter 키 눌러 확정
    ```
-7. "v1" 하위 탭을 클릭하여 활성화합니다.
+7. `{parent_tab_name} - v1` 하위 탭을 클릭하여 활성화합니다.
 8. **로컬 서빙 → 브라우저 복사 → Google Docs 붙여넣기**로 탭 내용을 삽입합니다 (아래 공통 삽입 절차 참조).
 9. 삽입 완료 확인 (스크린샷 1회).
 10. 문서가 `upload_folder`에 없으면 Drive로 이동:
@@ -154,27 +154,29 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
    a. 탭 패널 하단 "+" 아이콘 클릭 → "제목 없는 탭" 생성
    b. 새 탭 "탭 옵션" 버튼 클릭 → "탭 이름 바꾸기" → {parent_tab_name} → Enter
    c. 상위 탭 "탭 옵션" 버튼 클릭 → "하위 탭 추가"
-   d. 새 하위 탭 "탭 옵션" → "탭 이름 바꾸기" → "v1" → Enter
-   e. "v1" 하위 탭 클릭 → 활성화 → 공통 삽입 절차 실행
+   d. 새 하위 탭 "탭 옵션" → "탭 이름 바꾸기" → "{parent_tab_name} - v1" → Enter
+   e. "{parent_tab_name} - v1" 하위 탭 클릭 → 활성화 → 공통 삽입 절차 실행
    ```
 
    **[상위 탭 있음]**: 해당 `{parent_tab_name}` 탭이 이미 존재하는 경우
    ```
-   a. 상위 탭의 하위 탭 목록을 스캔하여 최대 버전 번호 M을 찾습니다 (하위 탭 없으면 M=0).
+   a. 상위 탭의 하위 탭 목록을 스캔합니다 (하위 탭 없으면 M=0).
+      - 하위 탭 이름에서 "{parent_tab_name} - v" prefix를 제거하고 숫자만 파싱하여 최대값 M을 추출합니다.
+      - 예: "Business Spec - v2" → M=2
    b. [하위 탭 없음 (M=0)]:
       - 상위 탭 "탭 옵션" → "하위 탭 추가"
-      - 새 하위 탭 "탭 옵션" → "탭 이름 바꾸기" → "v1" → Enter
-      - "v1" 하위 탭 클릭 → 활성화 → 공통 삽입 절차 실행
+      - 새 하위 탭 "탭 옵션" → "탭 이름 바꾸기" → "{parent_tab_name} - v1" → Enter
+      - "{parent_tab_name} - v1" 하위 탭 클릭 → 활성화 → 공통 삽입 절차 실행
    c. [하위 탭 있음 (M>0)]:
       - 사용자에게 확인:
-        > "`{parent_tab_name}` 탭의 최신 버전은 v{M}입니다.
-        >  새 v{M+1}을 추가할까요, 아니면 v{M}을 덮어쓸까요?"
+        > "`{parent_tab_name}` 탭의 최신 버전은 `{parent_tab_name} - v{M}`입니다.
+        >  새 `{parent_tab_name} - v{M+1}`을 추가할까요, 아니면 `{parent_tab_name} - v{M}`을 덮어쓸까요?"
       - [새 버전 추가]:
         - 상위 탭 "탭 옵션" → "하위 탭 추가"
-        - 새 하위 탭 "탭 옵션" → "탭 이름 바꾸기" → "v{M+1}" → Enter
-        - "v{M+1}" 하위 탭 클릭 → 활성화 → 공통 삽입 절차 실행
+        - 새 하위 탭 "탭 옵션" → "탭 이름 바꾸기" → "{parent_tab_name} - v{M+1}" → Enter
+        - "{parent_tab_name} - v{M+1}" 하위 탭 클릭 → 활성화 → 공통 삽입 절차 실행
       - [덮어쓰기]:
-        - "v{M}" 하위 탭 클릭 → Cmd+A(전체 선택) → 공통 삽입 절차 실행
+        - "{parent_tab_name} - v{M}" 하위 탭 클릭 → Cmd+A(전체 선택) → 공통 삽입 절차 실행
    ```
 
 5. 삽입 완료 확인 (스크린샷 1회).
@@ -246,7 +248,7 @@ browser_tabs → close (로컬 HTML 탭)
 2. 업로드 완료 후 결과를 사용자에게 공유합니다:
    ```
    업로드 완료: {project_name}
-   탭 추가됨: {parent_tab_name} > v{N}
+   탭 추가됨: {parent_tab_name} > {parent_tab_name} - v{N}
    링크: {docs_url}
    ```
 3. `browser_close`를 호출하여 브라우저를 종료합니다.
@@ -281,13 +283,13 @@ browser_snapshot → 왼쪽 사이드바 "문서 탭" 패널 확인
 ```
 treeitem "Business Spec":
   button "탭 옵션"
-  treeitem "v1":
+  treeitem "Business Spec - v1":
     button "탭 옵션"
-  treeitem "v2":
+  treeitem "Business Spec - v2":
     button "탭 옵션"
 treeitem "Pretotype Spec":
   button "탭 옵션"
-  treeitem "v1":
+  treeitem "Pretotype Spec - v1":
     button "탭 옵션"
 ```
 
@@ -300,7 +302,7 @@ treeitem "Pretotype Spec":
 | `project-defaults.yaml` | `upload.ask_after_generation` | 생성 후 업로드 여부 확인 |
 | `project-defaults.yaml` | `upload.auto_upload` | true면 확인 없이 자동 업로드 |
 | `project-defaults.yaml` | `upload.include_citations` | 인용 보고서 함께 업로드 여부 |
-| `project-defaults.yaml` | `upload.naming_pattern` | Google Docs 파일명 패턴 (파일명=프로젝트명, 탭 구조: `{document_title}` > `v{N}`) |
+| `project-defaults.yaml` | `upload.naming_pattern` | Google Docs 파일명 패턴 (파일명=프로젝트명, 탭 구조: `{document_title}` > `{document_title} - v{N}`) |
 | `drive-sources-{product_id}.yaml` | `upload_folder` | 개인 Drive 업로드 폴더 URL |
 | `drive-sources-{product_id}.yaml` | `shared_drive_folder` | 공유 드라이브 폴더 URL |
 | `drive-sources-{product_id}.yaml` | `docs_url` | 프로젝트 마스터 문서 URL (최초 업로드 시 자동 저장) |

@@ -2,6 +2,7 @@
 
 ## 2026-02-26
 
+- improve: Drive 소스 안내 추가 + 하위 탭 이름 형식 변경 — `init-project.md` 질문 7 직전에 mvp_stage별 추천 소스 유형 안내 블록 삽입(S1~S4 각 단계 추천 문서 유형, custom 제외); `upload-drive.md` 하위 탭 이름을 `v{N}`에서 `{parent_tab_name} - v{N}` 형식으로 변경(예: `Business Spec - v1`), 버전 파싱 로직을 prefix 제거 후 숫자만 추출하도록 업데이트, 탭 snapshot 예시 및 naming_pattern 설명 갱신
 - improve: Google Drive 업로드 탭 구조 개선 — 파일명을 `{project}-docs`에서 프로젝트명(`project.json`의 `name`)으로 변경, 탭 구조를 평탄한 단일 레벨에서 상위 탭(문서 타이틀) > 하위 탭(v1, v2, v3...) 계층 구조로 전환, Step 5-A에 상위 탭 이름 결정 로직(H1에서 프로젝트명 제거) 및 하위 탭 생성 절차 추가, Step 5-B에 상위 탭 존재 여부에 따른 분기 로직(신규/기존) 추가, 탭 UI 가이드에 하위 탭 추가 방법 및 snapshot 예시 보완, `project-defaults.yaml`의 `naming_pattern` 주석 업데이트
 - improve: Synth 에이전트 로컬 템플릿 연결 수정 + mvp-process-spec.md 신규 추가 — `run-research.md` Synth 팀원 절차에 "템플릿 구조 로드" 스텝(Step 3) 삽입, 폴백을 `output_sections`로 통일(작성 가이드 폴백 제거), Synth 프롬프트 입력 파일 섹션에 `로컬 문서 템플릿` 항목 추가, 통합 규칙 #4를 로컬 템플릿 H2/H3 우선 사용으로 수정; `.claude/spec/mvp-process-spec.md` 신규 생성 — S1~S5 Kill Gate 프로세스, S2 Kill Gate 조건 명확화(AND/OR 논리 분리로 상호 배타적 조건 확립), 문서 의존 관계, project.json 상태 필드, 시스템 연동 섹션 포함
 - improve: Google Docs 탭 기반 문서 통합 — 프로젝트 내 모든 문서를 하나의 마스터 문서(`{project}-docs`) 탭으로 관리, `drive-sources.yaml`에 `shared_drive_folder`·`docs_url` 필드 추가, `/upload-drive` Step 5를 최초/추가 분기 로직으로 재작성, 탭 UI 가이드 섹션 신설; Qodo 리뷰 반영 — `http.server` loopback 바인딩(`--bind 127.0.0.1`) 보안 강화, 서버 시작 후 `sleep 1` race condition 방지, 버전 충돌 방지를 위한 최고 버전 스캔(M+1) 로직, 덮어쓰기 절차 단순화(전체선택+붙여넣기로 원자적 교체)
