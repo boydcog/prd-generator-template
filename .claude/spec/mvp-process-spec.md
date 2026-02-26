@@ -211,9 +211,9 @@ P0 기능을 실제 배포 가능한 수준으로 빌드합니다.
 
 ```
 [S2 Gate 결과]
-  ├─ Skin in the Game 30+ AND NPQ 2개+  →  Go → S3
-  ├─ Skin 10 수준 OR NPQ 1개             →  Pivot → S2 재실험 (1회)
-  └─ Skin 0 OR NPQ 0                     →  Kill → 프로젝트 종료
+  ├─ Skin in the Game 30+ AND NPQ 2개+          →  Go → S3
+  ├─ (Skin 10~29) OR (NPQ 1개, Skin 무관)       →  Pivot → S2 재실험 (1회)
+  └─ Skin < 10 AND NPQ 0                        →  Kill → 프로젝트 종료
 ```
 
 S2 이외 Gate에서 Stop이 발생하면 재작업 후 해당 Gate 재검토 (Kill은 발생하지 않음).

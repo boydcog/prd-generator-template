@@ -363,7 +363,7 @@ Task(
    - `document-types.yaml`에서 현재 문서 유형의 `output_dir_name`과 `template_doc_url`을 읽습니다.
    - 로컬 템플릿 파일 경로: `.claude/templates/{output_dir_name}/` 디렉토리에서 `[프로젝트명]`으로 시작하는 `.md` 파일을 읽습니다.
    - 로컬 템플릿에서 섹션 헤더(H1/H2/H3) 구조를 추출하여 최종 문서의 뼈대로 사용합니다.
-   - 로컬 템플릿 파일이 없으면: 작성 가이드(`{DocType} 작성 가이드.md`)를 대신 읽고, 섹션 맵(섹션명 목록)을 추출합니다.
+   - 로컬 템플릿 파일이 없으면: `document-types.yaml`의 `output_sections`를 읽어 섹션 목록으로 사용합니다.
 4. 전체 결과 읽기 (회의 결과 + debate/ + critique)
 5. **Judge 판정 반영**: `judgment.json`의 `adopted_for_synth` 필드를 요구사항 결정 시 우선 반영
 6. **미판정 충돌 기록**: 역할 간 상충하는 주장 중 Judge가 판정하지 않은 잔여 충돌을 식별
