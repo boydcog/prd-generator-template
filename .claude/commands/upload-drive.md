@@ -164,7 +164,7 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
    ```
    a. 상위 탭의 하위 탭 목록을 스캔합니다 (하위 탭 없으면 M=0).
       - 하위 탭 이름에서 "{parent_tab_name} - v" prefix를 제거하고 숫자만 파싱하여 최대값 M을 추출합니다.
-      - 예: "Business Spec - v2" → M=2
+      - 예: "S1 Business Spec - v2" → M=2
    b. [하위 탭 없음 (M=0)]:
       - 상위 탭 "탭 옵션" → "하위 탭 추가"
       - 새 하위 탭 "탭 옵션" → "탭 이름 바꾸기" → "{parent_tab_name} - v1" → Enter
@@ -250,7 +250,7 @@ browser_tabs → close (로컬 HTML 탭)
 2. 업로드 완료 후 결과를 사용자에게 공유합니다:
    ```
    업로드 완료: {project_name}
-   탭 추가됨: {parent_tab_name} > {parent_tab_name} - v{N}
+   탭 추가됨: {parent_tab_name} > v{N}
    링크: {docs_url}
    ```
 3. `browser_close`를 호출하여 브라우저를 종료합니다.
@@ -304,7 +304,7 @@ treeitem "S2 Pretotype Spec":
 | `project-defaults.yaml` | `upload.ask_after_generation` | 생성 후 업로드 여부 확인 |
 | `project-defaults.yaml` | `upload.auto_upload` | true면 확인 없이 자동 업로드 |
 | `project-defaults.yaml` | `upload.include_citations` | 인용 보고서 함께 업로드 여부 |
-| `project-defaults.yaml` | `upload.naming_pattern` | Google Docs 파일명 패턴 (파일명=프로젝트명, 탭 구조: `{document_title}` > `{document_title} - v{N}`) |
+| `project-defaults.yaml` | `upload.naming_pattern` | Google Docs 파일명 패턴 (파일명=프로젝트명, 탭 구조: `{mvp_stage} {document_title}` > `{mvp_stage} {document_title} - v{N}`) |
 | `drive-sources-{product_id}.yaml` | `upload_folder` | 개인 Drive 업로드 폴더 URL |
 | `drive-sources-{product_id}.yaml` | `shared_drive_folder` | 공유 드라이브 폴더 URL |
 | `drive-sources-{product_id}.yaml` | `docs_url` | 프로젝트 마스터 문서 URL (최초 업로드 시 자동 저장) |
