@@ -2,7 +2,7 @@
 
 ## 2026-02-26
 
-- improve: Google Docs 탭 기반 문서 통합 — 프로젝트 내 모든 문서를 하나의 마스터 문서(`{project}-docs`) 탭으로 관리, `drive-sources.yaml`에 `shared_drive_folder`·`docs_url` 필드 추가, `/upload-drive` Step 5를 최초/추가 분기 로직으로 재작성, 탭 UI 가이드 섹션 신설
+- improve: Google Docs 탭 기반 문서 통합 — 프로젝트 내 모든 문서를 하나의 마스터 문서(`{project}-docs`) 탭으로 관리, `drive-sources.yaml`에 `shared_drive_folder`·`docs_url` 필드 추가, `/upload-drive` Step 5를 최초/추가 분기 로직으로 재작성, 탭 UI 가이드 섹션 신설; Qodo 리뷰 반영 — `http.server` loopback 바인딩(`--bind 127.0.0.1`) 보안 강화, 서버 시작 후 `sleep 1` race condition 방지, 버전 충돌 방지를 위한 최고 버전 스캔(M+1) 로직, 덮어쓰기 절차 단순화(전체선택+붙여넣기로 원자적 교체)
 
 ## 2026-02-25
 
