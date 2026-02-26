@@ -62,18 +62,7 @@ Google Drive 문서를 기반으로 6역할 에이전트 팀이 PRD, 디자인 �
 └─────────────────────┘
 ```
 
-### 문서 유형별 에이전트 매핑
-
-| 문서 유형 | biz | marketing | research | tech | pm | judge | critique | synth |
-|----------|:---:|:---------:|:--------:|:----:|:--:|:-----:|:--------:|:-----:|
-| 제품 요구사항 문서 (prd) | O | O | O | O | O | O | O | O |
-| 디자인 사양서 (design-spec) | - | - | O | O | O | O | O | O |
-| 마케팅 브리프 (marketing-brief) | O | O | O | - | - | O | O | O |
-| 사업 계획서 (business-plan) | O | O | O | O | - | O | O | O |
-| 기술 사양서 (tech-spec) | - | - | O | O | O | O | O | O |
-| 사용자 정의 (custom) | 선택 | 선택 | 선택 | 선택 | 선택 | O | O | O |
-
-> **모델 선택**: 회의(Discussion) 에이전트는 `sonnet`, 판정/비평/통합은 `opus`가 기본값입니다. 문서 유형별/프로젝트별 오버라이드가 가능합니다. 상세: `.claude/spec/model-selection-spec.md`
+> **모델 선택**: 회의(Discussion) 에이전트는 `sonnet`, 판정/비평/통합은 `opus`가 기본값입니다. 상세: `.claude/spec/model-selection-spec.md`
 
 ---
 
@@ -194,12 +183,7 @@ Claude Code 세션을 시작하면 SessionStart hook이 상태를 자동 감지�
 
 ## 지원 문서 유형
 
-| 유형 ID | 이름 | 설명 | 출력 파일 |
-|---------|------|------|----------|
-| `prd` | 제품 요구사항 문서 | 제품 기획을 위한 종합 요구사항 문서 | `PRD.md` |
-| `design-spec` | 디자인 사양서 | UI/UX 디자인 상세 사양 및 가이드라인 | `DESIGN-SPEC.md` |
-| `marketing-brief` | 마케팅 브리프 | 마케팅 전략 및 캠페인 기획 문서 | `MARKETING-BRIEF.md` |
-| `business-plan` | 사업 계획서 | 사업 타당성 및 실행 계획 문서 | `BUSINESS-PLAN.md` |
-| `tech-spec` | 기술 사양서 | 기술 아키텍처 및 구현 상세 문서 | `TECH-SPEC.md` |
-| `custom` | 사용자 정의 | 사용자가 에이전트와 섹션을 직접 정의 | `DOCUMENT.md` |
+**MVP 프로세스 문서 (권장)**: `product-brief`, `business-spec`, `pretotype-spec`, `product-spec`, `design-spec`, `tech-spec` — S1~S4 단계에서 자동 결정됩니다.
+
+**레거시 문서 유형**: `prd`, `marketing-brief`, `business-plan`, `custom` — 생성 가능하나 MVP 프로세스와 연동되지 않습니다. `/init-project`에서 단계 미선택 시 사용합니다.
 
