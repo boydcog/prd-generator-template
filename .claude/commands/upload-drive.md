@@ -7,8 +7,8 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
 
 **탭 구조**: `{document_title}` (상위 탭) > `{parent_tab_name} - v{N}` (하위 탭)
 - 파일명 = `project.json`의 `name` 필드 (예: `Maththera`)
-- 상위 탭 = 마크다운 H1에서 프로젝트명 제거 (예: `# Maththera Business Spec` → `Business Spec`)
-- 하위 탭 = `{상위탭 이름} - v{N}` 형식 (예: `Business Spec - v1`, `Business Spec - v2`)
+- 상위 탭 = `{mvp_stage} {문서명}` 형식 — H1에서 프로젝트명 제거 후 앞에 `mvp_stage` 붙임 (예: `# Maththera Business Spec` → `S1 Business Spec`)
+- 하위 탭 = `{상위탭 이름} - v{N}` 형식 (예: `S1 Business Spec - v1`, `S1 Business Spec - v2`)
 
 ## 입력
 
@@ -110,15 +110,16 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
    ```
 4. 상위 탭 이름을 결정합니다:
    - 업로드 `.md` 파일의 첫 번째 H1(`# ...`)을 읽습니다.
-   - H1에서 `{project_name}` 접두어와 앞뒤 공백을 제거하여 상위 탭 이름을 만듭니다.
-   - 예: `# Maththera Business Spec` → `Business Spec`
-   - **(Fallback)** 결과가 빈 문자열이면 문서 유형(`doc_type`)을 상위 탭 이름으로 사용합니다.
+   - H1에서 `{project_name}` 접두어와 앞뒤 공백을 제거합니다.
+   - **(Fallback)** 결과가 빈 문자열이면 문서 유형(`doc_type`)을 사용합니다.
+   - `project.json`의 `mvp_stage`를 읽어 앞에 붙입니다 (예: `S1`). `mvp_stage`가 null이면 생략합니다.
+   - 최종 상위 탭 이름: `{mvp_stage} {문서명}` (예: `S1 Business Spec`, `S4 Tech Spec`)
 5. 기본 탭 "Tab 1"을 상위 탭 이름으로 변경합니다:
    ```
    browser_snapshot → 왼쪽 사이드바 "문서 탭" 패널에서 "Tab 1" 확인
    (패널이 닫혀 있으면: View > Show tabs 클릭 후 재시도)
    "Tab 1"의 "탭 옵션" 버튼 클릭 → "탭 이름 바꾸기" 클릭
-   새 이름 입력: {parent_tab_name}  (예: Business Spec)
+   새 이름 입력: {parent_tab_name}  (예: S1 Business Spec)
    Enter 키 눌러 확정
    ```
 6. 상위 탭 아래 `{parent_tab_name} - v1` 하위 탭을 생성합니다:
@@ -145,8 +146,9 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
    - 탭 패널이 보이지 않으면: View > Show tabs 클릭.
 3. 상위 탭 이름을 결정합니다 (Step 5-A와 동일 로직):
    - 업로드 `.md` 파일의 첫 번째 H1에서 `{project_name}` 접두어 제거.
-   - 예: `# Maththera Pretotype Spec` → `Pretotype Spec`
-   - **(Fallback)** 결과가 빈 문자열이면 `doc_type`을 상위 탭 이름으로 사용합니다.
+   - **(Fallback)** 결과가 빈 문자열이면 `doc_type`을 사용합니다.
+   - `project.json`의 `mvp_stage`를 앞에 붙임 (null이면 생략).
+   - 예: `# Maththera Pretotype Spec` → `S2 Pretotype Spec`
 4. 상위 탭 존재 여부로 분기합니다:
 
    **[상위 탭 없음]**: 해당 `{parent_tab_name}` 탭이 존재하지 않는 경우
@@ -281,15 +283,15 @@ browser_snapshot → 왼쪽 사이드바 "문서 탭" 패널 확인
 
 **탭 구조 snapshot 예시** (접근성 트리):
 ```
-treeitem "Business Spec":
+treeitem "S1 Business Spec":
   button "탭 옵션"
-  treeitem "Business Spec - v1":
+  treeitem "S1 Business Spec - v1":
     button "탭 옵션"
-  treeitem "Business Spec - v2":
+  treeitem "S1 Business Spec - v2":
     button "탭 옵션"
-treeitem "Pretotype Spec":
+treeitem "S2 Pretotype Spec":
   button "탭 옵션"
-  treeitem "Pretotype Spec - v1":
+  treeitem "S2 Pretotype Spec - v1":
     button "탭 옵션"
 ```
 
