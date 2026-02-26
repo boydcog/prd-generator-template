@@ -42,7 +42,8 @@ upload:
   ask_after_generation: true               # PRD 생성 후 업로드 여부 확인
   auto_upload: false                       # true면 자동 업로드 (확인 없이)
   include_citations: false                 # citations.json도 함께 업로드할지
-  naming_pattern: "{type}-{project}-v{N}"   # Drive 업로드 시 파일명 ({type}은 문서 유형명)
+  naming_pattern: "{project}"               # Google Docs 파일명 = 프로젝트명 (project.json의 name)
+  # 탭 구조: {document_title} (상위 탭, H1에서 프로젝트명 제거) > v{N} (하위 탭)
 
 # 출력 경로
 # documents_dir: 문서 유형별 하위 디렉토리가 생성됩니다 (document-types.yaml의 output_dir_name)

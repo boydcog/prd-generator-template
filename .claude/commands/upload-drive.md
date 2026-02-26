@@ -3,7 +3,12 @@
 Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, `/run-research` 및 `/auto-generate` 완료 후 자동 호출됩니다.
 
 같은 프로젝트의 모든 문서(다른 형식 + 다른 버전)는 **하나의 Google Docs 문서** 내 탭으로 관리됩니다.
-최초 업로드 시 마스터 문서(`{project}-docs`)를 생성하고, 이후 업로드는 동일 문서에 탭을 추가합니다.
+최초 업로드 시 마스터 문서(`{project_name}`)를 생성하고, 이후 업로드는 동일 문서에 탭을 추가합니다.
+
+**탭 구조**: `{document_title}` (상위 탭) > `v{N}` (하위 탭)
+- 파일명 = `project.json`의 `name` 필드 (예: `Maththera`)
+- 상위 탭 = 마크다운 H1에서 프로젝트명 제거 (예: `# Maththera Business Spec` → `Business Spec`)
+- 하위 탭 = 버전 번호만 (예: `v1`, `v2`, `v3`)
 
 ## 입력
 
@@ -97,49 +102,82 @@ Google Drive에 생성된 문서를 업로드합니다. 독립 실행하거나, 
 #### Step 5-A: 최초 업로드 (`docs_url`이 비어 있음)
 
 1. `browser_navigate`로 `https://docs.google.com/document/create`에 접속하여 새 빈 문서를 만듭니다.
-2. `browser_evaluate`로 문서 제목을 `{project}-docs`로 설정합니다.
-   - `{project}`는 `project.json`의 `project_name` 값을 사용합니다 (예: `maththera-docs`).
+2. `browser_evaluate`로 문서 제목을 `{project_name}`으로 설정합니다.
+   - `{project_name}`은 `project.json`의 `name` 필드를 사용합니다 (예: `Maththera`).
 3. `browser_evaluate`로 현재 문서 URL을 읽어 `drive-sources-{product_id}.yaml`의 `docs_url`에 저장합니다:
    ```javascript
    return window.location.href;
    ```
-4. 기본 탭 "Tab 1"을 `{doc_type}-v{N}`으로 이름 변경합니다:
+4. 상위 탭 이름을 결정합니다:
+   - 업로드 `.md` 파일의 첫 번째 H1(`# ...`)을 읽습니다.
+   - H1에서 `{project_name}` 접두어와 앞뒤 공백을 제거하여 상위 탭 이름을 만듭니다.
+   - 예: `# Maththera Business Spec` → `Business Spec`
+   - **(Fallback)** 결과가 빈 문자열이면 문서 유형(`doc_type`)을 상위 탭 이름으로 사용합니다.
+5. 기본 탭 "Tab 1"을 상위 탭 이름으로 변경합니다:
    ```
    browser_snapshot → 왼쪽 사이드바 "문서 탭" 패널에서 "Tab 1" 확인
    (패널이 닫혀 있으면: View > Show tabs 클릭 후 재시도)
-   탭 우클릭 → "탭 이름 바꾸기" 클릭
-   새 이름 입력: {doc_type}-v{N}  (예: business-spec-v1)
+   "Tab 1"의 "탭 옵션" 버튼 클릭 → "탭 이름 바꾸기" 클릭
+   새 이름 입력: {parent_tab_name}  (예: Business Spec)
    Enter 키 눌러 확정
    ```
-   - `{doc_type}-v{N}`은 `project-defaults.yaml`의 `upload.naming_pattern` 규칙에서 타입 + 버전 부분만 사용합니다.
-5. **로컬 서빙 → 브라우저 복사 → Google Docs 붙여넣기**로 탭 내용을 삽입합니다 (아래 공통 삽입 절차 참조).
-6. 삽입 완료 확인 (스크린샷 1회).
-7. 문서가 `upload_folder`에 없으면 Drive로 이동:
-   - 파일 메뉴 → "이동" 클릭 → `upload_folder`로 이동.
+6. 상위 탭 아래 "v1" 하위 탭을 생성합니다:
+   ```
+   상위 탭("{parent_tab_name}")의 "탭 옵션" 버튼 클릭
+   → 드롭다운 메뉴에서 "하위 탭 추가" 클릭
+   → "제목 없는 탭"이 상위 탭 아래 들여쓰기로 생성됨
+   새 하위 탭의 "탭 옵션" 버튼 클릭 → "탭 이름 바꾸기"
+   이름 입력: v1
+   Enter 키 눌러 확정
+   ```
+7. "v1" 하위 탭을 클릭하여 활성화합니다.
+8. **로컬 서빙 → 브라우저 복사 → Google Docs 붙여넣기**로 탭 내용을 삽입합니다 (아래 공통 삽입 절차 참조).
+9. 삽입 완료 확인 (스크린샷 1회).
+10. 문서가 `upload_folder`에 없으면 Drive로 이동:
+    - 파일 메뉴 → "이동" 클릭 → `upload_folder`로 이동.
 
 ---
 
 #### Step 5-B: 탭 추가 (`docs_url`이 설정되어 있음)
 
 1. `browser_navigate`로 저장된 `docs_url`을 엽니다.
-2. `browser_snapshot`으로 탭 패널을 스캔하여 현재 탭 목록을 확인합니다.
+2. `browser_snapshot`으로 탭 패널을 스캔하여 현재 탭 구조(상위 탭 + 하위 탭)를 파악합니다.
    - 탭 패널이 보이지 않으면: View > Show tabs 클릭.
-3. 중복 탭 확인: `{doc_type}-v{N}` 이름의 탭이 이미 존재하면 사용자에게 질문합니다:
-   > "`{doc_type}-v{N}` 탭이 이미 있습니다. 덮어쓸까요, 아니면 새 버전 번호로 추가할까요?"
-   - 덮어쓰기 선택 시: 해당 탭으로 이동 → 전체 선택(Ctrl+A) → 아래의 '공통 삽입 절차'에 따라 붙여넣기 실행 (선택된 내용이 새 내용으로 교체됨).
-   - 새 버전 추가 선택 시: 현재 탭 목록에서 같은 `{doc_type}`의 가장 높은 버전 번호(M)를 스캔하고, 새 탭 버전을 M+1로 설정하여 추가.
-4. 새 탭을 추가합니다:
+3. 상위 탭 이름을 결정합니다 (Step 5-A와 동일 로직):
+   - 업로드 `.md` 파일의 첫 번째 H1에서 `{project_name}` 접두어 제거.
+   - 예: `# Maththera Pretotype Spec` → `Pretotype Spec`
+   - **(Fallback)** 결과가 빈 문자열이면 `doc_type`을 상위 탭 이름으로 사용합니다.
+4. 상위 탭 존재 여부로 분기합니다:
+
+   **[상위 탭 없음]**: 해당 `{parent_tab_name}` 탭이 존재하지 않는 경우
    ```
-   탭 패널 하단 "+" 아이콘 클릭
-   → 새 "제목 없는 탭" 생성됨
+   a. 탭 패널 하단 "+" 아이콘 클릭 → "제목 없는 탭" 생성
+   b. 새 탭 "탭 옵션" 버튼 클릭 → "탭 이름 바꾸기" → {parent_tab_name} → Enter
+   c. 상위 탭 "탭 옵션" 버튼 클릭 → "하위 탭 추가"
+   d. 새 하위 탭 "탭 옵션" → "탭 이름 바꾸기" → "v1" → Enter
+   e. "v1" 하위 탭 클릭 → 활성화 → 공통 삽입 절차 실행
    ```
-5. 새 탭 이름을 `{doc_type}-v{N}`으로 변경합니다:
+
+   **[상위 탭 있음]**: 해당 `{parent_tab_name}` 탭이 이미 존재하는 경우
    ```
-   새 탭 우클릭 → "탭 이름 바꾸기"
-   새 이름 입력 후 Enter
+   a. 상위 탭의 하위 탭 목록을 스캔하여 최대 버전 번호 M을 찾습니다 (하위 탭 없으면 M=0).
+   b. [하위 탭 없음 (M=0)]:
+      - 상위 탭 "탭 옵션" → "하위 탭 추가"
+      - 새 하위 탭 "탭 옵션" → "탭 이름 바꾸기" → "v1" → Enter
+      - "v1" 하위 탭 클릭 → 활성화 → 공통 삽입 절차 실행
+   c. [하위 탭 있음 (M>0)]:
+      - 사용자에게 확인:
+        > "`{parent_tab_name}` 탭의 최신 버전은 v{M}입니다.
+        >  새 v{M+1}을 추가할까요, 아니면 v{M}을 덮어쓸까요?"
+      - [새 버전 추가]:
+        - 상위 탭 "탭 옵션" → "하위 탭 추가"
+        - 새 하위 탭 "탭 옵션" → "탭 이름 바꾸기" → "v{M+1}" → Enter
+        - "v{M+1}" 하위 탭 클릭 → 활성화 → 공통 삽입 절차 실행
+      - [덮어쓰기]:
+        - "v{M}" 하위 탭 클릭 → Cmd+A(전체 선택) → 공통 삽입 절차 실행
    ```
-6. **로컬 서빙 → 브라우저 복사 → Google Docs 붙여넣기**로 탭 내용을 삽입합니다 (아래 공통 삽입 절차 참조).
-7. 삽입 완료 확인 (스크린샷 1회).
+
+5. 삽입 완료 확인 (스크린샷 1회).
 
 ---
 
@@ -207,8 +245,8 @@ browser_tabs → close (로컬 HTML 탭)
    - `citations.json` (인용 보고서, `project-defaults.yaml`의 `upload.include_citations`이 true일 때)
 2. 업로드 완료 후 결과를 사용자에게 공유합니다:
    ```
-   업로드 완료: {project}-docs
-   탭 추가됨: {doc_type}-v{N}
+   업로드 완료: {project_name}
+   탭 추가됨: {parent_tab_name} > v{N}
    링크: {docs_url}
    ```
 3. `browser_close`를 호출하여 브라우저를 종료합니다.
@@ -222,16 +260,35 @@ browser_tabs → close (로컬 HTML 탭)
 browser_snapshot → 왼쪽 사이드바 "문서 탭" 패널 확인
 (패널이 닫혀 있으면: View > Show tabs 클릭)
 
-# 탭 추가
+# 상위 탭 추가
 탭 패널 하단 "+" 아이콘 클릭
 → 새 "제목 없는 탭" 생성됨
 
 # 탭 이름 변경
-신규 탭 우클릭 → "탭 이름 바꾸기"
+탭의 "탭 옵션" 버튼 클릭 → "탭 이름 바꾸기"
 → 이름 입력 후 Enter
+
+# 하위 탭 추가
+상위 탭의 "탭 옵션" 버튼 클릭 → 드롭다운 → "하위 탭 추가"
+→ "제목 없는 탭"이 상위 탭 아래 들여쓰기로 생성됨
+→ 새 하위 탭 "탭 옵션" → "탭 이름 바꾸기" → 이름 입력 → Enter
 
 # 탭 내 콘텐츠 작업
 탭 클릭으로 전환 → 해당 탭 내용 편집 가능
+```
+
+**탭 구조 snapshot 예시** (접근성 트리):
+```
+treeitem "Business Spec":
+  button "탭 옵션"
+  treeitem "v1":
+    button "탭 옵션"
+  treeitem "v2":
+    button "탭 옵션"
+treeitem "Pretotype Spec":
+  button "탭 옵션"
+  treeitem "v1":
+    button "탭 옵션"
 ```
 
 ---
@@ -243,7 +300,7 @@ browser_snapshot → 왼쪽 사이드바 "문서 탭" 패널 확인
 | `project-defaults.yaml` | `upload.ask_after_generation` | 생성 후 업로드 여부 확인 |
 | `project-defaults.yaml` | `upload.auto_upload` | true면 확인 없이 자동 업로드 |
 | `project-defaults.yaml` | `upload.include_citations` | 인용 보고서 함께 업로드 여부 |
-| `project-defaults.yaml` | `upload.naming_pattern` | 탭 이름 패턴 (마스터 문서 제목은 `{project}-docs`) |
+| `project-defaults.yaml` | `upload.naming_pattern` | Google Docs 파일명 패턴 (파일명=프로젝트명, 탭 구조: `{document_title}` > `v{N}`) |
 | `drive-sources-{product_id}.yaml` | `upload_folder` | 개인 Drive 업로드 폴더 URL |
 | `drive-sources-{product_id}.yaml` | `shared_drive_folder` | 공유 드라이브 폴더 URL |
 | `drive-sources-{product_id}.yaml` | `docs_url` | 프로젝트 마스터 문서 URL (최초 업로드 시 자동 저장) |
