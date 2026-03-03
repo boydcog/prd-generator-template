@@ -48,8 +48,8 @@
 단계명 매핑:
 - S1 → Brief (1W)
 - S2 → Pretotype (2W)
-- S3 → Prototype (4W)
-- S4 → Freeze (2W)
+- S3 → Prototype (1W)
+- S4 → Freeze (0.5W)
 
 ### Step 4: Gate Criteria 로드
 
