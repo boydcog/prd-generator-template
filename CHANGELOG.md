@@ -2,8 +2,9 @@
 
 ## 2026-03-05
 
-- fix: verify.md debate/critique 경로 `{active_product}` 누락 수정 — `.claude/artifacts/agents/debate/...` → `.claude/artifacts/{active_product}/agents/debate/...` (이전 경로로는 파일을 찾지 못해 검증이 항상 스킵됨), critique.json/md 동일 수정
-- fix: run-research.md synth 전문가 토론 요약(부록 E) 위치 명확화 — 템플릿 원본 섹션 사이가 아닌 문서 말미(Append)에 배치하도록 Step 7 설명 보강, 불변 규칙의 적용 범위(템플릿 원본 섹션 구간만) 명시
+- fix: Qodo 리뷰 반영 — agent-team-spec.md 출력 파일 경로 테이블 전체에 `{active_product}` 추가(biz/marketing/research/tech/pm/critique/debate 모두), synth 경로 `{output_dir}` → `{active_product}/{output_dir_name}` 정합성 수정, README 핵심 기능 #16에 `/verify` 항목 신설 ([`ff1330b`](https://github.com/boydcog/prd-generator-template/commit/ff1330b))
+- fix: verify.md debate/critique 경로 `{active_product}` 누락 수정 — `.claude/artifacts/agents/debate/...` → `.claude/artifacts/{active_product}/agents/debate/...` (이전 경로로는 파일을 찾지 못해 검증이 항상 스킵됨), critique.json/md 동일 수정 ([`d3909ce`](https://github.com/boydcog/prd-generator-template/commit/d3909ce))
+- fix: run-research.md synth 전문가 토론 요약(부록 E) 위치 명확화 — 템플릿 원본 섹션 사이가 아닌 문서 말미(Append)에 배치하도록 Step 7 설명 보강, 불변 규칙의 적용 범위(템플릿 원본 섹션 구간만) 명시 ([`d3909ce`](https://github.com/boydcog/prd-generator-template/commit/d3909ce))
 
 ## 2026-03-04
 
