@@ -115,11 +115,19 @@ URL 및 slug에서 파생되는 값의 안전성을 보장합니다.
 
 2. browser_run_code로 실행:
    async (page) => {
-     // download 이벤트 Promise를 BEFORE goto()에서 생성 (순서 중요!)
+     // download 이벤트 Promise를 트리거 이전에 생성 (순서 중요!)
      const downloadPromise = page.waitForEvent('download', { timeout: 30000 });
-     await page.goto(exportUrl);
+     // page.goto(exportUrl)은 "Download is starting" 오류를 던지므로 사용하지 않음
+     // 앵커 클릭 방식으로 download 이벤트 트리거
+     await page.evaluate((url) => {
+       const a = document.createElement('a');
+       a.href = url;
+       document.body.appendChild(a);
+       a.click();
+       document.body.removeChild(a);
+     }, exportUrl);
      const download = await downloadPromise;
-     const filePath = await download.path();   // 임시 파일 경로
+     const filePath = await download.path();   // 임시 파일 경로 (/var/folders/.../playwright-artifacts-...)
      return filePath;
    }
 
@@ -131,8 +139,10 @@ URL 및 slug에서 파생되는 값의 안전성을 보장합니다.
 4. 내용을 Markdown으로 저장
 ```
 
-**핵심**: `waitForEvent('download')` Promise를 `page.goto()` **이전에** 생성해야 합니다.
-`page.evaluate(() => location.href = ...)` 방식은 download 이벤트를 트리거하지 않으므로 사용하지 않습니다.
+**핵심**: `waitForEvent('download')` Promise를 트리거 **이전에** 생성해야 합니다.
+- `page.goto(exportUrl)` — **사용 금지**: download가 시작될 때 "Download is starting" 오류를 던짐
+- `page.evaluate(() => location.href = url)` — **사용 금지**: download 이벤트를 트리거하지 않음
+- `page.evaluate(() => { const a = ...; a.click(); })` — **✅ 올바른 방식**: 앵커 클릭으로 download 이벤트 정상 트리거
 
 #### 2-2-F. Google Docs — Clipboard Fallback (폴링 방식)
 
@@ -214,7 +224,14 @@ exportUrl = https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&
 browser_run_code:
   async (page) => {
     const downloadPromise = page.waitForEvent('download', { timeout: 30000 });
-    await page.goto(exportUrl);
+    // page.goto(exportUrl)는 download 시 "Download is starting" 오류 → 앵커 클릭 방식 사용
+    await page.evaluate((url) => {
+      const a = document.createElement('a');
+      a.href = url;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }, exportUrl);
     const download = await downloadPromise;
     return await download.path();
   }

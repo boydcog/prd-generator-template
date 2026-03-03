@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-03-03
+
+- fix: `sync-drive.md` Download Event Capture 트리거 방식 수정 — `page.goto(exportUrl)` 사용 시 "Download is starting" 오류 발생 확인, Section 2-2(Google Docs) 및 2-4(대용량 데이터) 두 곳에서 `page.goto()` 대신 `page.evaluate()` 앵커 클릭 방식(`document.createElement('a') + a.click()`)으로 교체, `page.evaluate(() => location.href = ...)` 방식도 동작하지 않음을 명시적으로 주석으로 문서화
+
 ## 2026-02-27
 
 - improve: Synth 에이전트 템플릿 적용 방식 개선 — `run-research.md` Synth 팀원 절차 Step 3를 "템플릿 구조 로드"에서 "템플릿 배치(선행 작업)"로 교체(템플릿을 출력 경로에 먼저 복사 후 편집), Step 8을 "통합 문서 작성"에서 "통합 문서 채우기(섹션별 순차 작성)"으로 교체(헤더·표 구조 불변 규칙, Edit 도구로 플레이스홀더만 교체, 전체 재작성 금지), Synth 프롬프트 통합 규칙 4번을 출력 경로에 복사된 파일을 직접 편집하는 방식으로 변경, 입력 파일 섹션 로컬 템플릿 주석 갱신
