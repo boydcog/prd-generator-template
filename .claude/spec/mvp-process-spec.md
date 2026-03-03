@@ -3,8 +3,6 @@
 Kill Gate 기반 5단계 프로세스. 각 단계는 Gate를 통과해야 다음 단계로 진행됩니다.
 시스템 연동: `project.json`의 `mvp_stage` 필드 + `/gate-review` 커맨드.
 
-**S1→S5 검증·산출물·문서 한눈에 보기**: `docs/mvp-S1-S5-검증-산출물-문서.md` 참고.
-
 ---
 
 ## 프로세스 개요
