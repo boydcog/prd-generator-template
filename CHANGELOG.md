@@ -3,6 +3,8 @@
 ## 2026-03-03
 
 - fix: Qodo 리뷰 반영 — 동적 역할 출력 경로 v1→`{active_product}` 수정, verify.md H2 매칭 정규화 로직 추가, CLAUDE.md에 런타임 플레이스홀더(`{active_product}`, `{product_id}`) 섹션 신설로 env.yml 키와 명확 구분, admin.md 구현 후 PR 즉시 올리던 방식을 로컬 검증 완료 후 사용자 확인 요청 방식으로 변경 + 비개발자 친화 언어 추가
+- fix: `sync-drive.md` Download Event Capture 트리거 방식 수정 — `page.goto(exportUrl)` 사용 시 "Download is starting" 오류 발생 확인, Section 2-2(Google Docs) 및 2-4(대용량 데이터) 두 곳에서 `page.goto()` 대신 `page.evaluate()` 앵커 클릭 방식(`document.createElement('a') + a.click()`)으로 교체, `page.evaluate(() => location.href = ...)` 방식도 동작하지 않음을 명시적으로 주석으로 문서화 ([`9f758cf`](https://github.com/boydcog/prd-generator-template/commit/9f758cf))
+- fix: Qodo 리뷰 반영 — README 핵심 기능에 `/sync-drive` 명시, CHANGELOG 커밋 링크 형식, sync-drive C6 제약표 앵커 클릭 정렬, Option A tempPath 변수 연결 ([`c6bf532`](https://github.com/boydcog/prd-generator-template/commit/c6bf532))
 
 ## 2026-02-27
 
