@@ -2,7 +2,7 @@
 
 ## 2026-03-03
 
-- fix: `sync-drive.md` Download Event Capture 트리거 방식 수정 — `page.goto(exportUrl)` 사용 시 "Download is starting" 오류 발생 확인, Section 2-2(Google Docs) 및 2-4(대용량 데이터) 두 곳에서 `page.goto()` 대신 `page.evaluate()` 앵커 클릭 방식(`document.createElement('a') + a.click()`)으로 교체, `page.evaluate(() => location.href = ...)` 방식도 동작하지 않음을 명시적으로 주석으로 문서화
+- fix: `sync-drive.md` Download Event Capture 트리거 방식 수정 — `page.goto(exportUrl)` 사용 시 "Download is starting" 오류 발생 확인, Section 2-2(Google Docs) 및 2-4(대용량 데이터) 두 곳에서 `page.goto()` 대신 `page.evaluate()` 앵커 클릭 방식(`document.createElement('a') + a.click()`)으로 교체, `page.evaluate(() => location.href = ...)` 방식도 동작하지 않음을 명시적으로 주석으로 문서화 ([`13d7c6d`](https://github.com/boydcog/prd-generator-template/commit/13d7c6d))
 
 ## 2026-02-27
 
