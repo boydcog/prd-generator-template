@@ -59,7 +59,8 @@
 - S1의 경우: `product-brief`의 `gate_criteria`.
 - S2의 경우: `pretotype-spec`의 `gate_criteria`.
 - S3의 경우: `product-spec`의 `gate_criteria`.
-- S4의 경우: `design-spec`의 `gate_criteria` (두 핸드오프 문서 통합 기준).
+- S4의 경우: `document_type`이 `design-spec`이든 `tech-spec`이든 관계없이 항상 `design-spec`의 `gate_criteria`를 사용합니다.
+  (`tech-spec`의 `gate_criteria`는 비어있으므로, S4 판정은 항상 `design-spec` 기준을 따릅니다.)
 - 기준이 비어있으면: "이 단계에는 정의된 킬 게이트 기준이 없습니다. 다음 단계로 바로 진행하시겠습니까?" 확인.
 
 ### Step 5: 기준별 판정
