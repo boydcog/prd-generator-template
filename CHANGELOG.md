@@ -2,7 +2,7 @@
 
 ## 2026-03-03
 
-- improve: v2+ 경로 일관성 수정 + 에이전트 팀 토큰 최적화 — `verify.md` 토론·비평 출력 경로에 `{active_product}` 추가(C1), `output_sections: []`일 때 로컬 템플릿 H2 헤더 파싱 폴백 추가(C4); `agent-team-spec.md` 출력 파일 경로 전체 + Judge 출력 계약 경로에 `{active_product}` 추가(C2), Synth 역할에 "섹션 내 본문 보강 허용·H2 삭제·순서변경·신규 추가 금지" 규칙 명시(M5); `create-issue.md` Step 0.5 (활성 제품 로드) 추가 + v1 경로 수정(C3); `project-defaults.yaml` state/evidence/output 경로 모두 v2+ `{product_id}` 플레이스홀더로 교체(M1); `run-research.md` Step 0.65 "이전 단계 문서 로드" 추가 — S2~S4 단계에서 이전 artifacts를 주 컨텍스트로, Drive 청크를 보조 자료로 사용(M4); `share-project.md` 제외 파일 목록을 `.claude/knowledge/` 전체로 수정(M2); `gate-review.md` S4 tech-spec 케이스에서도 `design-spec.gate_criteria` 사용하도록 명시(M3)
+- fix: Qodo 리뷰 반영 — 동적 역할 출력 경로 v1→`{active_product}` 수정, verify.md H2 매칭 정규화 로직 추가, CLAUDE.md에 런타임 플레이스홀더(`{active_product}`, `{product_id}`) 섹션 신설로 env.yml 키와 명확 구분, admin.md 구현 후 PR 즉시 올리던 방식을 로컬 검증 완료 후 사용자 확인 요청 방식으로 변경 + 비개발자 친화 언어 추가
 
 ## 2026-02-27
 
