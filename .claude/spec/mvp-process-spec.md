@@ -174,10 +174,10 @@ AI가 실제로 개발할 수 있는 수준의 설계 문서를 완성합니다.
 
 ### Gate 4 기준 (`design-spec.gate_criteria`)
 
-- [ ] 모든 P0 화면 레이아웃 명세 완성 & AI 생성 가능 수준
-- [ ] Tech Spec §1~§8 전 섹션 완성
-- [ ] Product Spec AC와 API 명세 매핑 완성
-- [ ] Design Spec 기술 스택과 Tech Spec §1 일치
+- [ ] 모든 P0 화면 콘텐츠 명세 완성 & AI 생성 가능 수준
+- [ ] Tech Spec §1~Gate 전 섹션 완성
+- [ ] Product Spec §7-3 EXT 목록과 Tech Spec API 명세 1:1 매핑 완성
+- [ ] Design Spec 비주얼 방향성 및 접근성 기준(WCAG 2.1 AA) 명시
 - [ ] PM·디자이너·엔지니어 3자 합의
 
 **Gate 4**: Kill Gate 아님. 전원 Go → S5 진행.
