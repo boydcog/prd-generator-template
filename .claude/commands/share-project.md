@@ -71,7 +71,7 @@ git -C "$WORKTREE_DIR" add .claude/commands/ .claude/templates/ .claude/spec/ .c
 
 **절대 추가하지 않는 파일:**
 - `.gh-token` (민감 정보)
-- `.claude/knowledge/evidence/chunks/` (대용량 청크)
+- `.claude/knowledge/` (증거 데이터 전체 — `{product_id}` 네임스페이스 포함, 대용량)
 - `.claude/state/pending-issues/` (이미 이슈로 등록됨)
 
 ### Step 5: CHANGELOG.md 업데이트

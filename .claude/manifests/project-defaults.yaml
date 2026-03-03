@@ -45,27 +45,26 @@ upload:
   naming_pattern: "{project}"               # Google Docs 파일명 = 프로젝트명 (project.json의 name)
   # 탭 구조: {document_title} (상위 탭, H1에서 프로젝트명 제거) > v{N} (하위 탭)
 
-# 출력 경로
-# documents_dir: 문서 유형별 하위 디렉토리가 생성됩니다 (document-types.yaml의 output_dir_name)
-# 예: .claude/artifacts/prd/, .claude/artifacts/tech-spec/, .claude/artifacts/marketing-brief/
+# 출력 경로 (v2+ 스키마: {product_id}는 런타임에 활성 제품 ID로 치환)
+# documents_dir: base dir. 실제 경로는 .claude/artifacts/{product_id}/{output_dir_name}/ 구조
 output_paths:
-  agents_dir: .claude/artifacts/agents
-  documents_dir: .claude/artifacts        # base dir (하위에 문서유형별 디렉토리)
+  agents_dir: .claude/artifacts/{product_id}/agents
+  documents_dir: .claude/artifacts        # base dir (하위에 {product_id}/{doc_type}/ 구조)
   citations_file: citations.json
   conflicts_file: conflicts.json
   metadata_file: metadata.json
 
-# 증거 저장 경로
+# 증거 저장 경로 (v2+ 스키마: {product_id}는 런타임에 활성 제품 ID로 치환)
 evidence_paths:
-  raw_dir: .claude/knowledge/evidence/raw
-  chunks_dir: .claude/knowledge/evidence/chunks
-  index_file: .claude/knowledge/evidence/index/sources.jsonl
+  raw_dir: .claude/knowledge/{product_id}/evidence/raw
+  chunks_dir: .claude/knowledge/{product_id}/evidence/chunks
+  index_file: .claude/knowledge/{product_id}/evidence/index/sources.jsonl
 
-# 상태 파일 경로
+# 상태 파일 경로 (v2+ 스키마: {product_id}는 런타임에 활성 제품 ID로 치환)
 state_paths:
-  project_file: .claude/state/project.json
-  sync_ledger: .claude/state/sync-ledger.json
-  sync_log: .claude/state/sync-log.jsonl       # 수집 감사 로그 (JSONL)
+  project_file: .claude/state/{product_id}/project.json
+  sync_ledger: .claude/state/{product_id}/sync-ledger.json
+  sync_log: .claude/state/{product_id}/sync-log.jsonl       # 수집 감사 로그 (JSONL)
 
 # Sheets 내보내기 기본값
 sheets_export:

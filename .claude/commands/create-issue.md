@@ -6,6 +6,11 @@
 
 ## 실행 절차
 
+### Step 0.5: 활성 제품 로드
+
+1. `.claude/state/_active_product.txt`에서 `{active_product}` 로드.
+2. 파일이 없거나 비어있으면: "활성 제품이 없습니다. /init-project를 먼저 실행하세요." 안내 후 중단.
+
 ### Step 1: 사용자 아이덴티티 로드
 
 1. `.user-identity` 파일에서 사용자 이름을 읽습니다.
@@ -13,7 +18,7 @@
 
 ### Step 2: 프로젝트 컨텍스트 로드
 
-1. `.claude/state/project.json`에서 프로젝트 정보를 읽습니다:
+1. `.claude/state/{active_product}/project.json`에서 프로젝트 정보를 읽습니다:
    - `name` → `{project_name}`
    - `document_type` → `{document_type}` (없으면 `prd`)
 2. `git rev-parse --short HEAD`로 현재 커밋 해시를 가져옵니다 → `{commit_short}`
