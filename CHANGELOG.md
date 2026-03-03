@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-03-04
+
+- improve: Product Spec·Design Spec·Tech Spec 세 템플릿 책임 분리 재편 — Product Spec에 §0 Context Dump·§3 IA·§4 서비스 플로우 신설 및 §2 Task 분해 확장, §7을 디자인 프롬프트에서 데이터&외부연동(EXT 목록 포함)으로 재편; Design Spec을 ASCII 와이어프레임에서 실제 콘텐츠 명세 중심으로 전환(비주얼 방향성·이미지 DB 연결·마이크로인터랙션·접근성 기준 고도화); Tech Spec §1을 "전재 정보"로 재명칭, §2를 "최소 연동 구조"로 간소화, §3 API 명세에 Product Spec §7-3 외부 연동 매핑 열 추가
+
 ## 2026-03-03
 
 - fix: Qodo 리뷰 반영 — 동적 역할 출력 경로 v1→`{active_product}` 수정, verify.md H2 매칭 정규화 로직 추가, CLAUDE.md에 런타임 플레이스홀더(`{active_product}`, `{product_id}`) 섹션 신설로 env.yml 키와 명확 구분, admin.md 구현 후 PR 즉시 올리던 방식을 로컬 검증 완료 후 사용자 확인 요청 방식으로 변경 + 비개발자 친화 언어 추가
