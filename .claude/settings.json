@@ -40,6 +40,17 @@
           }
         ]
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-remote.sh\"",
+            "timeout": 15
+          }
+        ]
+      }
     ]
   }
 }

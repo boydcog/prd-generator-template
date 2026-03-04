@@ -41,13 +41,13 @@
 - 예시 (tech-spec): tech.json, research.json, pm.json
 
 **토론 기록 및 판정** (Live Meeting Mode):
-- [ ] `.claude/artifacts/agents/debate/discussions.json` (전체 peer_discussions 취합)
-- [ ] `.claude/artifacts/agents/debate/judgment.json` (Judge 판정 결과)
-- [ ] `.claude/artifacts/agents/debate/summary.md` (토론 요약)
+- [ ] `.claude/artifacts/{active_product}/agents/debate/discussions.json` (전체 peer_discussions 취합)
+- [ ] `.claude/artifacts/{active_product}/agents/debate/judgment.json` (Judge 판정 결과)
+- [ ] `.claude/artifacts/{active_product}/agents/debate/summary.md` (토론 요약)
 
 **비평 출력:**
-- [ ] `.claude/artifacts/agents/critique.json`
-- [ ] `.claude/artifacts/agents/critique.md`
+- [ ] `.claude/artifacts/{active_product}/agents/critique.json`
+- [ ] `.claude/artifacts/{active_product}/agents/critique.md`
 
 **최종 문서** (문서 유형에 따라 경로/파일명 결정):
 - `document-types.yaml`에서 `output_dir_name`, `output_file_name`을 로드합니다.
