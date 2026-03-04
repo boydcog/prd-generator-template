@@ -8,6 +8,7 @@
 
 ## 2026-03-04
 
+- fix: PR 리뷰 피드백 자동 반영 방지 — CLAUDE.md `PR 검증 및 적용 규칙` 2단계를 "즉시 적용 필수" → "수정 계획 보고 후 사용자 승인 대기"로 변경; `PR 리뷰 피드백 반영 규칙`에 승인 단계(Step 2-3) 추가, 사용자 승인 없이 push 금지 원칙 명시 ([`6cda706`](https://github.com/boydcog/prd-generator-template/commit/6cda706))
 - improve: 반복적 재료 추가 + 이후 단계 캐스케이드 업데이트 플로우 구현 — CLAUDE.md `sync-drive-or-update`를 3-way 선택지(이어서 진행/재료 추가/전체 재생성)로 확장, `메시지 수신 시 규칙` 신규 섹션 추가(UserPromptSubmit hook 원격 업데이트 알림 처리); `auto-generate.md`에 재료 추가 모드(M-1~M-5) 신설(새 소스 추가→동기화→현재 문서 업데이트→이후 단계 캐스케이드 제안→완료 보고); `UserPromptSubmit` hook 등록(`settings.json`), `check-remote.sh` 신규 생성(5분 rate limit + dismissed 추적); README.md 명령어 개수 표기 수정
 
 - fix: Qodo 리뷰 반영 — README 스펙 템플릿 v2.0 설명 추가, S4 Gate 기준 콘텐츠 명세·EXT 매핑으로 갱신, Product Spec §0 Stage 3 경량 섹션 누락 수정, Tech Spec '전재→전제' 오탈자 수정, Design/Tech Spec Gate 번호체계 정합성 수정, CHANGELOG 커밋 링크 추가 ([`c60f61a`](https://github.com/boydcog/prd-generator-template/commit/c60f61a))
