@@ -31,6 +31,99 @@
 
 ---
 
+## 실행 모드
+
+이 명령은 두 가지 모드로 실행됩니다:
+
+- **일반 모드** (기본): 전체 파이프라인 실행 (Phase 1~4)
+- **재료 추가 모드** (`mode=material-update`): 새 자료 추가 후 현재 문서 + 이후 문서 업데이트
+
+세션 시작 시 "[재료 추가]" 선택 또는 사용자가 "자료 추가해줘" / "재료 추가해줘" 요청 시 재료 추가 모드로 진입합니다.
+
+---
+
+## 재료 추가 모드 (mode=material-update)
+
+### Step M-1: 새 Drive 소스 수집
+
+1. `.claude/manifests/drive-sources-{active_product}.yaml`의 현재 소스 목록을 표시합니다.
+2. 사용자에게 질문: "추가할 Google Drive URL이 있으면 알려주세요. 이미 YAML에 직접 추가하셨다면 건너뜁니다."
+3. 새 URL이 제공되면 `drive-sources-{active_product}.yaml`의 `sources[]`에 항목 추가:
+   ```yaml
+   - title: "{제목 또는 URL에서 추출}"
+     url: "{제공된 URL}"
+     type: "gdoc"
+   ```
+4. URL이 없으면 기존 소스 목록으로 계속 진행합니다.
+
+### Step M-2: 새 자료 동기화
+
+`/sync-drive` 실행 (전체 소스 동기화 — 기존 + 새 소스).
+
+완료 후 요약 보고:
+- 총 동기화 문서 수
+- 신규 수집된 청크 수
+- 업데이트된 파일 경로
+
+### Step M-3: 현재 단계 문서 업데이트
+
+`/run-research` 실행:
+- `called_from: auto-generate` 컨텍스트 유지
+- synth 에이전트가 기존 + 신규 증거 전체를 기반으로 문서 재작성
+- 현재 document_type의 새 버전(v{N+1}) 생성
+
+완료 메시지: "현재 문서 {document_type} v{N+1} 생성 완료"
+
+### Step M-4: 이후 단계 문서 캐스케이드 업데이트 확인
+
+1. `document-types.yaml`에서 현재 `document_type`의 `mvp_stage` 확인
+2. 이후 단계에 해당하는 문서들이 `artifacts/{active_product}/` 하위에 존재하는지 확인:
+
+   | 현재 문서 (stage) | 확인할 이후 문서들 |
+   |----------------|-----------------|
+   | product-brief (S1) | product-spec, design-spec, tech-spec |
+   | business-spec (S1) | product-spec, design-spec, tech-spec |
+   | pretotype-spec (S2) | product-spec, design-spec, tech-spec |
+   | product-spec (S3) | design-spec, tech-spec |
+   | design-spec (S4), tech-spec (S4) | 없음 |
+
+   탐지 방법: `artifacts/{active_product}/{output_dir_name}/` 디렉토리 존재 여부 확인
+   (`output_dir_name`은 `document-types.yaml`의 `output_dir` 필드 참조)
+
+3. 존재하는 이후 문서가 있으면 목록 표시 후 선택 요청:
+   ```
+   이전 버전 자료 기반으로 생성된 이후 단계 문서들이 있습니다:
+   - product-spec v1 (S3)
+   - design-spec v1 (S4)
+   - tech-spec v1 (S4)
+
+   어떻게 할까요?
+   [모두 업데이트] [선택하여 업데이트] [건너뛰기]
+   ```
+
+4. 선택에 따라 해당 문서들을 순차적으로 `/run-research` 실행하여 재생성
+   (각 문서: `document_type`을 해당 타입으로 임시 전환하여 실행, 완료 후 원래 `document_type`으로 복원)
+
+5. 이후 문서가 없으면 Step M-5로 바로 이동합니다.
+
+### Step M-5: 재료 추가 완료 보고
+
+```
+=== 재료 추가 완료 ===
+
+업데이트된 문서:
+  📄 {document_type} v{N+1} — .claude/artifacts/{active_product}/{output_dir}/v{N+1}/
+  📄 {downstream_doc_type} v{M+1} — .claude/artifacts/{active_product}/{output_dir}/v{M+1}/
+
+=== 완료 ===
+```
+
+gate-review 진행 여부 질문: "S{N} 킬 게이트를 검토하시겠습니까?"
+- 예 → `/gate-review` 실행
+- 아니요 → 종료
+
+---
+
 ## 실행 절차
 
 ### Phase 1: Drive 동기화
