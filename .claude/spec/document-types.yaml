@@ -91,10 +91,10 @@ document_types:
     output_sections: []     # template_doc_url에서 런타임 로드
     template_doc_url: "https://docs.google.com/document/d/1zea7PeeH5lJlhH9kC4PLGGcbq7tRfYACdeNA828WwJ4"
 
-  design-spec:              # S4 핸드오프 (Zero-Design-Handoff)
+  design-spec:              # S3 핸드오프 (Zero-Design-Handoff)
     name: 디자인 사양서
-    description: S4 Freeze 단계 핸드오프 문서 — UI/UX 상세 사양 (AI 생성 가능 수준)
-    mvp_stage: S4
+    description: S3 Prototype(Iteration) 단계 핸드오프 문서 — UI/UX 상세 사양 (AI 생성 가능 수준)
+    mvp_stage: S3
     doc_category: handoff
     allow_dynamic_roles: true
     output_dir_name: design-spec
@@ -114,10 +114,10 @@ document_types:
     output_sections: []     # template_doc_url에서 런타임 로드
     template_doc_url: ""    # 추후 Google Docs 링크 추가
 
-  tech-spec:                # S4 핸드오프 (AI Rules & 가드레일)
+  tech-spec:                # S3 핸드오프 (AI Rules & 가드레일)
     name: 기술 사양서
-    description: S4 Freeze 단계 핸드오프 문서 — 기술 아키텍처 및 AI 구현 가이드
-    mvp_stage: S4
+    description: S3 Prototype(Iteration) 단계 핸드오프 문서 — 기술 아키텍처 및 AI 구현 가이드
+    mvp_stage: S3
     doc_category: handoff
     allow_dynamic_roles: true
     output_dir_name: tech-spec

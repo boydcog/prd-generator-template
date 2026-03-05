@@ -48,7 +48,7 @@
 단계명 매핑:
 - S1 → Brief (1W)
 - S2 → Pretotype (2W)
-- S3 → Prototype (1W)
+- S3 → Prototype (Iteration)
 - S4 → Freeze (0.5W)
 
 ### Step 4: Gate Criteria 로드
@@ -58,9 +58,9 @@
 - `doc_category: master` 문서의 `gate_criteria` 사용.
 - S1의 경우: `product-brief`의 `gate_criteria`.
 - S2의 경우: `pretotype-spec`의 `gate_criteria`.
-- S3의 경우: `product-spec`의 `gate_criteria`.
-- S4의 경우: `document_type`이 `design-spec`이든 `tech-spec`이든 관계없이 항상 `design-spec`의 `gate_criteria`를 사용합니다.
-  (`tech-spec`의 `gate_criteria`는 비어있으므로, S4 판정은 항상 `design-spec` 기준을 따릅니다.)
+- S3의 경우: `design-spec`의 `gate_criteria`를 사용합니다.
+  (S3에서 Product Spec / Design Spec / Tech Spec 3개 모두 완성 + 내부 시연 준비까지 포함된 기준입니다.)
+- **S4의 경우**: `document-types.yaml`에 S4 전용 문서가 없으므로 이 파일 하단 "S4 Freeze 게이트 기준" 섹션의 고정 기준 2개를 사용합니다.
 - **S5의 경우**: `document-types.yaml`에 S5 문서 유형이 없으므로 이 파일 하단 "S5 게이트 기준" 섹션의 고정 기준 3개를 사용합니다.
 - 기준이 비어있으면: "이 단계에는 정의된 킬 게이트 기준이 없습니다. 다음 단계로 바로 진행하시겠습니까?" 확인.
 
@@ -160,7 +160,7 @@ S{N+1} 단계로 넘어갈 준비가 되셨나요? (예 / 아니요)
 S4 이후 통과 시:
 ```
 === S4 Freeze 완료 ===
-MVP 개발 준비가 완료되었습니다!
+스펙 Freeze 및 Product Team 인계가 확인되었습니다!
 다음: S5 MVP 빌드 단계로 진행합니다.
 ```
 
@@ -242,6 +242,15 @@ S{N} 단계를 계속 진행합니다.
   - 현재 단계 문서 보완 후 재검토: /auto-generate → /gate-review
   - 방향 재설정: /init-project
 ```
+
+---
+
+## S4 Freeze 게이트 기준 (mvp_stage: S4)
+
+S3 통과 후 mvp_stage가 S4인 경우의 고정 기준:
+
+1. Product Team에 Product Spec / Design Spec / Tech Spec 전달 완료
+2. 스펙 변경 금지(Freeze) 합의 완료
 
 ---
 
