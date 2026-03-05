@@ -280,8 +280,12 @@ UserPromptSubmit hook 출력에 `=== REMOTE_UPDATE ===` 블록이 있으면:
 |-------------|------|------|
 | `{active_product}` | `.claude/state/_active_product.txt` | 현재 활성 제품 ID (예: `my-app`) |
 | `{product_id}` | `project.json`의 `product_id` 필드 | 제품 식별자 (`{active_product}`와 동일) |
+| `{product_name}` | `project.json`의 `product_name` 필드 | 표시용 제품 이름 (예: `Cogthera AI`) |
+| `{document_type}` | `project.json`의 `document_type` 필드 | 현재 문서 유형 ID (예: `product-brief`) |
+| `{document_type_name}` | `document-types.yaml`의 `name` 필드 | 문서 유형 표시명 (예: `Product Brief`) |
+| `{mvp_stage}` | `project.json`의 `mvp_stage` 필드 | 현재 MVP 단계 (예: `S2`) |
 
-이 플레이스홀더들은 명령 파일 내 경로(`.claude/artifacts/{active_product}/...`, `.claude/state/{product_id}/...`)에서 사용됩니다.
+이 플레이스홀더들은 명령 파일 내 경로(`.claude/artifacts/{active_product}/...`, `.claude/state/{product_id}/...`) 및 사용자 안내 메시지에서 사용됩니다.
 
 ---
 
@@ -554,13 +558,13 @@ PR에 리뷰 피드백(Qodo, 사람 리뷰 모두)이 달리면 다음 순서로
 
 ### 시스템 자체 감지 → 자동 Issue/PR
 
-사용자 요청 없이도 다음을 감지하면 **자동으로** Issue 또는 PR을 생성합니다:
-- `/verify` 실행 중 구조적 문제 → 자동 수정 후 `fix/` PR
-- spec 파일 간 모순/누락 → `improve/` PR
-- 에이전트 실행 실패 패턴 → Issue (라벨: `bug`)
-- 템플릿 개선 필요 → Issue (라벨: `enhancement`)
+사용자 요청 없이도 다음을 감지하면 자동으로 처리합니다:
+- `/verify` 실행 중 구조적 문제 → 자동 수정 + Issue 생성 + **"PR을 생성할까요?" 확인**
+- spec 파일 간 모순/누락 → Issue 생성 (라벨: `enhancement`) + **PR은 확인 후**
+- 에이전트 실행 실패 패턴 → Issue 생성 (라벨: `bug`)
+- 템플릿 개선 필요 → Issue 생성 (라벨: `enhancement`)
 
-사용자에게 묻지 않고 즉시 처리합니다. 결과만 간단히 보고합니다.
+**Issue**는 감지 즉시 자동 생성합니다. **PR**은 반드시 "PR을 생성할까요?" 확인 후 생성합니다 (§3 연속 실행 원칙의 PR 예외 규칙 적용).
 GH 토큰이 없으면 `.claude/state/pending-issues/`에 로컬 저장 후 토큰 설정 시 일괄 업로드합니다.
 
 ---

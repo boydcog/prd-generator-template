@@ -388,8 +388,18 @@ Task(
      - 대상: `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/{output_file_name}`
    - **이 파일이 최종 문서입니다.** 이후 단계에서 이 파일을 직접 편집하여 섹션을 채웁니다. 새 파일을 처음부터 작성하지 않습니다.
    - 로컬 템플릿 파일이 없으면: `document-types.yaml`의 `output_sections`를 사용하여 빈 구조 파일을 먼저 생성합니다.
+3-1. **draft-inputs 로드 (사전 대화 결과)**:
+   - `.claude/state/{active_product}/draft-inputs.json`이 존재하는지 확인합니다.
+   - 존재하면 파일 내 `document_type` 필드와 현재 실행 중인 `document_type`이 **일치하는지 검증**합니다.
+     - **불일치 시**: draft-inputs를 무시하고 전체 섹션을 연구 결과로 채웁니다. (Phase 3.5 cascade 등 임시 document_type 전환 시 stale 데이터 적용 방지)
+     - **일치 시**: 아래 섹션별 출처 규칙을 적용합니다.
+   - `source: "user"` 섹션: 연구 결과보다 **최우선** 반영. 플레이스홀더를 사용자 입력으로 직접 채우고 덮어쓰지 않습니다.
+   - `source: "prior"` 섹션: 이전 단계 문서 내용을 기반으로 채우되, 연구 결과로 보강 가능합니다. 구조와 핵심 내용은 유지합니다.
+   - `source: "research"` 섹션: 기존 방식대로 Drive 증거 + 에이전트 연구 결과로 채웁니다.
+   - draft-inputs가 없으면 (직접 `/run-research` 호출 등): 전체 섹션을 연구 결과로 채웁니다.
 4. 전체 결과 읽기 (회의 결과 + debate/ + critique)
 5. **Judge 판정 반영**: `judgment.json`의 `adopted_for_synth` 필드를 요구사항 결정 시 우선 반영
+   - 단, `source: "user"` 섹션과 충돌하는 경우 사용자 입력을 우선합니다.
 6. **미판정 충돌 기록**: 역할 간 상충하는 주장 중 Judge가 판정하지 않은 잔여 충돌을 식별
    - 해당 충돌은 해결하려 시도하지 말고, `conflicts.json`에 상세히 기록 (Judge가 유일한 판정자)
 7. **전문가 토론 요약 섹션 작성**: `debate/summary.md` 기반으로 토론 핵심 내용 요약
@@ -658,13 +668,18 @@ agent-team-spec.md의 "Judge 출력 계약"을 준수하세요.
 - .claude/templates/{output_dir_name}/{DocName} 작성 가이드.md   ← 섹션 작성 기준 참조
 
 ## 통합 규칙
-1. **Judge 판정 우선 반영**: judgment.json의 adopted_for_synth 필드를 요구사항 결정 시 우선 반영하세요.
-2. **critique 지적 고려**: critique의 권고사항을 최종 문서에 반영하세요.
-3. **전문가 토론 요약 섹션**: debate/summary.md 기반으로 토론 핵심 내용을 요약하는 섹션을 포함하세요.
-4. **문서 구조**: Step 3에서 직접 템플릿을 복사한 후, 출력 경로(`.claude/artifacts/{active_product}/{output_dir_name}/v{N}/{output_file_name}`)의 파일을 편집하여 플레이스홀더를 채우세요. 새 파일을 처음부터 작성하지 마세요. H1/H2/H3 헤더의 레벨·구조는 유지하고 `[내용]` 형식의 플레이스홀더(헤더 내 인라인 포함)를 모두 교체하세요.
-5. **동적 역할 통합**: 동적 역할의 관점은 관련 섹션에 자연스럽게 통합하세요 (별도 섹션 불필요).
-6. **미판정 충돌 기록**: Judge가 판정하지 않은 잔여 충돌은 해결하지 말고 conflicts.json에 상세 기록하세요 (Judge가 유일한 판정자).
-7. **인용 보고서**: 모든 인용을 citations.json에 기록하세요.
+1. **섹션 출처 우선순위**: `.claude/state/{active_product}/draft-inputs.json`이 있으면 로드하세요. **먼저 파일 내 `document_type` 필드와 현재 실행 중인 `document_type`이 일치하는지 확인하세요.** 불일치 시 draft-inputs를 무시하고 전체 섹션을 연구 결과로 채웁니다. 일치 시 출처별 처리:
+   - `source: "user"`: 사용자가 직접 입력한 내용 → **최우선 반영**, 연구 결과·Judge 판정으로 덮어쓰지 마세요.
+   - `source: "prior"`: 이전 단계 문서에서 가져온 내용 → 구조와 핵심 내용 유지, 연구 결과로 보강 가능.
+   - `source: "research"`: 아래 규칙에 따라 Drive 증거 + 연구 결과로 채웁니다.
+   - draft-inputs가 없으면 전체 섹션을 연구 결과로 채웁니다.
+2. **Judge 판정 우선 반영**: judgment.json의 adopted_for_synth 필드를 요구사항 결정 시 우선 반영하세요 (단, `source: "user"` 섹션과 충돌하면 사용자 입력 우선).
+3. **critique 지적 고려**: critique의 권고사항을 최종 문서에 반영하세요.
+4. **전문가 토론 요약 섹션**: debate/summary.md 기반으로 토론 핵심 내용을 요약하는 섹션을 포함하세요.
+5. **문서 구조**: Step 3에서 직접 템플릿을 복사한 후, 출력 경로(`.claude/artifacts/{active_product}/{output_dir_name}/v{N}/{output_file_name}`)의 파일을 편집하여 플레이스홀더를 채우세요. 새 파일을 처음부터 작성하지 마세요. H1/H2/H3 헤더의 레벨·구조는 유지하고 `[내용]` 형식의 플레이스홀더(헤더 내 인라인 포함)를 모두 교체하세요.
+6. **동적 역할 통합**: 동적 역할의 관점은 관련 섹션에 자연스럽게 통합하세요 (별도 섹션 불필요).
+7. **미판정 충돌 기록**: Judge가 판정하지 않은 잔여 충돌은 해결하지 말고 conflicts.json에 상세 기록하세요 (Judge가 유일한 판정자).
+8. **인용 보고서**: 모든 인용을 citations.json에 기록하세요.
 
 ## 출력 경로
 - 최종 문서: .claude/artifacts/{active_product}/{output_dir_name}/v{N}/{output_file_name}

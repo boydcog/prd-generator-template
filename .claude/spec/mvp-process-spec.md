@@ -276,6 +276,23 @@ S2 이외 Gate에서 Stop이 발생하면 재작업 후 해당 Gate 재검토 (K
 
 현재 `mvp_stage`와 `document_type`에 맞는 템플릿을 `.claude/templates/{output_dir_name}/`에서 로드하여 문서를 생성합니다.
 
+#### Phase 0: 사전 대화
+
+문서 생성 전 템플릿 H2 섹션 기반으로 사용자와 인터뷰를 진행합니다. 각 섹션에 대해 이전 단계 문서 내용이 있으면 확인만 진행(Mode A), 없으면 사용자 입력을 받거나 연구에 위임(Mode B)합니다. 결과는 `draft-inputs.json`에 저장되며, 섹션별로 출처(`user` / `prior` / `research`)가 기록됩니다.
+
+#### Phase 3.5: Master Doc Cascade
+
+Stage Doc 생성 후 연관 Master Doc을 자동 업데이트합니다:
+
+| 현재 문서 | cascade 대상 | 작업 |
+|---------|------------|------|
+| business-spec (S1) | product-brief | 없으면 신규 생성 / 있으면 내용 merge → 새 버전 |
+| pretotype-spec (S2) | product-brief | pretotype 결과 merge → 새 버전 |
+| product-spec (S3) | product-brief | 핵심 내용 merge → 새 버전 |
+| design-spec / tech-spec (S4) | product-spec | 화면별 인터랙션 규칙 + 외부 연동 절차 선택 추출 → 새 버전 |
+
+S4 cascade는 Design/Tech Spec이 모두 완성된 경우에만 실행되며, 글로벌 컨벤션(디자인 토큰, 공통 아키텍처 등)은 추출 대상에서 제외합니다.
+
 ### `/run-research`
 
 Synth 에이전트가 `.claude/templates/{output_dir_name}/[프로젝트명]*.md` 로컬 템플릿의 섹션 구조를 뼈대로 최종 문서를 작성합니다.
