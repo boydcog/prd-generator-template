@@ -11,7 +11,7 @@
 
 1. `.claude/state/_active_product.txt`에서 `{active_product}` 로드.
 2. `.claude/state/{active_product}/project.json`에서 다음 필드 확인:
-   - `mvp_stage`: 현재 단계 (S1~S4, null)
+   - `mvp_stage`: 현재 단계 (S1~S5, null)
    - `stage_status`: `in_progress` | `gate_passed` | `gate_stopped`
 
 ### Step 2: 사전 조건 확인
@@ -19,7 +19,7 @@
 - `mvp_stage`가 null이거나 `document_type`이 `custom`이면:
   ```
   이 프로젝트는 MVP 프로세스 단계가 설정되지 않았습니다.
-  킬 게이트 검토는 S1~S4 단계에서만 사용 가능합니다.
+  킬 게이트 검토는 S1~S5 단계에서만 사용 가능합니다.
   ```
   → 종료.
 
@@ -97,14 +97,7 @@
 다음 단계: S{N+1}
 ```
 
-담당자 확인:
-```
-S{N+1} 단계로 넘어갈 준비가 되셨나요? (예 / 아니요)
-```
-- **아니요**: project.json 변경 없이 현재 단계(S{N}) 유지. "S{N}에 머무릅니다. 준비되면 /gate-review를 다시 실행하세요." 안내 후 Step 7로 이동.
-- **예**: 아래 project.json 업데이트 진행.
-
-**저장 1 — 킬 게이트 로그 파일 생성**
+**저장 1 — 킬 게이트 로그 파일 생성** (담당자 확인 전에 항상 저장)
 
 `.claude/artifacts/{active_product}/gate-review/S{N}-{YYYYMMDD-HHmm}.md`에 상세 내역을 저장합니다:
 ```markdown
@@ -113,7 +106,7 @@ S{N+1} 단계로 넘어갈 준비가 되셨나요? (예 / 아니요)
 - **단계**: S{N} {단계명}
 - **제품**: {product_name}
 - **검토 일시**: {ISO 타임스탬프}
-- **최종 결정**: Go ✅ / Stop 🛑
+- **최종 결정**: Go ✅
 
 ## 기준별 판정
 
@@ -127,6 +120,13 @@ S{N+1} 단계로 넘어갈 준비가 되셨나요? (예 / 아니요)
 
 {전체 검토 과정에서 나온 주요 논의 및 메모}
 ```
+
+담당자 확인:
+```
+S{N+1} 단계로 넘어갈 준비가 되셨나요? (예 / 아니요)
+```
+- **아니요**: 로그 파일 하단에 `단계 전환: 보류 (담당자 미확인)` 항목을 추가합니다. project.json 변경 없이 현재 단계(S{N}) 유지. "S{N}에 머무릅니다. 준비되면 /gate-review를 다시 실행하세요." 안내 후 Step 7로 이동.
+- **예**: 로그 파일 하단에 `단계 전환: 확인 완료` 항목을 추가하고 아래 project.json 업데이트 진행.
 
 **저장 2 — project.json stage_history 업데이트**
 
@@ -191,7 +191,7 @@ S4 완료 핸드오프 안내를 출력합니다:
 ```json
 {
   "stage": "S{N}",
-  "entered_at": "...",
+  "entered_at": "{이전 또는 created_at}",
   "documents_generated": ["{document_type}"],
   "gate_decision": "stop",
   "gate_decided_at": "{현재 ISO 타임스탬프}",

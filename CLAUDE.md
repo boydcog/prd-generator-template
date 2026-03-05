@@ -280,8 +280,12 @@ UserPromptSubmit hook 출력에 `=== REMOTE_UPDATE ===` 블록이 있으면:
 |-------------|------|------|
 | `{active_product}` | `.claude/state/_active_product.txt` | 현재 활성 제품 ID (예: `my-app`) |
 | `{product_id}` | `project.json`의 `product_id` 필드 | 제품 식별자 (`{active_product}`와 동일) |
+| `{product_name}` | `project.json`의 `product_name` 필드 | 표시용 제품 이름 (예: `Cogthera AI`) |
+| `{document_type}` | `project.json`의 `document_type` 필드 | 현재 문서 유형 ID (예: `product-brief`) |
+| `{document_type_name}` | `document-types.yaml`의 `name` 필드 | 문서 유형 표시명 (예: `Product Brief`) |
+| `{mvp_stage}` | `project.json`의 `mvp_stage` 필드 | 현재 MVP 단계 (예: `S2`) |
 
-이 플레이스홀더들은 명령 파일 내 경로(`.claude/artifacts/{active_product}/...`, `.claude/state/{product_id}/...`)에서 사용됩니다.
+이 플레이스홀더들은 명령 파일 내 경로(`.claude/artifacts/{active_product}/...`, `.claude/state/{product_id}/...`) 및 사용자 안내 메시지에서 사용됩니다.
 
 ---
 
