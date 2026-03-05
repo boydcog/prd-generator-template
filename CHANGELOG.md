@@ -1,11 +1,8 @@
 # Changelog
 
-## 2026-03-05 (2)
-
-- fix: startup 훅 단계 문서 감지 버그 수정 — `HAS_DOCUMENT`가 임의의 artifact 존재 여부를 체크하여 이전 단계 문서(pretotype-spec)가 있을 때 현재 단계(S3) 문서 생성 전임에도 gate-review를 추천하던 버그 수정; `HAS_CURRENT_STAGE_DOC` 변수 추가(현재 `document_type` 디렉토리 기준 체크)하여 현재 단계 문서가 있을 때만 gate-review, 없으면 auto-generate 추천으로 변경; gate-review.md에 단계 진행 시 `document_type` 업데이트 규칙 추가(S1→S2: pretotype-spec, S2→S3: product-spec, S3→S4: design-spec)
-
 ## 2026-03-05
 
+- improve: Stage 문서 시퀀스 완전 추적 — `startup.sh`에 `get_stage_docs()` 함수 추가, stage별 필요 문서 목록 순회로 `STAGE_COMPLETE`·`NEXT_DOC_TYPE` 도출; 모두 존재 시 gate-review, 미생성 문서 있으면 auto-generate로 정확 라우팅; `gate_stopped` 케이스 명시 추가; `CLAUDE.md` auto-generate 케이스에 `NEXT_DOC_TYPE` 처리 규칙 추가; `init-project.md` S1 기본 document_type을 product-brief → business-spec으로 수정(cascade 자동 생성 명시); `mvp-process-spec.md` 시스템 연동 섹션 동기화 및 `다음 생성 문서` 메커니즘 설명 추가 (issues [#53](https://github.com/boydcog/prd-generator-template/issues/53))
 - fix: Qodo PR #52 리뷰 반영 — Bug #7(draft-inputs document_type 검증), Bug #8(cascade context 직접 경로 명시), Bug #9(킬게이트 로그를 담당자 확인 전으로 이동), Bug #10(S5 진입 조건 S1~S5로 수정), Rule #1(README 파이프라인 Phase 0+3.5 추가), Rule #3(mvp-process-spec cascade 문서화), Rule #6(CLAUDE.md 런타임 플레이스홀더 4개 추가) ([`b5d81fb`](https://github.com/boydcog/prd-generator-template/commit/b5d81fb))
 - improve: Issue #48/#50 — 사전 대화(Phase 0) + 킬게이트 플로우 개선 — `auto-generate.md`에 Phase 0(템플릿 기반 섹션 인터뷰) 신설: 모드 A(이전 단계 문서 존재 시 확인만)/모드 B(첫 실행 전체 인터뷰), draft-inputs.json으로 출처 분류(user/prior/research) 후 synth 에이전트 우선순위 반영; Phase 3.5(Master Doc Cascade + S4 Design/Tech Spec→Product Spec 화면별 선택 추출) 신설; `gate-review.md`에 단계 전환 전 담당자 확인 단계 추가, 킬게이트 로그 파일(`.claude/artifacts/{product}/gate-review/S{N}-{timestamp}.md`) 저장, S4 완료 후 3개 문서 핸드오프 안내, S5 기준 처리 + 아니요 케이스 Step 7 분리; `run-research.md` synth에 draft-inputs 3단계 출처 처리 추가; `CLAUDE.md` 에러핸들링 섹션 Issue 자동/PR 확인 후 규칙 §8과 통일; Product Spec 템플릿 §3-2에 화면별 Design Spec 참조 원칙 컬럼 추가 (closes [#48](https://github.com/boydcog/prd-generator-template/issues/48), [#50](https://github.com/boydcog/prd-generator-template/issues/50))
 - fix: agents/ 출력 경로 버전화 — 단일 공유 디렉토리에서 버전별 독립 경로(`{doc_type}/v{N}/agents/`)로 변경하여 다수 문서 생성 시 덮어쓰기 방지; run-research.md·agent-team-spec.md·verify.md 에이전트 출력 경로 전체 교체, project-defaults.yaml agents_dir DEPRECATED 표기, CLAUDE.md 파일 구조 섹션 업데이트, v3_to_v4.md 마이그레이션 지침 신규 작성, _target_version.txt v4로 갱신 (issues [#49](https://github.com/boydcog/prd-generator-template/issues/49), [#50](https://github.com/boydcog/prd-generator-template/issues/50)) ([`e9fecb5`](https://github.com/boydcog/prd-generator-template/commit/e9fecb5))

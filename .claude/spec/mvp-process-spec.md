@@ -265,12 +265,14 @@ S2 이외 Gate에서 Stop이 발생하면 재작업 후 해당 Gate 재검토 (K
 인터뷰 중 MVP 단계 선택 → `project.json`에 `mvp_stage`, `stage_status: "in_progress"` 설정.
 선택한 단계에 맞는 `document_type`이 자동 결정됩니다:
 
-| 선택 단계 | 기본 `document_type` |
-|-----------|----------------------|
-| S1 | `product-brief` (+ `business-spec` 보조) |
-| S2 | `pretotype-spec` |
-| S3 | `product-spec` |
-| S4 | `design-spec` (+ `tech-spec` 보조) |
+| 선택 단계 | 기본 `document_type` | 비고 |
+|-----------|----------------------|------|
+| S1 | `business-spec` | product-brief는 Phase 3.5 cascade로 자동 생성 |
+| S2 | `pretotype-spec` | |
+| S3 | `product-spec` | |
+| S4 | `design-spec` | tech-spec은 design-spec 생성 후 순차 생성 |
+
+**`다음 생성 문서` 메커니즘**: startup hook이 stage별 필요 문서 목록을 순회하여 artifact가 없는 첫 번째 문서를 `NEXT_DOC_TYPE`으로 도출합니다. 모두 존재하면 `STAGE_COMPLETE=true`로 gate-review를 추천하고, 미생성 문서가 있으면 해당 문서 타입으로 `document_type`을 업데이트 후 auto-generate를 실행합니다.
 
 ### `/auto-generate`
 

@@ -77,6 +77,9 @@ RECOMMENDED_ACTION=migration 감지 시 (최우선):
 추천 액션이 "auto-generate"일 때:
   → "프로젝트를 시작합니다." 안내 후 /auto-generate 실행
   → auto-generate가 내부에서 init/sync/research/verify를 상태에 따라 자동 판단
+  → startup 출력에 "다음 생성 문서: {doc_type}"가 있을 때:
+     project.json의 document_type이 {doc_type}과 다르면 업데이트한 뒤 /auto-generate 실행
+     (document_type이 동일하면 그대로 /auto-generate 실행)
 
 추천 액션이 "gate-review"일 때:
   → "S{N} 단계 킬 게이트를 검토할 차례입니다." 안내 후 /gate-review 실행
