@@ -34,20 +34,21 @@
 
 **에이전트 출력** (문서 유형의 `agent_roles.wave1`에 정의된 에이전트만 검사):
 - `project.json`에서 `document_type`을 읽습니다 (없으면 기본값 `prd`).
-- `document-types.yaml`에서 해당 유형의 `agent_roles.wave1` 목록을 로드합니다.
+- `document-types.yaml`에서 해당 유형의 `agent_roles.wave1` 목록 및 `output_dir_name`을 로드합니다.
+- 최신 `v{N}`을 자동 감지 (숫자 기반 정렬)하여 아래 경로를 구성합니다.
 - 각 에이전트에 대해:
-  - [ ] `.claude/artifacts/{active_product}/agents/{role}.json`
-- 예시 (prd): biz.json, marketing.json, research.json, tech.json, pm.json
-- 예시 (tech-spec): tech.json, research.json, pm.json
+  - [ ] `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/{role}.json`
+- 예시 (prd): `pretotype-spec/v2/agents/biz.json`, `…/marketing.json`, `…/research.json`, …
+- 예시 (tech-spec): `tech-spec/v1/agents/tech.json`, `…/research.json`, `…/pm.json`
 
 **토론 기록 및 판정** (Live Meeting Mode):
-- [ ] `.claude/artifacts/{active_product}/agents/debate/discussions.json` (전체 peer_discussions 취합)
-- [ ] `.claude/artifacts/{active_product}/agents/debate/judgment.json` (Judge 판정 결과)
-- [ ] `.claude/artifacts/{active_product}/agents/debate/summary.md` (토론 요약)
+- [ ] `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/debate/discussions.json` (전체 peer_discussions 취합)
+- [ ] `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/debate/judgment.json` (Judge 판정 결과)
+- [ ] `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/debate/summary.md` (토론 요약)
 
 **비평 출력:**
-- [ ] `.claude/artifacts/{active_product}/agents/critique.json`
-- [ ] `.claude/artifacts/{active_product}/agents/critique.md`
+- [ ] `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/critique.json`
+- [ ] `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/critique.md`
 
 **최종 문서** (문서 유형에 따라 경로/파일명 결정):
 - `document-types.yaml`에서 `output_dir_name`, `output_file_name`을 로드합니다.

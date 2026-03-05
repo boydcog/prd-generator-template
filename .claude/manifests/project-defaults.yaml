@@ -45,10 +45,12 @@ upload:
   naming_pattern: "{project}"               # Google Docs 파일명 = 프로젝트명 (project.json의 name)
   # 탭 구조: {document_title} (상위 탭, H1에서 프로젝트명 제거) > v{N} (하위 탭)
 
-# 출력 경로 (v2+ 스키마: {product_id}는 런타임에 활성 제품 ID로 치환)
-# documents_dir: base dir. 실제 경로는 .claude/artifacts/{product_id}/{output_dir_name}/ 구조
+# 출력 경로 (v4+ 스키마: {product_id}는 런타임에 활성 제품 ID로 치환)
+# 에이전트 로그는 버전별 독립 경로에 저장됩니다:
+#   .claude/artifacts/{product_id}/{doc_type}/v{N}/agents/
+# agents_dir 필드는 v4에서 deprecated됩니다. 기존 _legacy 데이터를 참조하는 경우에만 유지.
 output_paths:
-  agents_dir: .claude/artifacts/{product_id}/agents
+  agents_dir: .claude/artifacts/{product_id}/agents  # DEPRECATED v4: 레거시 경로 (신규 실행 미사용)
   documents_dir: .claude/artifacts        # base dir (하위에 {product_id}/{doc_type}/ 구조)
   citations_file: citations.json
   conflicts_file: conflicts.json
