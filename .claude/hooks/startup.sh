@@ -297,6 +297,13 @@ try:
   print(d.get('stage_status',''))
 except: pass
 " 2>/dev/null || true)
+  IMPL_STATUS=$(PROJECT_JSON="$PROJECT_JSON" python3 -c "
+import json,os
+try:
+  d=json.load(open(os.environ['PROJECT_JSON']))
+  print(d.get('implementation',{}).get('status',''))
+except: pass
+" 2>/dev/null || true)
 fi
 
 # ──────────────────────────────────────
@@ -341,7 +348,7 @@ elif [ "$HAS_PROJECT" = "false" ]; then
 elif [ "$STAGE_STATUS" = "gate_stopped" ]; then
   NEXT_ACTION="gate-review"
 elif [ "$STAGE_COMPLETE" = "true" ] && [ "$STAGE_STATUS" = "in_progress" ] && [ -n "$MVP_STAGE" ]; then
-  if [ "$MVP_STAGE" = "S3" ]; then
+  if [ "$MVP_STAGE" = "S3" ] && [ "${IMPL_STATUS:-}" != "complete" ]; then
     NEXT_ACTION="implement"   # S3: 스펙 완성 → 구현 먼저, gate는 내부 시연 후
   else
     NEXT_ACTION="gate-review"
@@ -375,9 +382,10 @@ echo "  문서 생성됨: $HAS_DOCUMENT"
 if [ "$HAS_DOCUMENT" = "true" ] && [ -n "$ACTIVE_PRODUCT" ] && [ -d ".claude/artifacts/${ACTIVE_PRODUCT}" ]; then
   VERSION_LINES=""
   for doc_dir in ".claude/artifacts/${ACTIVE_PRODUCT}"/*/; do
+    [ -d "$doc_dir" ] || continue
     doc_type=$(basename "$doc_dir")
-    [[ "$doc_type" == "gate-review" ]] && continue
-    max_v=$(ls "$doc_dir" 2>/dev/null | grep -E '^v[0-9]+$' | sed 's/v//' | sort -n | tail -1)
+    [[ "$doc_type" == "gate-review" || "$doc_type" == "agents" ]] && continue
+    max_v=$(ls "$doc_dir" 2>/dev/null | grep -E '^v[0-9]+$' | sed 's/v//' | sort -n | tail -1 || true)
     if [ -n "$max_v" ]; then
       VERSION_LINES="${VERSION_LINES}    ${doc_type}: v${max_v} (${max_v}회)\n"
     fi

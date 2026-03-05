@@ -20,6 +20,7 @@ S3 단계에서 완성된 스펙 3종을 읽어 프로토타입 구현을 시작
 
 `.claude/artifacts/{active_product}/` 하위에서 각 스펙 문서의 최신 버전 경로를 탐지합니다.
 
+canonical 파일명은 `.claude/spec/document-types.yaml`의 `output_file_name` 기준:
 ```
 스펙 3종 탐지 대상:
   product-spec  → product-spec/v{N}/PRODUCT-SPEC.md
@@ -29,15 +30,15 @@ S3 단계에서 완성된 스펙 3종을 읽어 프로토타입 구현을 시작
 
 탐지 방법:
 - `v{숫자}` 형식 폴더 중 가장 큰 숫자 선택
-- 해당 폴더 내 `*.md` 파일 중 `output.md` 또는 문서 타입명 포함 파일 선택
+- 해당 폴더 내에서 canonical 파일명(`PRODUCT-SPEC.md` 등) 우선 탐색, 없으면 `output.md` 폴백
 - 파일이 없으면 해당 스펙을 "누락"으로 표시
 
 탐지 결과 표시 (모든 경우):
 ```
 스펙 탐지 결과:
-  product-spec: v{N} → .claude/artifacts/{active_product}/product-spec/v{N}/output.md ✓
-  design-spec:  v{N} → .claude/artifacts/{active_product}/design-spec/v{N}/output.md ✓
-  tech-spec:    v{N} → .claude/artifacts/{active_product}/tech-spec/v{N}/output.md ✓
+  product-spec: v{N} → .claude/artifacts/{active_product}/product-spec/v{N}/PRODUCT-SPEC.md ✓
+  design-spec:  v{N} → .claude/artifacts/{active_product}/design-spec/v{N}/DESIGN-SPEC.md ✓
+  tech-spec:    v{N} → .claude/artifacts/{active_product}/tech-spec/v{N}/TECH-SPEC.md ✓
 ```
 
 누락된 스펙이 있으면:
