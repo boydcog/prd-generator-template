@@ -678,6 +678,11 @@ agent-team-spec.md의 "Judge 출력 계약"을 준수하세요.
 로컬 문서 템플릿 (복사 원본):
 - .claude/templates/{output_dir_name}/[프로젝트명] {DocName}.md  ← 출력 경로에 먼저 복사 후 편집
 - .claude/templates/{output_dir_name}/{DocName} 작성 가이드.md   ← 섹션 작성 기준 참조
+화면 정의 기준 (product-spec 전용):
+- .claude/templates/product-spec/화면정의서 가이드.md  ← document_type이 product-spec일 때만 로드
+  · §3-3 화면별 상세 정의의 각 화면(SCR-N)을 이 가이드의 10개 항목으로 채웁니다
+  · P0 화면: 10개 항목 모두 필수
+  · P1/P2 화면: 항목 1~5 필수, 6~10 선택
 라이브러리 문서 (design-spec 전용, Step 3-A에서 Context7로 페칭):
 - gluestack-ui v2: CSS 변수 시스템, @theme 매핑, 컴포넌트 Prop API
 - Tailwind CSS v4: @theme inline 설정, CSS 변수 매핑 방법
@@ -697,6 +702,9 @@ agent-team-spec.md의 "Judge 출력 계약"을 준수하세요.
 6. **동적 역할 통합**: 동적 역할의 관점은 관련 섹션에 자연스럽게 통합하세요 (별도 섹션 불필요).
 7. **미판정 충돌 기록**: Judge가 판정하지 않은 잔여 충돌은 해결하지 말고 conflicts.json에 상세 기록하세요 (Judge가 유일한 판정자).
 8. **인용 보고서**: 모든 인용을 citations.json에 기록하세요.
+9. **화면정의서 작성 (product-spec 전용)**: `document_type`이 `product-spec`인 경우,
+   §3-3 화면별 상세 정의의 각 화면(SCR-N)을 `.claude/templates/product-spec/화면정의서 가이드.md`의
+   10개 항목 프레임워크로 작성합니다. P0 화면은 10개 항목 모두 필수입니다.
 
 ## 출력 경로
 - 최종 문서: .claude/artifacts/{active_product}/{output_dir_name}/v{N}/{output_file_name}
