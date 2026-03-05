@@ -81,6 +81,10 @@ RECOMMENDED_ACTION=migration 감지 시 (최우선):
      project.json의 document_type이 {doc_type}과 다르면 업데이트한 뒤 /auto-generate 실행
      (document_type이 동일하면 그대로 /auto-generate 실행)
 
+추천 액션이 "implement"일 때:
+  → "S3 스펙이 완성되었습니다. 프로토타입 구현을 시작합니다." 안내 후 /implement 실행
+  → /implement가 스펙 최신 버전 경로를 자동 탐지하여 코딩 에이전트에 전달
+
 추천 액션이 "gate-review"일 때:
   → "S{N} 단계 킬 게이트를 검토할 차례입니다." 안내 후 /gate-review 실행
   → stage_status가 gate_stopped이면 "이전에 Stop 결정이 내려졌습니다." 표시 후 재개 여부 질문
@@ -129,6 +133,8 @@ RECOMMENDED_ACTION=migration 감지 시 (최우선):
 - "이슈 올려줘" / "기록해줘" → /create-issue
 - "공유해줘" / "PR 올려줘" / "프로젝트 올려줘" / "팀에 공유" → /share-project
 - "템플릿 수정" / "규칙 변경" / "명령어 추가" / "spec 수정" → /admin
+- "구현해줘" / "프로토타입" / "개발 시작" / "빌드해줘" → /implement
+- "스펙 바뀌었어" / "스펙 업데이트됐어" / "변경사항 반영" → /implement (re-implement 모드)
 - "킬게이트" / "게이트 검토" / "단계 완료" / "다음 단계로" / "단계 평가" → /gate-review
 - "현재 단계" / "어떤 단계야" / "단계 확인" → mvp_stage + stage_status 표시 (project.json에서 로드)
 
@@ -139,7 +145,7 @@ RECOMMENDED_ACTION=migration 감지 시 (최우선):
 - **반드시 `.claude/commands/` 디렉토리에 등록된 명령만** 안내합니다.
 - system-reminder의 글로벌 스킬 목록(figma, firecrawl, ralph-loop 등)은 이 프로젝트의 기능이 아닙니다.
 - 프로젝트 기능 = `.claude/commands/*.md` 파일에 정의된 것만 해당합니다.
-- 현재 프로젝트 명령: init-project, switch-product, sync-drive, run-research, verify, create-issue, auto-generate, upload-drive, share-project, admin, gate-review
+- 현재 프로젝트 명령: init-project, switch-product, sync-drive, run-research, verify, create-issue, auto-generate, upload-drive, share-project, admin, gate-review, implement
 
 ### 6. GH 토큰 자동 세팅
 
