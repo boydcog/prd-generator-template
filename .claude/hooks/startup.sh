@@ -299,14 +299,48 @@ except: pass
 " 2>/dev/null || true)
 fi
 
+# ──────────────────────────────────────
+# 4-2. Stage 문서 시퀀스 확인
+# ──────────────────────────────────────
+get_stage_docs() {
+  case "$1" in
+    S1) echo "business-spec product-brief" ;;
+    S2) echo "pretotype-spec" ;;
+    S3) echo "product-spec" ;;
+    S4) echo "design-spec tech-spec" ;;
+    *)  echo "" ;;
+  esac
+}
+
+STAGE_COMPLETE="false"
+NEXT_DOC_TYPE=""
+
+if [ -n "$MVP_STAGE" ] && [ -n "$ACTIVE_PRODUCT" ]; then
+  STAGE_DOCS="$(get_stage_docs "$MVP_STAGE")"
+  if [ -n "$STAGE_DOCS" ]; then
+    STAGE_COMPLETE="true"
+    for doc in $STAGE_DOCS; do
+      if ! find ".claude/artifacts/${ACTIVE_PRODUCT}/${doc}/" \
+           -path "*/v*/*.md" -maxdepth 3 2>/dev/null | grep -q .; then
+        STAGE_COMPLETE="false"
+        [ -z "$NEXT_DOC_TYPE" ] && NEXT_DOC_TYPE="$doc"
+      fi
+    done
+  fi
+fi
+
 # 추천 액션 (auto-generate 중심 — 내부에서 상태별 Phase 자동 판단)
 NEXT_ACTION=""
 if [ -z "$ACTIVE_PRODUCT" ]; then
   NEXT_ACTION="select-product"
 elif [ "$HAS_PROJECT" = "false" ]; then
   NEXT_ACTION="auto-generate"
-elif [ "$HAS_DOCUMENT" = "true" ] && [ "$STAGE_STATUS" = "in_progress" ] && [ -n "$MVP_STAGE" ]; then
+elif [ "$STAGE_STATUS" = "gate_stopped" ]; then
   NEXT_ACTION="gate-review"
+elif [ "$STAGE_COMPLETE" = "true" ] && [ "$STAGE_STATUS" = "in_progress" ] && [ -n "$MVP_STAGE" ]; then
+  NEXT_ACTION="gate-review"
+elif [ -n "$NEXT_DOC_TYPE" ] && [ "$STAGE_STATUS" = "in_progress" ]; then
+  NEXT_ACTION="auto-generate"
 elif [ "$HAS_DOCUMENT" = "true" ]; then
   NEXT_ACTION="sync-drive-or-update"
 else
@@ -333,6 +367,10 @@ echo "  증거(evidence): $HAS_EVIDENCE"
 echo "  문서 생성됨: $HAS_DOCUMENT"
 echo "  MVP 단계: ${MVP_STAGE:-미설정}"
 echo "  단계 상태: ${STAGE_STATUS:-미설정}"
+echo "  단계 완료 여부: ${STAGE_COMPLETE:-false}"
+if [ -n "$NEXT_DOC_TYPE" ]; then
+  echo "  다음 생성 문서: $NEXT_DOC_TYPE"
+fi
 echo "  GH 토큰: $GH_TOKEN_LOADED"
 echo "  git 연결: $GIT_READY"
 echo "  사용자: ${USER_NAME:-미설정}"

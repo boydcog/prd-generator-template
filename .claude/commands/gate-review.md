@@ -143,7 +143,19 @@ S{N+1} 단계로 넘어갈 준비가 되셨나요? (예 / 아니요)
   "gate_log": ".claude/artifacts/{active_product}/gate-review/S{N}-{YYYYMMDD-HHmm}.md"
 }
 ```
-3. `mvp_stage: "S{N+1}"`, `stage_status: "in_progress"`, 수정된 `stage_history` 배열을 project.json에 저장합니다.
+3. `mvp_stage: "S{N+1}"`, `stage_status: "in_progress"`, `document_type: "{다음 단계 기본 문서 유형}"`, 수정된 `stage_history` 배열을 project.json에 저장합니다.
+
+**다음 단계 document_type 매핑** (stage 진행 시 함께 업데이트):
+
+| 현재 단계 → 다음 단계 | document_type 변경 값 |
+|----------------------|----------------------|
+| S1 → S2 | `pretotype-spec` |
+| S2 → S3 | `product-spec` |
+| S3 → S4 | `design-spec` |
+| S4 → S5 | `document_type` 유지 (S5는 MVP 빌드 단계, 별도 문서 없음) |
+
+> **이유**: startup 훅이 `document_type` 디렉토리 내 artifact 유무로 현재 단계 문서 생성 완료를 판단합니다.
+> document_type이 이전 단계 값으로 남아있으면, 이미 완료된 이전 단계 문서를 "현재 단계 문서"로 오인하여 gate-review를 중복 추천하는 버그가 발생합니다.
 
 S4 이후 통과 시:
 ```

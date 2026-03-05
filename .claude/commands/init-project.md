@@ -48,8 +48,9 @@
 | # | 질문 | 기본값 | 필수 |
 |---|------|--------|------|
 | 1 | 프로젝트 이름은 무엇인가요? | — | Y |
-| 1-1 | 어떤 문서를 만들까요? | 제품 브리프(S1) | Y |
-|     | **MVP 프로세스**: S1 제품 브리프 / S1 비즈니스 사양서 / S2 프리토타입 사양서 / S3 제품 사양서 / S4 디자인 사양서 / S4 기술 사양서 / 직접 정의 | | |
+| 1-1 | 어떤 문서를 만들까요? | 비즈니스 사양서(S1) | Y |
+|     | **MVP 프로세스**: S1 비즈니스 사양서 / S2 프리토타입 사양서 / S3 제품 사양서 / S4 디자인 사양서 / 직접 정의 | | |
+|     | ※ S1 제품 브리프는 비즈니스 사양서 생성 후 Phase 3.5 cascade로 자동 생성됩니다. | | |
 | 1-2 | 현재 어느 단계부터 시작하시나요? | S1 (자동) | Y |
 |     | S1 Brief / S2 Pretotype / S3 Prototype / S4 Freeze / 해당 없음(custom) | | |
 |     | ※ 1-1에서 MVP 문서 선택 시 단계가 자동 결정되므로 확인만 함. "직접 정의" 선택 시 이 질문 필수. | | |
@@ -97,10 +98,12 @@
 | 8 | 출력 언어 선호는? | ko | N |
 
 **문서 유형 → 단계 자동 결정 규칙**:
-- `product-brief`, `business-spec` → `mvp_stage: "S1"`
+- `business-spec` → `mvp_stage: "S1"` (초기 document_type; product-brief는 Phase 3.5 cascade로 자동 생성)
+- `product-brief` → `mvp_stage: "S1"` (이미 business-spec이 있고 product-brief만 생성할 때)
 - `pretotype-spec` → `mvp_stage: "S2"`
 - `product-spec` → `mvp_stage: "S3"`
-- `design-spec`, `tech-spec` → `mvp_stage: "S4"`
+- `design-spec` → `mvp_stage: "S4"` (초기 document_type; tech-spec은 design-spec 후 순차 생성)
+- `tech-spec` → `mvp_stage: "S4"` (design-spec이 있고 tech-spec만 생성할 때)
 - `custom` (직접 정의 또는 "해당 없음") → `mvp_stage: null`
 
 질문 1 이후, **product_id를 생성**합니다:
