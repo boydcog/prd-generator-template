@@ -388,6 +388,18 @@ Task(
      - 대상: `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/{output_file_name}`
    - **이 파일이 최종 문서입니다.** 이후 단계에서 이 파일을 직접 편집하여 섹션을 채웁니다. 새 파일을 처음부터 작성하지 않습니다.
    - 로컬 템플릿 파일이 없으면: `document-types.yaml`의 `output_sections`를 사용하여 빈 구조 파일을 먼저 생성합니다.
+3-A. **라이브러리 문서 페칭 (design-spec 전용)**:
+   - `document_type`이 `design-spec`인 경우에만 실행합니다. 다른 유형이면 이 단계를 건너뜁니다.
+   - Context7 MCP를 사용하여 항목 9 CSS 변수 작성에 필요한 최신 API 문법을 페칭합니다:
+     1. `mcp__plugin_context7_context7__resolve-library-id`로 라이브러리 ID를 조회합니다.
+     2. `mcp__plugin_context7_context7__query-docs`로 핵심 섹션을 페칭합니다:
+        - `gluestack-ui`: CSS 변수 시스템, `@theme` 매핑, Box/HStack/VStack prop API
+        - `tailwindcss`: v4 `@theme inline` 설정, CSS 변수 매핑 방법
+        - `framer-motion`: `transition` 옵션 (duration, ease, type: spring, stiffness, damping)
+   - 페칭 실패 시: 해당 라이브러리를 스킵하고 템플릿 예시(`기억생생 Design Spec 예시.md`)를 기준으로 작성합니다.
+   - 페칭된 내용은 **항목 9 CSS 변수 코드블록** 작성 시 최신 API 문법 검증에 사용하며, 항목 10 UX 전략의 컴포넌트 능력 파악에도 활용합니다.
+   - 페칭된 내용은 synth 에이전트 프롬프트의 "라이브러리 문서" 섹션에 전달합니다.
+
 3-1. **draft-inputs 로드 (사전 대화 결과)**:
    - `.claude/state/{active_product}/draft-inputs.json`이 존재하는지 확인합니다.
    - 존재하면 파일 내 `document_type` 필드와 현재 실행 중인 `document_type`이 **일치하는지 검증**합니다.
@@ -666,6 +678,11 @@ agent-team-spec.md의 "Judge 출력 계약"을 준수하세요.
 로컬 문서 템플릿 (복사 원본):
 - .claude/templates/{output_dir_name}/[프로젝트명] {DocName}.md  ← 출력 경로에 먼저 복사 후 편집
 - .claude/templates/{output_dir_name}/{DocName} 작성 가이드.md   ← 섹션 작성 기준 참조
+라이브러리 문서 (design-spec 전용, Step 3-A에서 Context7로 페칭):
+- gluestack-ui v2: CSS 변수 시스템, @theme 매핑, 컴포넌트 Prop API
+- Tailwind CSS v4: @theme inline 설정, CSS 변수 매핑 방법
+- Framer Motion: transition API (duration, ease, spring stiffness/damping)
+(페칭 성공 시에만 포함. 없으면 템플릿 예시 파일을 기준으로 항목 9를 작성하세요.)
 
 ## 통합 규칙
 1. **섹션 출처 우선순위**: `.claude/state/{active_product}/draft-inputs.json`이 있으면 로드하세요. **먼저 파일 내 `document_type` 필드와 현재 실행 중인 `document_type`이 일치하는지 확인하세요.** 불일치 시 draft-inputs를 무시하고 전체 섹션을 연구 결과로 채웁니다. 일치 시 출처별 처리:
