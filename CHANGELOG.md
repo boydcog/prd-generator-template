@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-03-05 (2)
+
+- fix: startup 훅 단계 문서 감지 버그 수정 — `HAS_DOCUMENT`가 임의의 artifact 존재 여부를 체크하여 이전 단계 문서(pretotype-spec)가 있을 때 현재 단계(S3) 문서 생성 전임에도 gate-review를 추천하던 버그 수정; `HAS_CURRENT_STAGE_DOC` 변수 추가(현재 `document_type` 디렉토리 기준 체크)하여 현재 단계 문서가 있을 때만 gate-review, 없으면 auto-generate 추천으로 변경; gate-review.md에 단계 진행 시 `document_type` 업데이트 규칙 추가(S1→S2: pretotype-spec, S2→S3: product-spec, S3→S4: design-spec)
+
 ## 2026-03-05
 
 - fix: Qodo PR #52 리뷰 반영 — Bug #7(draft-inputs document_type 검증), Bug #8(cascade context 직접 경로 명시), Bug #9(킬게이트 로그를 담당자 확인 전으로 이동), Bug #10(S5 진입 조건 S1~S5로 수정), Rule #1(README 파이프라인 Phase 0+3.5 추가), Rule #3(mvp-process-spec cascade 문서화), Rule #6(CLAUDE.md 런타임 플레이스홀더 4개 추가) ([`b5d81fb`](https://github.com/boydcog/prd-generator-template/commit/b5d81fb))
