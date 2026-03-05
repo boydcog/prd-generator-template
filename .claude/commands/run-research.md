@@ -267,11 +267,11 @@ Task(
 
 | Role ID | 에이전트 | 역할 | 출력 |
 |---------|---------|------|------|
-| `biz` | Biz/Strategy Agent | 비즈니스 목표, 성공 지표, 경쟁 환경 분석 | `{doc_type}/v{N}/agents/biz.json` + `biz.md` |
-| `marketing` | Marketing/GTM Agent | 포지셔닝, 메시징, 런칭 전략 | `{doc_type}/v{N}/agents/marketing.json` + `marketing.md` |
-| `research` | Research Agent | 사용자 인사이트, 증거 맵, 가정 검증 | `{doc_type}/v{N}/agents/research.json` + `research.md` |
-| `tech` | Tech Agent | 기술 타당성, 아키텍처, 비기능 요구사항 | `{doc_type}/v{N}/agents/tech.json` + `tech.md` |
-| `pm` | PM Agent | 스코프, 요구사항, 마일스톤, 수용 기준 | `{doc_type}/v{N}/agents/pm.json` + `pm.md` |
+| `biz` | Biz/Strategy Agent | 비즈니스 목표, 성공 지표, 경쟁 환경 분석 | `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/biz.json` + `biz.md` |
+| `marketing` | Marketing/GTM Agent | 포지셔닝, 메시징, 런칭 전략 | `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/marketing.json` + `marketing.md` |
+| `research` | Research Agent | 사용자 인사이트, 증거 맵, 가정 검증 | `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/research.json` + `research.md` |
+| `tech` | Tech Agent | 기술 타당성, 아키텍처, 비기능 요구사항 | `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/tech.json` + `tech.md` |
+| `pm` | PM Agent | 스코프, 요구사항, 마일스톤, 수용 기준 | `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/pm.json` + `pm.md` |
 
 예시: `document_type: marketing-brief`이면 biz, marketing, research만 실행.
 
@@ -703,17 +703,17 @@ agent-team-spec.md의 "Judge 출력 계약"을 준수하세요.
 
 | 파일 | 설명 |
 |------|------|
-| `.claude/artifacts/{active_product}/{output_dir}/v{N}/agents/{role}.json` | 회의(Discussion) 각 역할의 구조화된 출력 (peer_discussions 포함) |
-| `.claude/artifacts/{active_product}/{output_dir}/v{N}/agents/{role}.md` | 회의(Discussion) 각 역할의 서술형 요약 |
-| `.claude/artifacts/{active_product}/{output_dir}/v{N}/agents/debate/discussions.json` | 팀 리더가 취합한 전체 peer_discussions |
-| `.claude/artifacts/{active_product}/{output_dir}/v{N}/agents/debate/judgment.json` | Judge 판정 결과 (미해결 충돌 승/패/무승부) |
-| `.claude/artifacts/{active_product}/{output_dir}/v{N}/agents/debate/summary.md` | 인간 읽기용 전체 토론 요약 |
-| `.claude/artifacts/{active_product}/{output_dir}/v{N}/agents/critique.json` | 비평(Critique) 비판적 검토 구조화된 출력 |
-| `.claude/artifacts/{active_product}/{output_dir}/v{N}/agents/critique.md` | 비평(Critique) 비판적 검토 서술형 요약 |
-| `.claude/artifacts/{active_product}/{output_dir}/v{N}/{output_file}` | 최종 통합 문서 (버전별) |
-| `.claude/artifacts/{active_product}/{output_dir}/v{N}/citations.json` | 전체 인용 보고서 |
-| `.claude/artifacts/{active_product}/{output_dir}/v{N}/conflicts.json` | 역할 간 충돌 보고서 |
-| `.claude/artifacts/{active_product}/{output_dir}/v{N}/metadata.json` | 버전 메타데이터 |
+| `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/{role}.json` | 회의(Discussion) 각 역할의 구조화된 출력 (peer_discussions 포함) |
+| `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/{role}.md` | 회의(Discussion) 각 역할의 서술형 요약 |
+| `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/debate/discussions.json` | 팀 리더가 취합한 전체 peer_discussions |
+| `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/debate/judgment.json` | Judge 판정 결과 (미해결 충돌 승/패/무승부) |
+| `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/debate/summary.md` | 인간 읽기용 전체 토론 요약 |
+| `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/critique.json` | 비평(Critique) 비판적 검토 구조화된 출력 |
+| `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/critique.md` | 비평(Critique) 비판적 검토 서술형 요약 |
+| `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/{output_file_name}` | 최종 통합 문서 (버전별) |
+| `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/citations.json` | 전체 인용 보고서 |
+| `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/conflicts.json` | 역할 간 충돌 보고서 |
+| `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/metadata.json` | 버전 메타데이터 |
 
 ---
 

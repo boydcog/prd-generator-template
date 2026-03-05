@@ -33,12 +33,12 @@
 - [ ] `.claude/knowledge/{active_product}/evidence/chunks/` (최소 1개 청크 파일)
 
 **에이전트 출력** (문서 유형의 `agent_roles.wave1`에 정의된 에이전트만 검사):
-- `project.json`에서 `document_type`을 읽습니다 (없으면 기본값 `prd`).
+- `project.json`에서 `document_type`을 읽습니다 (없으면 `.claude/manifests/project-defaults.yaml`의 `default_document_type` 값 사용, 현재 기본값: `product-brief`).
 - `document-types.yaml`에서 해당 유형의 `agent_roles.wave1` 목록 및 `output_dir_name`을 로드합니다.
 - 최신 `v{N}`을 자동 감지 (숫자 기반 정렬)하여 아래 경로를 구성합니다.
 - 각 에이전트에 대해:
   - [ ] `.claude/artifacts/{active_product}/{output_dir_name}/v{N}/agents/{role}.json`
-- 예시 (prd): `pretotype-spec/v2/agents/biz.json`, `…/marketing.json`, `…/research.json`, …
+- 예시 (product-brief): `product-brief/v2/agents/biz.json`, `…/marketing.json`, `…/research.json`, …
 - 예시 (tech-spec): `tech-spec/v1/agents/tech.json`, `…/research.json`, `…/pm.json`
 
 **토론 기록 및 판정** (Live Meeting Mode):

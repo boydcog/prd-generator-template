@@ -22,9 +22,13 @@
 ```
 for each {product_id} in .claude/state/:
   if .claude/artifacts/{product_id}/agents/ exists:
-    rename: .claude/artifacts/{product_id}/agents/
-    to:     .claude/artifacts/{product_id}/agents/_legacy/
+    1. mv .claude/artifacts/{product_id}/agents/ .claude/artifacts/{product_id}/agents_tmp/
+    2. mkdir -p .claude/artifacts/{product_id}/agents/_legacy/
+    3. mv .claude/artifacts/{product_id}/agents_tmp/* .claude/artifacts/{product_id}/agents/_legacy/
+    4. rm -rf .claude/artifacts/{product_id}/agents_tmp/
 ```
+
+> **주의**: `agents/`를 `agents/_legacy/`로 직접 이름 변경하면 자기 자신 안에 이동하는 오류가 발생합니다. 위 4단계(임시 이름 → 빈 `_legacy/` 생성 → 내용 이동 → 임시 삭제) 방식을 사용합니다.
 
 - 이름 변경 이유: 기존 데이터를 보존하면서 신규 실행이 덮어쓰는 것을 방지합니다.
 - `_legacy/` 디렉토리의 데이터는 수동 참조 전용입니다. 자동 워크플로우에서는 무시됩니다.
@@ -36,8 +40,9 @@ for each {product_id} in .claude/state/:
 ```
 # 각 제품에 대해:
 product_id = {product_id}
-doc_type = project.json의 document_type (없으면 "prd")
-latest_version = artifacts/{product_id}/{doc_type}/의 최고 v{N}
+doc_type = .claude/state/{product_id}/project.json의 document_type
+           (없으면 .claude/manifests/project-defaults.yaml의 default_document_type, 현재 기본값: "product-brief")
+latest_version = .claude/artifacts/{product_id}/{doc_type}/의 최고 v{N}
 
 if latest_version exists:
   copy .claude/artifacts/{product_id}/agents/_legacy/*
