@@ -306,8 +306,8 @@ get_stage_docs() {
   case "$1" in
     S1) echo "business-spec product-brief" ;;
     S2) echo "pretotype-spec" ;;
-    S3) echo "product-spec" ;;
-    S4) echo "design-spec tech-spec" ;;
+    S3) echo "product-spec design-spec tech-spec" ;;
+    S4) echo "" ;;
     *)  echo "" ;;
   esac
 }
@@ -326,6 +326,9 @@ if [ -n "$MVP_STAGE" ] && [ -n "$ACTIVE_PRODUCT" ]; then
         [ -z "$NEXT_DOC_TYPE" ] && NEXT_DOC_TYPE="$doc"
       fi
     done
+  elif [ -n "$MVP_STAGE" ]; then
+    # S4 등 신규 문서 없는 단계: 문서 생성이 필요 없으므로 완료 상태로 처리
+    STAGE_COMPLETE="true"
   fi
 fi
 

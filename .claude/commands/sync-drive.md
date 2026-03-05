@@ -36,6 +36,35 @@ Playwright 브라우저를 통해 Google Drive 문서를 수집하고 로컬 kno
 4. 대상이 있으면:
    - 현재 등록된 소스 목록을 보여주고, 추가할 소스가 있는지 물어봅니다.
 
+### Step 0.5: 수정일 기반 사전 필터링
+
+목표: Drive 문서 전체를 다운로드하지 않고 수정일만 확인하여 불필요한 재수집 방지.
+
+> `--refresh` 플래그가 전달된 경우 이 단계 전체를 스킵하고 모든 소스를 재수집합니다.
+
+1. `.claude/state/{active_product}/sync-ledger.json`이 있으면 소스별 `scraped_at` 로드.
+2. 소스별 Drive 파일 메타데이터 확인 (Playwright로 접근):
+   - Google Drive 파일 ID 추출: URL에서 `/document/d/{FILE_ID}/` 또는 `/spreadsheets/d/{FILE_ID}/` 추출
+   - `browser_navigate`로 Drive 파일 뷰어 URL 접속:
+     `https://drive.google.com/file/d/{FILE_ID}/view`
+   - `browser_snapshot`으로 페이지 접근성 트리에서 "마지막 수정" 날짜 추출
+   - 실패 시 Fallback: 해당 소스를 "확인 불가"로 분류
+3. 소스별 변경 여부 분류:
+   - `modifiedTime > scraped_at` → "변경됨"
+   - `modifiedTime <= scraped_at` → "변경 없음" (스킵 대상)
+   - `scraped_at` 없음 (최초 수집) → "신규" (무조건 수집)
+   - 수정일 확인 실패 → "확인 불가" (수동 선택 대상)
+4. 변경된/신규/확인 불가 소스가 있으면 목록을 표시하고 사용자에게 확인:
+   ```
+   다음 소스가 업데이트되었거나 확인이 필요합니다:
+     - [소스명]: YYYY-MM-DD 수정됨 (마지막 수집: YYYY-MM-DD)
+     - [소스명]: 신규 소스
+     - [소스명]: 수정일 확인 불가
+   재수집할까요?
+   ```
+5. 확인된 소스만 Step 2로 진행. "변경 없음" 소스는 기존 캐시 유지.
+   - 전체 스킵 대상만 남은 경우: "모든 소스가 최신 상태입니다. 재수집을 스킵합니다." 안내 후 Step 3로 바로 이동.
+
 ### Step 1: Google 로그인 확인
 
 1. Playwright `browser_navigate`로 Google Drive 페이지에 접속합니다.
