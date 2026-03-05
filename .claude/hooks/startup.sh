@@ -341,7 +341,11 @@ elif [ "$HAS_PROJECT" = "false" ]; then
 elif [ "$STAGE_STATUS" = "gate_stopped" ]; then
   NEXT_ACTION="gate-review"
 elif [ "$STAGE_COMPLETE" = "true" ] && [ "$STAGE_STATUS" = "in_progress" ] && [ -n "$MVP_STAGE" ]; then
-  NEXT_ACTION="gate-review"
+  if [ "$MVP_STAGE" = "S3" ]; then
+    NEXT_ACTION="implement"   # S3: 스펙 완성 → 구현 먼저, gate는 내부 시연 후
+  else
+    NEXT_ACTION="gate-review"
+  fi
 elif [ -n "$NEXT_DOC_TYPE" ] && [ "$STAGE_STATUS" = "in_progress" ]; then
   NEXT_ACTION="auto-generate"
 elif [ "$HAS_DOCUMENT" = "true" ]; then
@@ -368,6 +372,21 @@ echo "  project.json: $HAS_PROJECT"
 echo "  Drive 소스: $HAS_SOURCES"
 echo "  증거(evidence): $HAS_EVIDENCE"
 echo "  문서 생성됨: $HAS_DOCUMENT"
+if [ "$HAS_DOCUMENT" = "true" ] && [ -n "$ACTIVE_PRODUCT" ] && [ -d ".claude/artifacts/${ACTIVE_PRODUCT}" ]; then
+  VERSION_LINES=""
+  for doc_dir in ".claude/artifacts/${ACTIVE_PRODUCT}"/*/; do
+    doc_type=$(basename "$doc_dir")
+    [[ "$doc_type" == "gate-review" ]] && continue
+    max_v=$(ls "$doc_dir" 2>/dev/null | grep -E '^v[0-9]+$' | sed 's/v//' | sort -n | tail -1)
+    if [ -n "$max_v" ]; then
+      VERSION_LINES="${VERSION_LINES}    ${doc_type}: v${max_v} (${max_v}회)\n"
+    fi
+  done
+  if [ -n "$VERSION_LINES" ]; then
+    echo "  문서 버전 현황:"
+    printf "%b" "$VERSION_LINES"
+  fi
+fi
 echo "  MVP 단계: ${MVP_STAGE:-미설정}"
 echo "  단계 상태: ${STAGE_STATUS:-미설정}"
 echo "  단계 완료 여부: ${STAGE_COMPLETE:-false}"
