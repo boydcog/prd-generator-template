@@ -326,8 +326,8 @@ if [ -n "$MVP_STAGE" ] && [ -n "$ACTIVE_PRODUCT" ]; then
         [ -z "$NEXT_DOC_TYPE" ] && NEXT_DOC_TYPE="$doc"
       fi
     done
-  elif [ -n "$MVP_STAGE" ]; then
-    # S4 등 신규 문서 없는 단계: 문서 생성이 필요 없으므로 완료 상태로 처리
+  elif [ "$MVP_STAGE" = "S4" ]; then
+    # S4: 신규 문서 없는 Freeze 단계 — 문서 생성 불필요하므로 완료 상태로 처리
     STAGE_COMPLETE="true"
   fi
 fi

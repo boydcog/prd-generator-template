@@ -102,8 +102,8 @@
 - `product-brief` → `mvp_stage: "S1"` (이미 business-spec이 있고 product-brief만 생성할 때)
 - `pretotype-spec` → `mvp_stage: "S2"`
 - `product-spec` → `mvp_stage: "S3"`
-- `design-spec` → `mvp_stage: "S4"` (초기 document_type; tech-spec은 design-spec 후 순차 생성)
-- `tech-spec` → `mvp_stage: "S4"` (design-spec이 있고 tech-spec만 생성할 때)
+- `design-spec` → `mvp_stage: "S3"` (초기 document_type; tech-spec은 design-spec 후 순차 생성)
+- `tech-spec` → `mvp_stage: "S3"` (design-spec이 있고 tech-spec만 생성할 때)
 - `custom` (직접 정의 또는 "해당 없음") → `mvp_stage: null`
 
 질문 1 이후, **product_id를 생성**합니다:
